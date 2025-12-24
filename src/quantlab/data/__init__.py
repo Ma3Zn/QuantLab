@@ -8,6 +8,7 @@ from quantlab.data.errors import (
     ValidationError,
 )
 from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
+from quantlab.data.quality import QualityFlag, ValidationReport
 from quantlab.data.schemas import Bar, BarRecord, CanonicalRecord, PointRecord, Source
 
 __all__ = [
@@ -19,6 +20,8 @@ __all__ = [
     "StructuredJSONFormatter",
     "get_logger",
     "log_data_error",
+    "QualityFlag",
+    "ValidationReport",
     "Source",
     "CanonicalRecord",
     "Bar",

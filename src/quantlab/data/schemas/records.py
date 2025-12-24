@@ -5,6 +5,8 @@ from datetime import date, datetime, timezone
 from enum import Enum
 from typing import Any, Tuple
 
+from quantlab.data.quality import QualityFlag
+
 
 def _require_non_empty(value: str, name: str) -> None:
     if not value:
@@ -39,7 +41,7 @@ class CanonicalRecord:
     asof_ts: datetime
     source: Source
     ingest_run_id: str
-    quality_flags: Tuple[str, ...]
+    quality_flags: Tuple[QualityFlag, ...]
     trading_date_local: date | None
     timezone_local: str | None
     currency: str | None
@@ -55,7 +57,8 @@ class CanonicalRecord:
         _ensure_utc(self.asof_ts, "asof_ts")
         if self.quality_flags is None:
             raise ValueError("quality_flags must not be None")
-        object.__setattr__(self, "quality_flags", tuple(self.quality_flags))
+        normalized_flags = tuple(QualityFlag(flag) for flag in self.quality_flags)
+        object.__setattr__(self, "quality_flags", normalized_flags)
 
     def metadata_payload(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -70,7 +73,7 @@ class CanonicalRecord:
                 "endpoint": self.source.endpoint,
             },
             "ingest_run_id": self.ingest_run_id,
-            "quality_flags": list(self.quality_flags),
+            "quality_flags": [flag.value for flag in self.quality_flags],
         }
         if self.source.provider_dataset is not None:
             payload["source"]["provider_dataset"] = self.source.provider_dataset
