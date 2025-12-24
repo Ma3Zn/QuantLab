@@ -1,0 +1,38 @@
+# codex-execpolicy.yaml — Suggested command allowlist for Codex sessions (conceptual)
+
+# Use this as a reference when configuring Codex approval modes / execpolicy.
+# The intent is to allow safe, reproducible commands and block destructive ones.
+
+allow:
+  - "python -m pytest*"
+  - "python -m ruff*"
+  - "python -m mypy*"
+  - "python -m pip install*"
+  - "pip install*"
+  - "git status"
+  - "git diff*"
+  - "git log*"
+  - "git show*"
+  - "git checkout*"
+  - "git switch*"
+  - "git branch*"
+  - "git fetch*"
+  - "git pull*"
+  - "git commit*"
+  - "git add*"
+
+prompt:
+  - "git rebase*"
+  - "git merge*"
+  - "git push*"
+  - "python -m build*"
+
+block:
+  - "rm -rf*"
+  - "sudo*"
+  - "curl*"
+  - "wget*"
+  - "sh *"
+  - "bash *"
+  - "pip install git+*"
+  - "python -c *"  # unless reviewed

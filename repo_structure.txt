@@ -1,0 +1,97 @@
+QuantLab/
+  pyproject.toml
+  README.md
+  LICENSE
+  CHANGELOG.md
+
+  src/
+    __init__.py
+
+    data/
+      __init__.py
+      providers/          # adapter: fetch (Yahoo, Stooq, etc.)
+      storage/            # cache: parquet/duckdb, versioning
+      transforms/         # cleaning, alignment, calendars
+      schemas/            # typed models for bars, curves, etc.
+
+    instruments/
+      __init__.py
+      types.py            # Instrument, Position, Portfolio (pure domain)
+
+    pricing/
+      __init__.py
+      pricers/            # pure pricers
+      curves/             # curve construction (when needed)
+
+    risk/
+      __init__.py
+      metrics/            # VaR/ES, Greeks (as applicable), exposures
+
+    stress/
+      __init__.py
+      scenarios/          # scenario definitions
+      engines/            # apply scenarios to portfolio
+
+    optimization/
+      __init__.py
+      solvers/            # wrappers around solvers
+      constraints/        # realistic constraints, risk budgets
+
+    decision/
+      __init__.py
+      policies/           # target exposure / risk budget decisions
+      rationale/          # explainability objects
+
+    report/
+      __init__.py
+      formats/            # JSON/Markdown/HTML serializers
+      templates/
+
+    utils/
+      __init__.py
+      logging.py
+      errors.py           # typed exceptions
+      time.py             # timezone/calendar helpers
+
+  tests/
+    unit/
+      data/
+      instruments/
+      pricing/
+      risk/
+      stress/
+      optimization/
+      decision/
+    integration/
+    golden/                # snapshot tests for reports
+
+  docs/
+    index.md
+    architecture.md
+    modules/
+      data.md
+      instruments.md
+      pricing.md
+      risk.md
+      stress.md
+      optimization.md
+      decision.md
+    adr/
+      0001-repo-structure.md
+
+  examples/
+    notebooks/             # optional, keep light
+    scripts/               # runnable minimal demos
+
+  configs/
+    default.yaml
+    dev.yaml
+
+  data/
+    external/              # optional; ideally gitignored
+    cache/                 # gitignored
+    sample/                # tiny, versioned, committed datasets
+
+  tools/
+    cli.py                 # optional: a minimal CLI entrypoint
+

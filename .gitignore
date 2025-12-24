@@ -1,0 +1,28 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.hypothesis/
+
+# Virtual environments / tooling
+.venv/
+.env
+.tox/
+.coverage
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Data directories (cache/external not tracked)
+data/cache/
+data/external/
