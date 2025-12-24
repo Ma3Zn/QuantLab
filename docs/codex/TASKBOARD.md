@@ -11,18 +11,18 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 
 ### Core domain & schemas
 - [x] Implement canonical record models (BarRecord, PointRecord) + metadata contract
-- [ ] Implement quality flag vocabulary + typed enums
+- [x] Implement quality flag vocabulary + typed enums
 - [x] Implement typed exceptions and structured logging utilities for data layer
 
 ### Storage + registry
-- [ ] Implement snapshot directory conventions (raw/canonical) per docs
-- [ ] Implement registry (JSONL first; SQLite optional)
-- [ ] Implement atomic publish workflow (staging → publish)
-- [ ] Add content hashing utilities
+- [x] Implement snapshot directory conventions (raw/canonical) per docs
+- [x] Implement registry (JSONL first; SQLite optional)
+- [x] Implement atomic publish workflow (staging → publish)
+- [x] Add content hashing utilities
 
 ### Provider + ingestion
 - [ ] Implement ProviderAdapter interface + one MVP adapter
-- [ ] Implement request fingerprinting
+- [x] Implement request fingerprinting
 - [ ] Implement Normalizer raw→canonical for EOD equities and FX daily
 - [ ] Implement Validator hard rules + soft flags + reports
 - [ ] Implement ingestion runner that produces: raw payloads + canonical snapshot + registry entry

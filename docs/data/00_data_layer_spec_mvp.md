@@ -62,7 +62,7 @@ Reference: `06_calendar_timezone_alignment_policy.md`
 ## Alignment policy for portfolio joins
 Alignment is an explicit, named policy recorded in every experiment/report.
 
-**Default MVP**: `INNER` on `alignment_date` (conservative; no implicit fills).  
+**Default MVP**: `INNER` on `alignment_date` (conservative; no implicit fills).
 **Alternative**: `LEFT` with explicit missingness (no fills; missing records flagged/absent).
 
 Hard rule: no forward-fill/backfill in canonical datasets.

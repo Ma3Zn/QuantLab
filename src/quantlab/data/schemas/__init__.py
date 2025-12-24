@@ -9,4 +9,3 @@ from quantlab.data.schemas.records import (
 )
 
 __all__ = ["Source", "CanonicalRecord", "Bar", "BarRecord", "PointRecord"]
-

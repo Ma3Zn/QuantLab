@@ -49,7 +49,7 @@ Define a minimal but *globally usable* instrument universe for the first end-to-
 ### Internal identifiers (canonical)
 Downstream modules MUST reference instruments by `instrument_id` only.
 
-- Format: opaque, stable string (e.g., `inst_<uuid>`).  
+- Format: opaque, stable string (e.g., `inst_<uuid>`).
 - Stability rule: once created, `instrument_id` never changes; mappings evolve via reference tables.
 
 ### External identifiers (non-canonical, for mapping)

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import asdict, is_dataclass
 from datetime import date, datetime, timezone
 from enum import Enum
-import hashlib
-import json
 from typing import Any, Mapping
 
 
@@ -47,9 +47,7 @@ def request_fingerprint(payload: Mapping[str, Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def generate_ingest_run_id(
-    started_at: datetime | None = None, *, sequence: int = 1
-) -> str:
+def generate_ingest_run_id(started_at: datetime | None = None, *, sequence: int = 1) -> str:
     """Generate a deterministic ingestion run identifier."""
 
     if sequence < 1:

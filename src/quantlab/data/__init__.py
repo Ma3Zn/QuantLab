@@ -7,9 +7,14 @@ from quantlab.data.errors import (
     StorageError,
     ValidationError,
 )
-from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
 from quantlab.data.identity import generate_ingest_run_id, request_fingerprint
+from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
 from quantlab.data.quality import QualityFlag, ValidationReport
+from quantlab.data.registry import (
+    DatasetRegistryEntry,
+    append_registry_entry,
+    lookup_registry_entry,
+)
 from quantlab.data.schemas import Bar, BarRecord, CanonicalRecord, PointRecord, Source
 from quantlab.data.storage import (
     CanonicalPaths,
@@ -37,6 +42,9 @@ __all__ = [
     "generate_ingest_run_id",
     "QualityFlag",
     "ValidationReport",
+    "DatasetRegistryEntry",
+    "append_registry_entry",
+    "lookup_registry_entry",
     "Source",
     "CanonicalRecord",
     "Bar",

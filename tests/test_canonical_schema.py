@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
+from typing import Any
 
 import pytest
 
 from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source
 
 
-def _base_metadata() -> dict[str, object]:
+def _base_metadata() -> dict[str, Any]:
     return {
         "dataset_id": "md.equity.eod.bars",
         "schema_version": "1.0.0",

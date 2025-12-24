@@ -46,4 +46,3 @@ class ValidationError(DataError):
 
 class StorageError(DataError):
     """Raised when snapshot staging or publishing fails."""
-

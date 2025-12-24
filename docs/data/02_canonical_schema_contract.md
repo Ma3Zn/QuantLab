@@ -25,7 +25,7 @@ We standardize the **logical schema**. Physical storage may use “wide” colum
 
 We define two logical record types:
 
-1) **BarRecord** — for OHLCV-style data (equities EOD).  
+1) **BarRecord** — for OHLCV-style data (equities EOD).
 2) **PointRecord** — generic scalar observation (FX mid, rates fixings, etc.).
 
 Downstream code should target these logical types, not vendor payloads.

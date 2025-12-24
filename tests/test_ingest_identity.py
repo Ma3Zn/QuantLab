@@ -25,7 +25,4 @@ def test_request_fingerprint_is_key_order_invariant() -> None:
 def test_generate_ingest_run_id_format_is_deterministic() -> None:
     started_at = datetime(2025, 12, 24, 7, 10, 3, tzinfo=timezone.utc)
 
-    assert (
-        generate_ingest_run_id(started_at, sequence=1)
-        == "ing_20251224_071003Z_0001"
-    )
+    assert generate_ingest_run_id(started_at, sequence=1) == "ing_20251224_071003Z_0001"

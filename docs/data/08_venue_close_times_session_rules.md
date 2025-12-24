@@ -42,13 +42,13 @@ A table keyed by `mic` with time rules.
 ## Source-of-truth hierarchy (MVP)
 When computing canonical `ts` for EOD equities (Step 5):
 
-1) **SessionRules** close time (if present for MIC and date in validity range)  
+1) **SessionRules** close time (if present for MIC and date in validity range)
 → `ts_provenance = EXCHANGE_CLOSE`
 
-2) Else **baseline calendar** close time (if provided and trustworthy)  
+2) Else **baseline calendar** close time (if provided and trustworthy)
 → `ts_provenance = EXCHANGE_CLOSE` (but note source is baseline)
 
-3) Else **provider timestamp**  
+3) Else **provider timestamp**
 → `ts_provenance = PROVIDER_EOD` + flag `PROVIDER_TIMESTAMP_USED`
 
 This hierarchy must be deterministic and recorded in metadata.

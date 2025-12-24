@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import Any
 
 import pytest
 
@@ -8,7 +9,7 @@ from quantlab.data.quality import QualityFlag, ValidationReport
 from quantlab.data.schemas import Bar, BarRecord, Source
 
 
-def _base_metadata() -> dict[str, object]:
+def _base_metadata() -> dict[str, Any]:
     return {
         "dataset_id": "md.equity.eod.bars",
         "schema_version": "1.0.0",

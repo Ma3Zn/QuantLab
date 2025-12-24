@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import hashlib
 import json
+import uuid
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping, Sequence
-import uuid
 
 from quantlab.data.errors import StorageError
 
@@ -22,7 +22,7 @@ def _normalize_extension(ext: str) -> str:
 
 
 def _normalize_parts(
-    parts: Mapping[str, bytes] | Sequence[tuple[str, bytes]]
+    parts: Mapping[str, bytes] | Sequence[tuple[str, bytes]],
 ) -> list[tuple[str, bytes]]:
     if isinstance(parts, Mapping):
         normalized = list(parts.items())
@@ -78,16 +78,10 @@ def build_raw_paths(
     _require_non_empty(ingest_run_id, "ingest_run_id")
     _require_non_empty(request_fingerprint, "request_fingerprint")
     extension = _normalize_extension(ext)
-    base_dir = (
-        raw_root
-        / f"ingest_run_id={ingest_run_id}"
-        / f"request={request_fingerprint}"
-    )
+    base_dir = raw_root / f"ingest_run_id={ingest_run_id}" / f"request={request_fingerprint}"
     payload_path = base_dir / f"payload.{extension}"
     metadata_path = base_dir / "metadata.json"
-    return RawPaths(
-        base_dir=base_dir, payload_path=payload_path, metadata_path=metadata_path
-    )
+    return RawPaths(base_dir=base_dir, payload_path=payload_path, metadata_path=metadata_path)
 
 
 def store_raw_payload(
@@ -99,9 +93,7 @@ def store_raw_payload(
     *,
     ext: str = "json",
 ) -> RawPaths:
-    paths = build_raw_paths(
-        raw_root, ingest_run_id, request_fingerprint, ext=ext
-    )
+    paths = build_raw_paths(raw_root, ingest_run_id, request_fingerprint, ext=ext)
     if paths.base_dir.exists():
         raise StorageError(
             "raw payload already exists",
@@ -113,9 +105,7 @@ def store_raw_payload(
     try:
         paths.base_dir.mkdir(parents=True, exist_ok=False)
         paths.payload_path.write_bytes(payload)
-        metadata_payload = json.dumps(
-            dict(metadata), sort_keys=True, ensure_ascii=True
-        )
+        metadata_payload = json.dumps(dict(metadata), sort_keys=True, ensure_ascii=True)
         paths.metadata_path.write_text(metadata_payload, encoding="utf-8")
     except (OSError, TypeError, ValueError) as exc:
         raise StorageError(
@@ -152,9 +142,7 @@ def compute_content_hash(paths: Sequence[Path]) -> str:
     hasher = hashlib.sha256()
     for path in sorted(paths, key=lambda item: item.name):
         if not path.exists():
-            raise StorageError(
-                "content hash path missing", context={"path": str(path)}
-            )
+            raise StorageError("content hash path missing", context={"path": str(path)})
         hasher.update(path.name.encode("utf-8"))
         hasher.update(b"\0")
         try:
@@ -203,9 +191,7 @@ def stage_canonical_snapshot(
             part_path.write_bytes(data)
             part_paths.append(part_path)
         metadata_path = staging_dir / "_metadata.json"
-        metadata_payload = json.dumps(
-            dict(metadata), sort_keys=True, ensure_ascii=True
-        )
+        metadata_payload = json.dumps(dict(metadata), sort_keys=True, ensure_ascii=True)
         metadata_path.write_text(metadata_payload, encoding="utf-8")
     except StorageError:
         raise

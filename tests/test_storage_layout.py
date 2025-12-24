@@ -18,9 +18,7 @@ def test_store_raw_payload_writes_paths_and_is_immutable(tmp_path: Path) -> None
     payload = b'{"ok": true}'
     metadata = {"ingest_run_id": "run-1", "source": "dummy"}
 
-    paths = store_raw_payload(
-        tmp_path, "run-1", "req-1", payload, metadata, ext="json"
-    )
+    paths = store_raw_payload(tmp_path, "run-1", "req-1", payload, metadata, ext="json")
 
     assert paths.base_dir == tmp_path / "ingest_run_id=run-1" / "request=req-1"
     assert paths.payload_path.read_bytes() == payload
@@ -47,18 +45,14 @@ def test_canonical_stage_and_publish_prevents_overwrite(tmp_path: Path) -> None:
 
     published = publish_canonical_snapshot(staged)
     assert published.version_dir == (
-        tmp_path
-        / "dataset_id=md.equity.eod.bars"
-        / "dataset_version=2025-01-01.1"
+        tmp_path / "dataset_id=md.equity.eod.bars" / "dataset_version=2025-01-01.1"
     )
     assert published.metadata_path.exists()
     assert json.loads(published.metadata_path.read_text(encoding="utf-8")) == metadata
     assert all(path.exists() for path in published.part_paths)
 
     with pytest.raises(StorageError):
-        stage_canonical_snapshot(
-            tmp_path, "md.equity.eod.bars", "2025-01-01.1", parts, metadata
-        )
+        stage_canonical_snapshot(tmp_path, "md.equity.eod.bars", "2025-01-01.1", parts, metadata)
 
 
 def test_content_hash_is_order_invariant(tmp_path: Path) -> None:

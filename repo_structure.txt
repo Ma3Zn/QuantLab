@@ -94,4 +94,3 @@ QuantLab/
 
   tools/
     cli.py                 # optional: a minimal CLI entrypoint
-

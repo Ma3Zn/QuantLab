@@ -42,9 +42,7 @@ class StructuredJSONFormatter(logging.Formatter):
             "message": record.getMessage(),
         }
         extra_context = {
-            key: value
-            for key, value in record.__dict__.items()
-            if key not in _STANDARD_ATTRS
+            key: value for key, value in record.__dict__.items() if key not in _STANDARD_ATTRS
         }
         if extra_context:
             base["context"] = extra_context
@@ -76,4 +74,3 @@ def log_data_error(logger: logging.Logger, error: DataError) -> None:
         extra={"error_type": type(error).__name__, "context": dict(error.context)},
         exc_info=error.cause,
     )
-
