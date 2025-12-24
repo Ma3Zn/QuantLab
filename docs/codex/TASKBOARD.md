@@ -10,7 +10,7 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 - [x] Add GitHub Actions CI: lint + typecheck + tests
 
 ### Core domain & schemas
-- [ ] Implement canonical record models (BarRecord, PointRecord) + metadata contract
+- [x] Implement canonical record models (BarRecord, PointRecord) + metadata contract
 - [ ] Implement quality flag vocabulary + typed enums
 - [x] Implement typed exceptions and structured logging utilities for data layer
 
