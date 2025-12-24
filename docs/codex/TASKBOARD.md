@@ -12,7 +12,7 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 ### Core domain & schemas
 - [ ] Implement canonical record models (BarRecord, PointRecord) + metadata contract
 - [ ] Implement quality flag vocabulary + typed enums
-- [ ] Implement typed exceptions and structured logging utilities for data layer
+- [x] Implement typed exceptions and structured logging utilities for data layer
 
 ### Storage + registry
 - [ ] Implement snapshot directory conventions (raw/canonical) per docs

@@ -1,36 +1,33 @@
-# Template per CI -- per il momento lasciamo commentato finchè non avremo
-#                    sviluppi significativi da testare
+name: CI
 
-# name: CI
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
-# on:
-#   push:
-#     branches: ["main"]
-#   pull_request:
-#     branches: ["main"]
+jobs:
+  lint-type-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-# jobs:
-#   lint-type-test:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-#       - name: Setup Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
 
-#       - name: Install dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           python -m pip install -e ".[dev]"
+      - name: Ruff
+        run: python -m ruff check .
 
-#       - name: Ruff
-#         run: python -m ruff check .
+      - name: Mypy
+        run: python -m mypy src
 
-#       - name: Mypy
-#         run: python -m mypy src
-
-#       - name: Pytest
-#         run: python -m pytest
+      - name: Pytest
+        run: python -m pytest
