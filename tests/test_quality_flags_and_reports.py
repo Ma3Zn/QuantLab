@@ -35,6 +35,7 @@ def test_quality_flag_enum_is_stable() -> None:
         "ADJUSTED_PRICE_PRESENT",
         "PROVIDER_TIMESTAMP_USED",
         "IMPUTED",
+        "CALENDAR_CONFLICT",
     }
     assert {flag.value for flag in QualityFlag} == expected
     assert QualityFlag("MISSING_VALUE") is QualityFlag.MISSING_VALUE
