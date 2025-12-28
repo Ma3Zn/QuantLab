@@ -5,11 +5,20 @@ from quantlab.data.errors import (
     DataError,
     NormalizationError,
     ProviderError,
+    ProviderRequestError,
+    ProviderResponseError,
     StorageError,
     ValidationError,
 )
 from quantlab.data.identity import generate_ingest_run_id, request_fingerprint
 from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
+from quantlab.data.providers import (
+    FetchRequest,
+    LocalFileProviderAdapter,
+    ProviderAdapter,
+    RawResponse,
+    TimeRange,
+)
 from quantlab.data.quality import QualityFlag, ValidationReport
 from quantlab.data.registry import (
     DatasetRegistryEntry,
@@ -39,6 +48,8 @@ from quantlab.data.storage import (
 __all__ = [
     "DataError",
     "ProviderError",
+    "ProviderRequestError",
+    "ProviderResponseError",
     "NormalizationError",
     "ValidationError",
     "StorageError",
@@ -55,6 +66,11 @@ __all__ = [
     "DatasetRegistryEntry",
     "append_registry_entry",
     "lookup_registry_entry",
+    "TimeRange",
+    "FetchRequest",
+    "RawResponse",
+    "ProviderAdapter",
+    "LocalFileProviderAdapter",
     "Source",
     "CanonicalRecord",
     "Bar",

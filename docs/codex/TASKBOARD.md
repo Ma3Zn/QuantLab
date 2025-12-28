@@ -29,8 +29,9 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 
 ### Calendars/time semantics scaffolding
 - [ ] Implement UTC enforcement + ts_provenance plumbing
-- [ ] Implement minimal SessionRules config loader for seed MICs
-- [ ] Implement calendar conflict flagging hooks (even if baseline calendar is stubbed)
+- [x] Implement minimal SessionRules config loader for seed MICs
+- [x] Implement calendar baseline abstraction + version id helpers
+- [x] Implement calendar conflict flagging hooks (even if baseline calendar is stubbed)
 
 ### Tests
 - [ ] Unit tests for schema invariants

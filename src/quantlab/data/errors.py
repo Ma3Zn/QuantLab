@@ -36,6 +36,14 @@ class ProviderError(DataError):
     """Raised when provider adapters fail to fetch or parse data."""
 
 
+class ProviderRequestError(ProviderError):
+    """Raised when provider adapters receive invalid or unsupported requests."""
+
+
+class ProviderResponseError(ProviderError):
+    """Raised when provider adapters fail to read or parse responses."""
+
+
 class NormalizationError(DataError):
     """Raised when raw payloads cannot be normalized to canonical schema."""
 
