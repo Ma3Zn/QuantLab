@@ -1,0 +1,71 @@
+{
+  "version": "v1",
+  "equities": [
+    {
+      "mic": "XNYS",
+      "vendor_symbol": "AAPL",
+      "currency": "USD",
+      "timezone": "America/New_York"
+    },
+    {
+      "mic": "XNYS",
+      "vendor_symbol": "MSFT",
+      "currency": "USD",
+      "timezone": "America/New_York"
+    },
+    {
+      "mic": "XNAS",
+      "vendor_symbol": "NVDA",
+      "currency": "USD",
+      "timezone": "America/New_York"
+    },
+    {
+      "mic": "XNAS",
+      "vendor_symbol": "AMZN",
+      "currency": "USD",
+      "timezone": "America/New_York"
+    },
+    {
+      "mic": "XLON",
+      "vendor_symbol": "VOD",
+      "currency": "GBP",
+      "timezone": "Europe/London"
+    },
+    {
+      "mic": "XPAR",
+      "vendor_symbol": "AIR",
+      "currency": "EUR",
+      "timezone": "Europe/Paris"
+    },
+    {
+      "mic": "XETR",
+      "vendor_symbol": "SAP",
+      "currency": "EUR",
+      "timezone": "Europe/Berlin"
+    },
+    {
+      "mic": "XTKS",
+      "vendor_symbol": "7203",
+      "currency": "JPY",
+      "timezone": "Asia/Tokyo"
+    }
+  ],
+  "fx_spot": [
+    {
+      "base_ccy": "EUR",
+      "quote_ccy": "USD"
+    },
+    {
+      "base_ccy": "USD",
+      "quote_ccy": "JPY"
+    },
+    {
+      "base_ccy": "GBP",
+      "quote_ccy": "USD"
+    },
+    {
+      "base_ccy": "USD",
+      "quote_ccy": "CHF"
+    }
+  ]
+}
