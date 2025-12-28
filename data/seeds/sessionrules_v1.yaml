@@ -1,0 +1,41 @@
+{
+  "version": "v1",
+  "rules": [
+    {
+      "mic": "XNYS",
+      "timezone_local": "America/New_York",
+      "regular_close_local": "16:00",
+      "source_note": "MVP seed"
+    },
+    {
+      "mic": "XNAS",
+      "timezone_local": "America/New_York",
+      "regular_close_local": "16:00",
+      "source_note": "MVP seed"
+    },
+    {
+      "mic": "XLON",
+      "timezone_local": "Europe/London",
+      "regular_close_local": "16:30",
+      "source_note": "MVP seed"
+    },
+    {
+      "mic": "XPAR",
+      "timezone_local": "Europe/Paris",
+      "regular_close_local": "17:30",
+      "source_note": "MVP seed"
+    },
+    {
+      "mic": "XETR",
+      "timezone_local": "Europe/Berlin",
+      "regular_close_local": "17:30",
+      "source_note": "MVP seed"
+    },
+    {
+      "mic": "XTKS",
+      "timezone_local": "Asia/Tokyo",
+      "regular_close_local": "15:00",
+      "source_note": "MVP seed"
+    }
+  ]
+}
