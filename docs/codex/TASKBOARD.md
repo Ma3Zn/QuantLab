@@ -23,8 +23,8 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 ### Provider + ingestion
 - [x] Implement ProviderAdapter interface + one MVP adapter
 - [x] Implement request fingerprinting
-- [ ] Implement Normalizer raw→canonical for EOD equities and FX daily
-- [ ] Implement Validator hard rules + soft flags + reports
+- [x] Implement Normalizer raw→canonical for EOD equities and FX daily
+- [x] Implement Validator hard rules + soft flags + reports
 - [ ] Implement ingestion runner that produces: raw payloads + canonical snapshot + registry entry
 
 ### Calendars/time semantics scaffolding
@@ -34,7 +34,7 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 - [x] Implement calendar conflict flagging hooks (even if baseline calendar is stubbed)
 
 ### Tests
-- [ ] Unit tests for schema invariants
+- [x] Unit tests for schema invariants
 - [ ] Property-based tests (Hypothesis) for key invariants
 - [ ] Integration test: seed universe ingestion run (network calls mocked/recorded)
 - [ ] Golden snapshot test: stable canonical output for a fixed seed payload
