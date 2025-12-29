@@ -52,6 +52,7 @@ from quantlab.data.storage import (
     stage_canonical_snapshot,
     store_raw_payload,
 )
+from quantlab.data.validators import ValidationContext, validate_records
 
 __all__ = [
     "DataError",
@@ -104,4 +105,6 @@ __all__ = [
     "compute_content_hash",
     "stage_canonical_snapshot",
     "publish_canonical_snapshot",
+    "ValidationContext",
+    "validate_records",
 ]
