@@ -12,6 +12,14 @@ from quantlab.data.errors import (
 )
 from quantlab.data.identity import generate_ingest_run_id, request_fingerprint
 from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
+from quantlab.data.normalizers import (
+    EQUITY_EOD_DATASET_ID,
+    FX_DAILY_DATASET_ID,
+    SCHEMA_VERSION,
+    NormalizationContext,
+    normalize_equity_eod,
+    normalize_fx_daily,
+)
 from quantlab.data.providers import (
     FetchRequest,
     LocalFileProviderAdapter,
@@ -59,6 +67,12 @@ __all__ = [
     "StructuredJSONFormatter",
     "get_logger",
     "log_data_error",
+    "EQUITY_EOD_DATASET_ID",
+    "FX_DAILY_DATASET_ID",
+    "SCHEMA_VERSION",
+    "NormalizationContext",
+    "normalize_equity_eod",
+    "normalize_fx_daily",
     "request_fingerprint",
     "generate_ingest_run_id",
     "QualityFlag",

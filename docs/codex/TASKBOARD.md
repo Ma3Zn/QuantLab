@@ -21,7 +21,7 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 - [x] Add content hashing utilities
 
 ### Provider + ingestion
-- [ ] Implement ProviderAdapter interface + one MVP adapter
+- [x] Implement ProviderAdapter interface + one MVP adapter
 - [x] Implement request fingerprinting
 - [ ] Implement Normalizer raw→canonical for EOD equities and FX daily
 - [ ] Implement Validator hard rules + soft flags + reports
