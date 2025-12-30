@@ -4,6 +4,9 @@ This file is intended to be used as a living checklist during Codex sessions.
 Update it as tasks are completed. Keep tasks small and reviewable.
 
 ## Milestone: Data Layer MVP “end-to-end”
+Reference plan: `docs/codex/DATA_LAYER_MVP_EXECUTION_PLAN.md` (Stooq-first).
+
+Provider choice (MVP): Stooq (offline CSV fixtures, no network in tests).
 ### Tooling baseline (required before writing much code)
 - [x] Add `pyproject.toml` dev tooling (ruff, pytest, mypy) and minimal config
 - [x] Add pre-commit config (optional but recommended)

@@ -54,3 +54,6 @@ Implement MVP described by:
 - `docs/testing/data_layer_test_plan.md`
 
 Do not implement intraday, futures, options, or portfolio/risk logic.
+
+## Addenda
+- Time semantics + tests: `docs/codex/AGENTS_DATA_LAYER_MVP.md`

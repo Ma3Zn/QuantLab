@@ -5,6 +5,10 @@
 2) Property-based tests
 3) Example script
 
+Provider focus (MVP): Stooq via offline CSV fixtures and LocalFileProviderAdapter.
+Fixture location: `financial_data/external`.
+First dataset_id: `md.equity.eod.bars` (EOD equities).
+
 ## Step 1: UTC enforcement + ts_provenance
 Read:
 - docs/data/00_data_layer_spec_mvp.md
@@ -19,6 +23,8 @@ Implementation sketch:
   - add PROVIDER_TIMESTAMP_USED when ts_provenance != EXCHANGE_CLOSE,
   - capture calendar conflict flags where hooks exist.
 - Propagate provenance into registry metadata or snapshot parts if required.
+- Stooq-specific: map CSV timestamps to UTC and set ts_provenance to
+  PROVIDER_EOD unless close times are explicitly known.
 
 Likely touch points:
 - src/quantlab/data/schemas/records.py
@@ -29,6 +35,7 @@ Likely touch points:
 - tests/test_normalizers.py
 - tests/test_validators.py
 - tests/test_quality_flags_and_reports.py
+ - tests/fixtures (Stooq CSV fixtures)
 
 Acceptance notes:
 - Canonical records serialize ts_provenance.
@@ -40,6 +47,7 @@ Acceptance notes:
 Implementation sketch:
 - Add Hypothesis tests for record invariants in a new file.
 - Keep strategies bounded and deterministic; avoid external calls.
+- Ensure fixtures remain offline and consistent with Stooq CSV schema.
 
 Suggested tests:
 - BarRecord: low <= min(open, close) and high >= max(open, close).
@@ -54,7 +62,7 @@ Likely touch points:
 ## Step 3: Example script
 Implementation sketch:
 - Add examples/scripts/ingest_seed_universe.py calling ingestion runner with
-  the seed universe fixture.
+  Stooq CSV fixtures from `financial_data/external` (via LocalFileProviderAdapter).
 - Write logs to stdout and output to data/ under registry.
 - Document how to run it (no network calls).
 
