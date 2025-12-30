@@ -25,7 +25,7 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 - [x] Implement request fingerprinting
 - [x] Implement Normalizer raw→canonical for EOD equities and FX daily
 - [x] Implement Validator hard rules + soft flags + reports
-- [ ] Implement ingestion runner that produces: raw payloads + canonical snapshot + registry entry
+- [x] Implement ingestion runner that produces: raw payloads + canonical snapshot + registry entry
 
 ### Calendars/time semantics scaffolding
 - [ ] Implement UTC enforcement + ts_provenance plumbing
@@ -36,9 +36,9 @@ Update it as tasks are completed. Keep tasks small and reviewable.
 ### Tests
 - [x] Unit tests for schema invariants
 - [ ] Property-based tests (Hypothesis) for key invariants
-- [ ] Integration test: seed universe ingestion run (network calls mocked/recorded)
-- [ ] Golden snapshot test: stable canonical output for a fixed seed payload
+- [x] Integration test: seed universe ingestion run (network calls mocked/recorded)
+- [x] Golden snapshot test: stable canonical output for a fixed seed payload
 
 ### Documentation & examples
-- [ ] `docs/` updated to reflect actual config paths and commands
+- [x] `docs/` updated to reflect actual config paths and commands
 - [ ] Minimal example script under `examples/scripts/ingest_seed_universe.py`
