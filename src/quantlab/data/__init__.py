@@ -11,6 +11,12 @@ from quantlab.data.errors import (
     ValidationError,
 )
 from quantlab.data.identity import generate_ingest_run_id, request_fingerprint
+from quantlab.data.ingestion import (
+    IngestionConfig,
+    IngestionResult,
+    build_canonical_parts,
+    run_ingestion,
+)
 from quantlab.data.logging import StructuredJSONFormatter, get_logger, log_data_error
 from quantlab.data.normalizers import (
     EQUITY_EOD_DATASET_ID,
@@ -76,6 +82,10 @@ __all__ = [
     "normalize_fx_daily",
     "request_fingerprint",
     "generate_ingest_run_id",
+    "IngestionConfig",
+    "IngestionResult",
+    "build_canonical_parts",
+    "run_ingestion",
     "QualityFlag",
     "ValidationReport",
     "DatasetRegistryEntry",
