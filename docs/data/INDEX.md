@@ -3,6 +3,7 @@
 This directory documents the **Data layer** of QuantLab: how market data is scoped, identified, normalized, and exposed to downstream modules.
 
 ## Files
+- `docs/QUICKSTART.md` — end-to-end ingestion quickstart (local payload).
 - `docs/data/README.md` — module responsibilities, boundaries, and invariants.
 - `docs/data/00_data_layer_spec_mvp.md` — 1–2 page MVP spec (datasets, time semantics, alignment, boundaries).
 - `docs/data/01_instrument_universe_mvp.md` — MVP instrument universe and identifier policy.

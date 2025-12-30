@@ -36,3 +36,4 @@
 
 ## References
 See `docs/data/INDEX.md` for the documentation map.
+Quickstart: `docs/QUICKSTART.md`.
