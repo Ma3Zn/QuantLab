@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 
 from quantlab.data.quality import QualityFlag, ValidationReport
-from quantlab.data.schemas import Bar, BarRecord, Source
+from quantlab.data.schemas import Bar, BarRecord, Source, TimestampProvenance
 
 
 def _base_metadata() -> dict[str, Any]:
@@ -17,6 +17,7 @@ def _base_metadata() -> dict[str, Any]:
         "instrument_id": "inst_123",
         "ts": datetime(2024, 12, 23, 21, 0, tzinfo=timezone.utc),
         "asof_ts": datetime(2024, 12, 24, 7, 10, 3, tzinfo=timezone.utc),
+        "ts_provenance": TimestampProvenance.EXCHANGE_CLOSE,
         "source": Source(provider="TEST", endpoint="eod_bars"),
         "ingest_run_id": "ing_001",
         "quality_flags": (),
@@ -53,6 +54,7 @@ def test_canonical_record_normalizes_quality_flags() -> None:
     )
     payload = record.to_payload()
     assert payload["quality_flags"] == ["MISSING_VALUE", "OUTLIER_SUSPECT"]
+    assert payload["ts_provenance"] == "EXCHANGE_CLOSE"
 
 
 def test_canonical_record_rejects_unknown_flags() -> None:

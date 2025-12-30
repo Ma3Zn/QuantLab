@@ -16,7 +16,7 @@ from quantlab.data.normalizers import (
     normalize_fx_daily,
 )
 from quantlab.data.quality import QualityFlag
-from quantlab.data.schemas import Source
+from quantlab.data.schemas import Source, TimestampProvenance
 from quantlab.data.universe import load_seed_universe
 from quantlab.instruments.master import InstrumentMasterRecord, InstrumentType
 
@@ -85,6 +85,33 @@ def test_normalize_equity_eod_payload_bytes() -> None:
     assert record.bar.close == 192.8
     assert record.bar.adjustment_basis is not None
     assert record.quality_flags == (QualityFlag.ADJUSTED_PRICE_PRESENT,)
+    assert record.ts_provenance is TimestampProvenance.PROVIDER_EOD
+
+
+def test_normalize_equity_eod_payload_csv() -> None:
+    context = NormalizationContext(
+        dataset_id=EQUITY_EOD_DATASET_ID,
+        schema_version=SCHEMA_VERSION,
+        dataset_version="2024-01-03",
+        asof_ts=datetime(2024, 1, 3, 7, 10, tzinfo=timezone.utc),
+        ingest_run_id="ing_20240103_071000Z_0001",
+        source=Source(provider="TEST", endpoint="eod_bars"),
+    )
+    payload = (
+        "mic,vendor_symbol,ts,trading_date,close\nXNYS,AAPL,2024-01-02T21:00:00Z,2024-01-02,192.8\n"
+    )
+
+    records = normalize_equity_eod(
+        payload,
+        context=context,
+        instrument_lookup=_equity_lookup(),
+    )
+
+    assert len(records) == 1
+    record = records[0]
+    assert record.bar.close == 192.8
+    assert record.trading_date_local == date(2024, 1, 2)
+    assert record.ts_provenance is TimestampProvenance.PROVIDER_EOD
 
 
 def test_normalize_fx_daily_payload_mapping() -> None:
@@ -123,6 +150,7 @@ def test_normalize_fx_daily_payload_mapping() -> None:
     assert record.field == "mid"
     assert record.value == 1.0785
     assert record.trading_date_local == date(2024, 1, 2)
+    assert record.ts_provenance is TimestampProvenance.PROVIDER_EOD
 
 
 def test_normalize_equity_eod_missing_instrument_raises() -> None:

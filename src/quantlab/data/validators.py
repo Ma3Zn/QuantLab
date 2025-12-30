@@ -8,7 +8,12 @@ from typing import Callable, Hashable, Iterable, Sequence
 from quantlab.data.errors import ValidationError
 from quantlab.data.normalizers import EQUITY_EOD_DATASET_ID, FX_DAILY_DATASET_ID
 from quantlab.data.quality import QualityFlag, ValidationReport
-from quantlab.data.schemas import BarRecord, CanonicalRecord, PointRecord
+from quantlab.data.schemas import (
+    BarRecord,
+    CanonicalRecord,
+    PointRecord,
+    TimestampProvenance,
+)
 
 DEFAULT_EQUITY_OUTLIER_THRESHOLD = 0.30
 DEFAULT_FX_OUTLIER_THRESHOLD = 0.05
@@ -131,6 +136,8 @@ def validate_records(
             hard_errors.append(f"record {index} dataset_version mismatch: {record.dataset_version}")
         if record.ingest_run_id != context.ingest_run_id:
             hard_errors.append(f"record {index} ingest_run_id mismatch: {record.ingest_run_id}")
+        if record.ts_provenance != TimestampProvenance.EXCHANGE_CLOSE:
+            additions[index].add(QualityFlag.PROVIDER_TIMESTAMP_USED)
 
         if dataset_id == EQUITY_EOD_DATASET_ID:
             if not isinstance(record, BarRecord):
@@ -183,6 +190,33 @@ def validate_records(
         else:
             hard_errors.append(f"unsupported dataset_id: {dataset_id}")
             break
+
+    if dataset_id == EQUITY_EOD_DATASET_ID:
+        seen_equity: set[tuple[str, datetime]] = set()
+        for record in records:
+            if not isinstance(record, BarRecord):
+                continue
+            key_equity = (record.instrument_id, record.ts)
+            if key_equity in seen_equity:
+                hard_errors.append(
+                    f"duplicate record for {record.instrument_id} at {record.ts.isoformat()}"
+                )
+            else:
+                seen_equity.add(key_equity)
+    elif dataset_id == FX_DAILY_DATASET_ID:
+        seen_fx: set[tuple[str, str, datetime]] = set()
+        for record in records:
+            if not isinstance(record, PointRecord):
+                continue
+            field = record.field.strip().lower()
+            key_fx = (record.instrument_id, field, record.ts)
+            if key_fx in seen_fx:
+                hard_errors.append(
+                    "duplicate record for "
+                    f"{record.instrument_id}/{field} at {record.ts.isoformat()}"
+                )
+            else:
+                seen_fx.add(key_fx)
 
     if dataset_id == FX_DAILY_DATASET_ID:
         bid_ask: dict[tuple[str, datetime], dict[str, float]] = {}

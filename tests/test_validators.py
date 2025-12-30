@@ -11,13 +11,18 @@ from quantlab.data.normalizers import (
     SCHEMA_VERSION,
 )
 from quantlab.data.quality import QualityFlag
-from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source
+from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source, TimestampProvenance
 from quantlab.data.validators import validate_records
 
 _ASOF_TS = datetime(2024, 1, 3, 7, 10, tzinfo=timezone.utc)
 
 
-def _equity_record(ts: datetime, close: float) -> BarRecord:
+def _equity_record(
+    ts: datetime,
+    close: float,
+    *,
+    ts_provenance: TimestampProvenance = TimestampProvenance.EXCHANGE_CLOSE,
+) -> BarRecord:
     return BarRecord(
         dataset_id=EQUITY_EOD_DATASET_ID,
         schema_version=SCHEMA_VERSION,
@@ -25,6 +30,7 @@ def _equity_record(ts: datetime, close: float) -> BarRecord:
         instrument_id="inst_eq_1",
         ts=ts,
         asof_ts=_ASOF_TS,
+        ts_provenance=ts_provenance,
         source=Source(provider="TEST", endpoint="eod_bars"),
         ingest_run_id="ing_001",
         quality_flags=(),
@@ -36,7 +42,14 @@ def _equity_record(ts: datetime, close: float) -> BarRecord:
     )
 
 
-def _fx_record(ts: datetime, field: str, value: float, base_ccy: str) -> PointRecord:
+def _fx_record(
+    ts: datetime,
+    field: str,
+    value: float,
+    base_ccy: str,
+    *,
+    ts_provenance: TimestampProvenance = TimestampProvenance.EXCHANGE_CLOSE,
+) -> PointRecord:
     return PointRecord(
         dataset_id=FX_DAILY_DATASET_ID,
         schema_version=SCHEMA_VERSION,
@@ -44,6 +57,7 @@ def _fx_record(ts: datetime, field: str, value: float, base_ccy: str) -> PointRe
         instrument_id="inst_fx_1",
         ts=ts,
         asof_ts=_ASOF_TS,
+        ts_provenance=ts_provenance,
         source=Source(provider="TEST", endpoint="fx_daily"),
         ingest_run_id="ing_001",
         quality_flags=(),
@@ -101,3 +115,17 @@ def test_validate_fx_hard_errors_raise() -> None:
             generated_ts=datetime(2024, 1, 3, tzinfo=timezone.utc),
             raise_on_hard_error=True,
         )
+
+
+def test_validate_records_adds_provider_timestamp_flag() -> None:
+    ts = datetime(2024, 1, 2, 21, 0, tzinfo=timezone.utc)
+    records = (_equity_record(ts, close=100.0, ts_provenance=TimestampProvenance.PROVIDER_EOD),)
+
+    validated, report = validate_records(
+        records,
+        generated_ts=datetime(2024, 1, 3, tzinfo=timezone.utc),
+        raise_on_hard_error=False,
+    )
+
+    assert QualityFlag.PROVIDER_TIMESTAMP_USED in validated[0].quality_flags
+    assert report.flag_counts[QualityFlag.PROVIDER_TIMESTAMP_USED] == 1

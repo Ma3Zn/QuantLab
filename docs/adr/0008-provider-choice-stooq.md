@@ -18,7 +18,7 @@ offline, aligning with deterministic ingestion and golden snapshot tests.
 
 ## Decision
 For the MVP, the primary provider is **Stooq**, using **offline CSV fixtures**
-stored under `financial_data/external`.
+stored under `data/external`.
 
 Provider choice is recorded in registry metadata via `source.provider`.
 
@@ -33,6 +33,6 @@ Provider choice is recorded in registry metadata via `source.provider`.
 - Network calls are not required for MVP ingestion or testing.
 
 ## Follow-ups
-- Add Stooq CSV fixtures under `financial_data/external`.
+- Add Stooq CSV fixtures under `data/external`.
 - Ensure dataset versioning reflects provider differences if/when additional
   providers are added.

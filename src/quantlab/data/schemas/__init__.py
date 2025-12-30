@@ -6,6 +6,14 @@ from quantlab.data.schemas.records import (
     CanonicalRecord,
     PointRecord,
     Source,
+    TimestampProvenance,
 )
 
-__all__ = ["Source", "CanonicalRecord", "Bar", "BarRecord", "PointRecord"]
+__all__ = [
+    "Source",
+    "CanonicalRecord",
+    "Bar",
+    "BarRecord",
+    "PointRecord",
+    "TimestampProvenance",
+]

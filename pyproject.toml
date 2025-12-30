@@ -16,6 +16,7 @@ dev = [
   "ruff==0.1.9",
   "mypy==1.7.1",
   "pytest==7.4.3",
+  "hypothesis==6.92.1",
 ]
 
 [tool.setuptools.packages.find]

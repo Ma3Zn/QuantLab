@@ -41,6 +41,7 @@ Downstream code should target these logical types, not vendor payloads.
 - `instrument_id`: string (internal stable ID)
 - `ts`: timestamp (UTC, ISO 8601)
 - `asof_ts`: timestamp (UTC) — when this observation was known/ingested (anti-lookahead)
+- `ts_provenance`: enum {`EXCHANGE_CLOSE`, `FIXING_TIME`, `PROVIDER_EOD`, `UNKNOWN`}
 - `source`: object
   - `provider`: string
   - `endpoint`: string (or logical name)
@@ -82,6 +83,7 @@ Add to record (recommended when `adj_close` present):
   "instrument_id": "inst_2cdd0b9d-2b6a-4a61-9a31-1a7b9f0c5b2a",
   "ts": "2025-12-23T21:00:00Z",
   "asof_ts": "2025-12-24T07:10:03Z",
+  "ts_provenance": "PROVIDER_EOD",
   "source": {"provider": "PROVIDER_X", "endpoint": "eod_bars", "provider_dataset": "global_equities"},
   "ingest_run_id": "ing_20251224_071003Z_0001",
   "quality_flags": [],
@@ -111,6 +113,7 @@ Add to record (recommended when `adj_close` present):
   "instrument_id": "inst_7bd7a0a1-5f8a-4a2b-9b93-6fd2a7a7c1f1",
   "ts": "2025-12-23T17:00:00Z",
   "asof_ts": "2025-12-24T07:10:03Z",
+  "ts_provenance": "PROVIDER_EOD",
   "source": {"provider": "PROVIDER_X", "endpoint": "fx_daily", "provider_dataset": "fx_spot"},
   "ingest_run_id": "ing_20251224_071003Z_0001",
   "quality_flags": [],

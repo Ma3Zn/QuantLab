@@ -6,7 +6,7 @@
 3) Example script
 
 Provider focus (MVP): Stooq via offline CSV fixtures and LocalFileProviderAdapter.
-Fixture location: `financial_data/external`.
+Fixture location: `data/external`.
 First dataset_id: `md.equity.eod.bars` (EOD equities).
 
 ## Step 1: UTC enforcement + ts_provenance
@@ -62,7 +62,7 @@ Likely touch points:
 ## Step 3: Example script
 Implementation sketch:
 - Add examples/scripts/ingest_seed_universe.py calling ingestion runner with
-  Stooq CSV fixtures from `financial_data/external` (via LocalFileProviderAdapter).
+  Stooq CSV fixtures from `data/external` (via LocalFileProviderAdapter).
 - Write logs to stdout and output to data/ under registry.
 - Document how to run it (no network calls).
 

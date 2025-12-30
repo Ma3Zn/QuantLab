@@ -31,6 +31,13 @@ class Source:
             _require_non_empty(self.provider_dataset, "provider_dataset")
 
 
+class TimestampProvenance(str, Enum):
+    EXCHANGE_CLOSE = "EXCHANGE_CLOSE"
+    FIXING_TIME = "FIXING_TIME"
+    PROVIDER_EOD = "PROVIDER_EOD"
+    UNKNOWN = "UNKNOWN"
+
+
 @dataclass(frozen=True)
 class CanonicalRecord:
     dataset_id: str
@@ -39,6 +46,7 @@ class CanonicalRecord:
     instrument_id: str
     ts: datetime
     asof_ts: datetime
+    ts_provenance: TimestampProvenance
     source: Source
     ingest_run_id: str
     quality_flags: Tuple[QualityFlag, ...]
@@ -55,6 +63,8 @@ class CanonicalRecord:
         _require_non_empty(self.ingest_run_id, "ingest_run_id")
         _ensure_utc(self.ts, "ts")
         _ensure_utc(self.asof_ts, "asof_ts")
+        normalized_provenance = TimestampProvenance(self.ts_provenance)
+        object.__setattr__(self, "ts_provenance", normalized_provenance)
         if self.quality_flags is None:
             raise ValueError("quality_flags must not be None")
         normalized_flags = tuple(QualityFlag(flag) for flag in self.quality_flags)
@@ -68,6 +78,7 @@ class CanonicalRecord:
             "instrument_id": self.instrument_id,
             "ts": self.ts.isoformat(),
             "asof_ts": self.asof_ts.isoformat(),
+            "ts_provenance": self.ts_provenance.value,
             "source": {
                 "provider": self.source.provider,
                 "endpoint": self.source.endpoint,

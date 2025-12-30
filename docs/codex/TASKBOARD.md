@@ -31,17 +31,17 @@ Provider choice (MVP): Stooq (offline CSV fixtures, no network in tests).
 - [x] Implement ingestion runner that produces: raw payloads + canonical snapshot + registry entry
 
 ### Calendars/time semantics scaffolding
-- [ ] Implement UTC enforcement + ts_provenance plumbing
+- [x] Implement UTC enforcement + ts_provenance plumbing
 - [x] Implement minimal SessionRules config loader for seed MICs
 - [x] Implement calendar baseline abstraction + version id helpers
 - [x] Implement calendar conflict flagging hooks (even if baseline calendar is stubbed)
 
 ### Tests
 - [x] Unit tests for schema invariants
-- [ ] Property-based tests (Hypothesis) for key invariants
+- [x] Property-based tests (Hypothesis) for key invariants
 - [x] Integration test: seed universe ingestion run (network calls mocked/recorded)
 - [x] Golden snapshot test: stable canonical output for a fixed seed payload
 
 ### Documentation & examples
 - [x] `docs/` updated to reflect actual config paths and commands
-- [ ] Minimal example script under `examples/scripts/ingest_seed_universe.py`
+- [x] Minimal example script under `examples/scripts/ingest_seed_universe.py`

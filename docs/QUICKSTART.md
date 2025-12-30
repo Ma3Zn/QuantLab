@@ -78,3 +78,13 @@ Outputs:
 - Raw payloads in `data/raw/ingest_run_id=.../request=.../`
 - Canonical snapshot in `data/canonical/dataset_id=.../dataset_version=.../`
 - Registry entry appended to `data/registry.jsonl`
+
+## Seed universe script (offline fixtures)
+Run the bundled script that ingests the seed universe using offline Stooq fixtures:
+```
+python examples/scripts/ingest_seed_universe.py
+```
+
+Inputs:
+- Fixtures under `data/external`
+- Seeds under `data/seeds`

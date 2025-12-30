@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import csv
 import json
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+from io import StringIO
 from typing import Mapping, Sequence
 
 from quantlab.data.errors import NormalizationError
 from quantlab.data.quality import QualityFlag
-from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source
+from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source, TimestampProvenance
 from quantlab.data.schemas.records import AdjustmentBasis
 from quantlab.instruments.master import InstrumentMasterRecord, InstrumentType, normalize_ccy
 
@@ -45,11 +47,29 @@ def _parse_payload(payload: bytes | str | Mapping[str, object]) -> Mapping[str, 
         raise NormalizationError("payload must be utf-8", cause=exc) from exc
     try:
         parsed = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise NormalizationError("payload must be valid JSON", cause=exc) from exc
+    except json.JSONDecodeError:
+        return _parse_csv_payload(raw)
     if not isinstance(parsed, Mapping):
         raise NormalizationError("payload must decode to a JSON object")
     return parsed
+
+
+def _parse_csv_payload(raw: str) -> Mapping[str, object]:
+    try:
+        reader = csv.DictReader(StringIO(raw), skipinitialspace=True)
+    except csv.Error as exc:
+        raise NormalizationError("payload must be valid CSV", cause=exc) from exc
+    if reader.fieldnames is None:
+        raise NormalizationError("payload missing CSV header")
+    records: list[dict[str, object]] = []
+    for row in reader:
+        if row is None:
+            continue
+        cleaned = {key: value for key, value in row.items() if key is not None}
+        if all(value in ("", None) for value in cleaned.values()):
+            continue
+        records.append(cleaned)
+    return {"records": records}
 
 
 def _get_records(payload: Mapping[str, object]) -> Sequence[object]:
@@ -70,7 +90,7 @@ def _get_required_str(entry: Mapping[str, object], field: str) -> str:
 
 def _get_optional_str(entry: Mapping[str, object], field: str) -> str | None:
     value = entry.get(field)
-    if value is None:
+    if value is None or value == "":
         return None
     if not isinstance(value, str) or not value:
         raise NormalizationError(f"{field} must be a non-empty string when provided")
@@ -86,15 +106,24 @@ def _get_required_float(entry: Mapping[str, object], field: str) -> float:
 
 def _get_optional_float(entry: Mapping[str, object], field: str) -> float | None:
     value = entry.get(field)
-    if value is None:
+    if value is None or value == "":
         return None
     return _parse_float(value, field)
 
 
 def _parse_float(value: object, field: str) -> float:
-    if isinstance(value, bool) or not isinstance(value, (int, float)):
+    if isinstance(value, bool):
         raise NormalizationError(f"{field} must be numeric")
-    return float(value)
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        if not value:
+            raise NormalizationError(f"{field} must be numeric")
+        try:
+            return float(value)
+        except ValueError as exc:
+            raise NormalizationError(f"{field} must be numeric", cause=exc) from exc
+    raise NormalizationError(f"{field} must be numeric")
 
 
 def _parse_datetime(value: object, field: str) -> datetime:
@@ -111,7 +140,7 @@ def _parse_datetime(value: object, field: str) -> datetime:
 
 
 def _parse_optional_date(value: object, field: str) -> date | None:
-    if value is None:
+    if value is None or value == "":
         return None
     if not isinstance(value, str) or not value:
         raise NormalizationError(f"{field} must be a non-empty string when provided")
@@ -210,6 +239,7 @@ def normalize_equity_eod(
                 instrument_id=instrument.instrument_id,
                 ts=ts,
                 asof_ts=context.asof_ts,
+                ts_provenance=TimestampProvenance.PROVIDER_EOD,
                 source=context.source,
                 ingest_run_id=context.ingest_run_id,
                 quality_flags=tuple(flags),
@@ -271,6 +301,7 @@ def normalize_fx_daily(
                 instrument_id=instrument.instrument_id,
                 ts=ts,
                 asof_ts=context.asof_ts,
+                ts_provenance=TimestampProvenance.PROVIDER_EOD,
                 source=context.source,
                 ingest_run_id=context.ingest_run_id,
                 quality_flags=tuple(),
