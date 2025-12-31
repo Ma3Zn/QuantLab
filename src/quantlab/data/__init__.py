@@ -27,10 +27,12 @@ from quantlab.data.normalizers import (
     normalize_fx_daily,
 )
 from quantlab.data.providers import (
+    EodProvider,
     FetchRequest,
     LocalFileProviderAdapter,
     ProviderAdapter,
     RawResponse,
+    SymbolMapper,
     TimeRange,
 )
 from quantlab.data.quality import QualityFlag, ValidationReport
@@ -39,7 +41,14 @@ from quantlab.data.registry import (
     append_registry_entry,
     lookup_registry_entry,
 )
-from quantlab.data.schemas import Bar, BarRecord, CanonicalRecord, PointRecord, Source
+from quantlab.data.schemas import (
+    Bar,
+    BarRecord,
+    CanonicalRecord,
+    PointRecord,
+    Source,
+    TimeSeriesBundle,
+)
 from quantlab.data.sessionrules import (
     SessionRule,
     SessionRulesSnapshot,
@@ -59,6 +68,7 @@ from quantlab.data.storage import (
     store_raw_payload,
 )
 from quantlab.data.validators import ValidationContext, validate_records
+from quantlab.data.service import MarketDataService
 
 __all__ = [
     "DataError",
@@ -96,11 +106,14 @@ __all__ = [
     "RawResponse",
     "ProviderAdapter",
     "LocalFileProviderAdapter",
+    "EodProvider",
+    "SymbolMapper",
     "Source",
     "CanonicalRecord",
     "Bar",
     "BarRecord",
     "PointRecord",
+    "TimeSeriesBundle",
     "SessionRule",
     "SessionRulesSnapshot",
     "compute_sessionrules_hash",
@@ -117,4 +130,5 @@ __all__ = [
     "publish_canonical_snapshot",
     "ValidationContext",
     "validate_records",
+    "MarketDataService",
 ]
