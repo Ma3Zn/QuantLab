@@ -167,40 +167,40 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16�
 ## 5) MarketDataService façade (PR-20)
 
 ### 5.1 Provider protocol and symbol mapping
-- [ ] Provider protocol exists (e.g., `fetch_eod(...) -> DataFrame`).
-- [ ] SymbolMapper exists and:
-  - [ ] maps `AssetId` to provider symbols deterministically
-  - [ ] raises a typed error if mapping is missing
+- [x] Provider protocol exists (e.g., `fetch_eod(...) -> DataFrame`).
+- [x] SymbolMapper exists and:
+  - [x] maps `AssetId` to provider symbols deterministically
+  - [x] raises a typed error if mapping is missing
 
 ### 5.2 Bundle schema
-- [ ] `TimeSeriesBundle` exists and includes:
-  - [ ] `data` (DataFrame with MultiIndex columns `(asset_id, field)`)
-  - [ ] index is `date`
-  - [ ] `assets_meta`
-  - [ ] `quality`
-  - [ ] `lineage`
+- [x] `TimeSeriesBundle` exists and includes:
+  - [x] `data` (DataFrame with MultiIndex columns `(asset_id, field)`)
+  - [x] index is `date`
+  - [x] `assets_meta`
+  - [x] `quality`
+  - [x] `lineage`
 
 ### 5.3 Cache-first orchestration
-- [ ] On cache hit, provider is not called (tested with a stub provider).
-- [ ] On cache miss, service:
-  - [ ] fetches from provider
-  - [ ] writes to store
-  - [ ] writes manifest
-  - [ ] returns **normalized** bundle (aligned + validated)
-- [ ] Service never returns raw provider frames.
+- [x] On cache hit, provider is not called (tested with a stub provider).
+- [x] On cache miss, service:
+  - [x] fetches from provider
+  - [x] writes to store
+  - [x] writes manifest
+  - [x] returns **normalized** bundle (aligned + validated)
+- [x] Service never returns raw provider frames.
 
 ### 5.4 Failure behavior
-- [ ] Provider errors surface as `ProviderFetchError` with context.
-- [ ] Storage errors surface as `StorageError` with context.
-- [ ] Validation errors surface as `DataValidationError` with context.
+- [x] Provider errors surface as `ProviderFetchError` with context.
+- [x] Storage errors surface as `StorageError` with context.
+- [x] Validation errors surface as `DataValidationError` with context.
 
 ### 5.5 Service tests
-- [ ] Cache miss → hit test exists.
-- [ ] Bundle structure test exists:
-  - [ ] MultiIndex columns shape
-  - [ ] date index type
-  - [ ] lineage fields present
-  - [ ] quality present
+- [x] Cache miss → hit test exists.
+- [x] Bundle structure test exists:
+  - [x] MultiIndex columns shape
+  - [x] date index type
+  - [x] lineage fields present
+  - [x] quality present
 
 ---
 
