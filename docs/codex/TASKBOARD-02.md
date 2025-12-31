@@ -18,12 +18,12 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16‚Ä
 - [ ] Providers (external I/O) are isolated under `src/data/providers/`.
 - [ ] Storage/caching is isolated under `src/data/storage/`.
 - [ ] Calendar/alignment/validation are isolated under `src/data/transforms/`.
-- [ ] Typed models and serializable contracts are isolated under `src/data/schemas/`.
+- [x] Typed models and serializable contracts are isolated under `src/data/schemas/`.
 - [ ] Orchestration fa√ßade exists as a composition object (e.g., `MarketDataService`) and does not mix I/O with transforms.
 - [ ] No circular imports between `providers/`, `storage/`, `transforms/`, `schemas/`.
 
 ### 0.3 Determinism and reproducibility
-- [ ] Request hashing is deterministic and order-invariant (assets/fields order does not matter).
+- [x] Request hashing is deterministic and order-invariant (assets/fields order does not matter).
 - [ ] ‚ÄúReplay semantics‚Äù are defined (via `request_hash` and `as_of` fields), and manifests exist for past runs.
 - [ ] All timestamps used in tests are either frozen or normalized so snapshots are stable.
 
@@ -32,61 +32,61 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16‚Ä
 ## 1) Public contracts and models (PR-16)
 
 ### 1.1 Request and policy models
-- [ ] `TimeSeriesRequest` exists and includes at least:
-  - [ ] `assets: list[AssetId]`
-  - [ ] `start: date` inclusive
-  - [ ] `end: date` inclusive
-  - [ ] `frequency: "1D"`
-  - [ ] `fields` (supports at least `close`; can include OHLCV)
-  - [ ] `price_type: "raw"` (and **only** raw is accepted)
-  - [ ] `calendar: CalendarSpec(kind="MARKET", market=...)`
-  - [ ] `alignment: AlignmentPolicy` (MVP: target calendar)
-  - [ ] `missing: MissingDataPolicy` (NAN_OK / DROP_DATES / ERROR)
-  - [ ] `validate: ValidationPolicy` (see below)
-  - [ ] `as_of: datetime | None`
-- [ ] Policy defaults are conservative and match spec:
-  - [ ] Missing default does **not** forward-fill.
-  - [ ] Nonpositive prices are disallowed by default.
-  - [ ] Deduplicate default is deterministic (e.g., LAST).
+- [x] `TimeSeriesRequest` exists and includes at least:
+  - [x] `assets: list[AssetId]`
+  - [x] `start: date` inclusive
+  - [x] `end: date` inclusive
+  - [x] `frequency: "1D"`
+  - [x] `fields` (supports at least `close`; can include OHLCV)
+  - [x] `price_type: "raw"` (and **only** raw is accepted)
+  - [x] `calendar: CalendarSpec(kind="MARKET", market=...)`
+  - [x] `alignment: AlignmentPolicy` (MVP: target calendar)
+  - [x] `missing: MissingDataPolicy` (NAN_OK / DROP_DATES / ERROR)
+  - [x] `validate: ValidationPolicy` (see below)
+  - [x] `as_of: datetime | None`
+- [x] Policy defaults are conservative and match spec:
+  - [x] Missing default does **not** forward-fill.
+  - [x] Nonpositive prices are disallowed by default.
+  - [x] Deduplicate default is deterministic (e.g., LAST).
 
 ### 1.2 Quality / lineage models
-- [ ] `QualityFlag` definitions exist, including at least:
-  - [ ] `MISSING`
-  - [ ] `DUPLICATE_RESOLVED`
-  - [ ] `OUTLIER_RETURN`
-  - [ ] `SUSPECT_CORP_ACTION`
-  - [ ] `NONPOSITIVE_PRICE`
-  - [ ] `NONMONOTONIC_INDEX`
-- [ ] `QualityReport` exists and is JSON-serializable; includes:
-  - [ ] per-asset coverage
-  - [ ] per-asset counts per flag
-  - [ ] example dates (bounded list) per flag type
-  - [ ] actions taken (e.g., dedup policy applied)
-- [ ] `LineageMeta` exists and includes at least:
-  - [ ] `request_hash`
-  - [ ] `request_json`
-  - [ ] `provider`
-  - [ ] `ingestion_ts_utc`
-  - [ ] `as_of_utc` (nullable)
-  - [ ] `dataset_version`
-  - [ ] `code_version` (nullable; if available)
-  - [ ] `storage_paths`
+- [x] `QualityFlag` definitions exist, including at least:
+  - [x] `MISSING`
+  - [x] `DUPLICATE_RESOLVED`
+  - [x] `OUTLIER_RETURN`
+  - [x] `SUSPECT_CORP_ACTION`
+  - [x] `NONPOSITIVE_PRICE`
+  - [x] `NONMONOTONIC_INDEX`
+- [x] `QualityReport` exists and is JSON-serializable; includes:
+  - [x] per-asset coverage
+  - [x] per-asset counts per flag
+  - [x] example dates (bounded list) per flag type
+  - [x] actions taken (e.g., dedup policy applied)
+- [x] `LineageMeta` exists and includes at least:
+  - [x] `request_hash`
+  - [x] `request_json`
+  - [x] `provider`
+  - [x] `ingestion_ts_utc`
+  - [x] `as_of_utc` (nullable)
+  - [x] `dataset_version`
+  - [x] `code_version` (nullable; if available)
+  - [x] `storage_paths`
 
 ### 1.3 Typed errors
-- [ ] Typed exceptions exist under `src/data/schemas/errors.py` (or equivalent) and are used consistently:
-  - [ ] `ProviderFetchError`
-  - [ ] `StorageError`
-  - [ ] `DataValidationError`
+- [x] Typed exceptions exist under `src/data/schemas/errors.py` (or equivalent) and are used consistently:
+  - [x] `ProviderFetchError`
+  - [x] `StorageError`
+  - [x] `DataValidationError`
 - [ ] Exceptions carry actionable context (asset_id, provider, request_hash, failing dates/counts).
 
 ### 1.4 Canonical hashing
-- [ ] `canonical_request_dict()` exists and:
-  - [ ] sorts `assets` deterministically
-  - [ ] sorts `fields` deterministically
-  - [ ] serializes dates as ISO strings
-  - [ ] includes all policy fields
-  - [ ] includes `as_of` if present
-- [ ] `request_hash()` exists and uses sha256 of canonical JSON.
+- [x] `canonical_request_dict()` exists and:
+  - [x] sorts `assets` deterministically
+  - [x] sorts `fields` deterministically
+  - [x] serializes dates as ISO strings
+  - [x] includes all policy fields
+  - [x] includes `as_of` if present
+- [x] `request_hash()` exists and uses sha256 of canonical JSON.
 
 ---
 

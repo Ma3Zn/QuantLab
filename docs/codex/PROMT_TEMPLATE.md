@@ -14,13 +14,13 @@ Workflow for THIS PR:
    - code (schemas/transforms/storage/service)
    - tests (pytest + any golden snapshots requested)
    - docs updates requested for that PR
-4) Run the test suite (at least the relevant subset). Fix until green.
-5) Produce a PR summary that includes:
+4) Run the test suite (at least the relevant subset) and fix until green. Then run mypy from the
+   virtual environment .venv and fix all relevant errors.
+5) Consinstently update `docs/codex/TASKBOARD-02.md` and produce a PR summary that includes:
    - What changed (modules/classes/functions)
    - How to run tests for this PR
    - Any assumptions/limitations introduced
    - Follow-ups explicitly deferred to later PRs
-   and consinstently update `docs/codex/TASKBOARD-02.md`.
 
 Now implement: <PR_CODE>
 Where <PR_CODE> is one of: PR-16, PR-17, PR-18, PR-19, PR-20, PR-21.
