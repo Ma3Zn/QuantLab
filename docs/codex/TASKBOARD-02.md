@@ -93,23 +93,23 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
 ## 2) Market calendar adapter + alignment transform (PR-17)
 
 ### 2.1 Market calendar adapter
-- [ ] `TradingCalendar` abstraction exists.
-- [ ] `MarketCalendarAdapter` exists and uses a real market calendar library (e.g., `pandas_market_calendars`).
-- [ ] `sessions(start, end)` returns the correct set of trading **dates** (not timestamps).
-- [ ] Known market holidays are excluded (validated by test against a specific known holiday).
+- [x] `TradingCalendar` abstraction exists.
+- [x] `MarketCalendarAdapter` exists and uses a real market calendar library (e.g., `pandas_market_calendars`).
+- [x] `sessions(start, end)` returns the correct set of trading **dates** (not timestamps).
+- [x] Known market holidays are excluded (validated by test against a specific known holiday).
 
 ### 2.2 Alignment semantics
-- [ ] Target index is derived from the requested market calendar sessions (not weekday fallback).
-- [ ] Output index type is **pure `date`**.
-- [ ] Alignment logic is deterministic:
-  - [ ] reindex each asset onto target dates
-  - [ ] apply missing-data policy only after reindex
-  - [ ] ensure uniqueness and monotonicity
+- [x] Target index is derived from the requested market calendar sessions (not weekday fallback).
+- [x] Output index type is **pure `date`**.
+- [x] Alignment logic is deterministic:
+  - [x] reindex each asset onto target dates
+  - [x] apply missing-data policy only after reindex
+  - [x] ensure uniqueness and monotonicity
 
 ### 2.3 Missing data policies
 - [ ] `NAN_OK` leaves missing values as NaN and reports them.
-- [ ] `DROP_DATES` drops dates where any required field is missing (define exact semantics and test them).
-- [ ] `ERROR` raises a typed validation error when missing data exists.
+- [x] `DROP_DATES` drops dates where any required field is missing (define exact semantics and test them).
+- [x] `ERROR` raises a typed validation error when missing data exists.
 - [ ] Coverage computation exists and is consistent with the chosen missing policy.
 
 ---
