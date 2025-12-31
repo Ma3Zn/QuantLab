@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 from datetime import date, datetime, timezone
 from pathlib import Path
+from typing import Sequence
 
 import pandas as pd
 import pytest
@@ -40,10 +41,10 @@ class _StubProvider:
 
     def fetch_eod(
         self,
-        provider_symbols: list[str],
+        provider_symbols: Sequence[str],
         start: date,
         end: date,
-        fields: list[str],
+        fields: Sequence[str],
     ) -> pd.DataFrame:
         return self._frame
 
@@ -52,10 +53,12 @@ def test_service_bundle_schema(tmp_path: Path) -> None:
     _require_parquet_engine()
 
     sessions = [date(2024, 1, 2), date(2024, 1, 3)]
-    columns = pd.MultiIndex.from_tuples([
-        ("SPY", "close"),
-        ("QQQ", "close"),
-    ])
+    columns = pd.MultiIndex.from_tuples(
+        [
+            ("SPY", "close"),
+            ("QQQ", "close"),
+        ]
+    )
     raw_frame = pd.DataFrame(
         [[100.0, 200.0], [101.0, 201.0]],
         index=sessions,
@@ -64,10 +67,12 @@ def test_service_bundle_schema(tmp_path: Path) -> None:
 
     provider = _StubProvider(raw_frame)
     store = ParquetMarketDataStore(tmp_path, provider="TEST")
-    symbol_mapper = SymbolMapper({
-        AssetId("EQ:SPY"): "SPY",
-        AssetId("EQ:QQQ"): "QQQ",
-    })
+    symbol_mapper = SymbolMapper(
+        {
+            AssetId("EQ:SPY"): "SPY",
+            AssetId("EQ:QQQ"): "QQQ",
+        }
+    )
 
     def calendar_factory(_: CalendarSpec) -> TradingCalendar:
         return _StaticCalendar(sessions)

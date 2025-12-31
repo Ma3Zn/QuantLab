@@ -207,39 +207,39 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16�
 ## 6) Robust testing + documentation + example workflow (PR-21)
 
 ### 6.1 Documentation
-- [ ] `src/data/README.md` exists and explains:
-  - [ ] responsibilities and non-goals
-  - [ ] public API usage example
-  - [ ] calendar/alignment semantics
-  - [ ] missing-data policies
-  - [ ] guardrails (suspect CA heuristic) and limitations
-  - [ ] reproducibility / manifests / request_hash
-- [ ] An ADR exists in `docs/adr/` documenting the decision **raw-only + guardrails**:
-  - [ ] Decision
-  - [ ] Context
-  - [ ] Options considered
-  - [ ] Trade-offs
-  - [ ] Consequences and follow-ups
+- [x] `src/data/README.md` exists and explains:
+  - [x] responsibilities and non-goals
+  - [x] public API usage example
+  - [x] calendar/alignment semantics
+  - [x] missing-data policies
+  - [x] guardrails (suspect CA heuristic) and limitations
+  - [x] reproducibility / manifests / request_hash
+- [x] An ADR exists in `docs/adr/` documenting the decision **raw-only + guardrails**:
+  - [x] Decision
+  - [x] Context
+  - [x] Options considered
+  - [x] Trade-offs
+  - [x] Consequences and follow-ups
 
 ### 6.2 Property-based tests (Hypothesis)
-- [ ] Property tests exist to verify:
-  - [ ] output index is unique and monotonic
-  - [ ] alignment is idempotent (`normalize(normalize(x)) == normalize(x)`)
-  - [ ] hashing order-invariance holds
+- [x] Property tests exist to verify:
+  - [x] output index is unique and monotonic
+  - [x] alignment is idempotent (`normalize(normalize(x)) == normalize(x)`)
+  - [x] hashing order-invariance holds
 
 ### 6.3 Integration tests
-- [ ] End-to-end test exists: stub provider → service → store → manifest.
-- [ ] Test asserts:
-  - [ ] manifest written
-  - [ ] lineage consistent with request
-  - [ ] data can be read back on second call without provider
+- [x] End-to-end test exists: stub provider → service → store → manifest.
+- [x] Test asserts:
+  - [x] manifest written
+  - [x] lineage consistent with request
+  - [x] data can be read back on second call without provider
 
 ### 6.4 Example script
-- [ ] A runnable example exists under `examples/scripts/` (or `scripts/`):
-  - [ ] loads simple mapping/config
-  - [ ] pulls 2–3 assets
-  - [ ] prints or writes a small JSON report including coverage and suspect CA dates
-  - [ ] writes output to `data/sample/` (tiny, committable)
+- [x] A runnable example exists under `examples/scripts/` (or `scripts/`):
+  - [x] loads simple mapping/config
+  - [x] pulls 2–3 assets
+  - [x] prints or writes a small JSON report including coverage and suspect CA dates
+  - [x] writes output to `data/sample/` (tiny, committable)
 
 ---
 
@@ -287,6 +287,6 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16�
 
 ## 9) Notes / known limitations (must be explicitly documented)
 
-- [ ] Survivorship bias risk is acknowledged (tickers/delistings).
-- [ ] Corporate actions are not corrected; suspect events are only flagged.
-- [ ] Vendor “close” semantics may vary (official close vs last vs NAV vs settlement) and are tracked as metadata when available.
+- [x] Survivorship bias risk is acknowledged (tickers/delistings).
+- [x] Corporate actions are not corrected; suspect events are only flagged.
+- [x] Vendor “close” semantics may vary (official close vs last vs NAV vs settlement) and are tracked as metadata when available.

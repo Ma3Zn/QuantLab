@@ -1,0 +1,16 @@
+{
+  "provider": "SAMPLE",
+  "calendar": "XNYS",
+  "assets": ["EQ:SPY", "EQ:QQQ", "EQ:IWM"],
+  "symbol_map": {
+    "EQ:SPY": "SPY",
+    "EQ:QQQ": "QQQ",
+    "EQ:IWM": "IWM"
+  },
+  "start": "2024-01-02",
+  "end": "2024-01-05",
+  "fields": ["close"],
+  "data_path": "data/sample/sample_prices.csv",
+  "report_path": "data/sample/data_pull_report.json",
+  "cache_path": "data/cache"
+}

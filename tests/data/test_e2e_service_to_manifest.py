@@ -3,15 +3,17 @@ from __future__ import annotations
 import importlib.util
 from datetime import date, datetime, timezone
 from pathlib import Path
-from typing import Sequence
+from typing import Mapping, Sequence, cast
 
 import pandas as pd
 import pytest
 
 from quantlab.data.providers import SymbolMapper
+from quantlab.data.schemas.lineage import LineageMeta
 from quantlab.data.schemas.requests import AssetId, CalendarSpec, TimeSeriesRequest
 from quantlab.data.service import MarketDataService
 from quantlab.data.storage.layout import manifest_path
+from quantlab.data.storage.manifests import read_manifest
 from quantlab.data.storage.parquet_store import ParquetMarketDataStore
 from quantlab.data.transforms.calendars import TradingCalendar
 
@@ -50,10 +52,10 @@ class _StubProvider:
         return self._frame
 
 
-def test_service_cache_miss_then_hit(tmp_path: Path) -> None:
+def test_e2e_service_to_manifest(tmp_path: Path) -> None:
     _require_parquet_engine()
 
-    sessions = [date(2024, 1, 2), date(2024, 1, 3)]
+    sessions = [date(2024, 1, 2), date(2024, 1, 3), date(2024, 1, 4)]
     columns = pd.MultiIndex.from_tuples(
         [
             ("SPY", "close"),
@@ -61,7 +63,7 @@ def test_service_cache_miss_then_hit(tmp_path: Path) -> None:
         ]
     )
     raw_frame = pd.DataFrame(
-        [[100.0, 200.0], [101.0, 201.0]],
+        [[100.0, 200.0], [101.0, 201.0], [102.0, 202.0]],
         index=sessions,
         columns=columns,
     )
@@ -83,22 +85,37 @@ def test_service_cache_miss_then_hit(tmp_path: Path) -> None:
         store=store,
         calendar_factory=calendar_factory,
         symbol_mapper=symbol_mapper,
-        dataset_version="2024-01-03",
-        clock=lambda: datetime(2024, 1, 4, tzinfo=timezone.utc),
+        dataset_version="2024-01-04",
+        clock=lambda: datetime(2024, 1, 5, tzinfo=timezone.utc),
     )
 
     request = TimeSeriesRequest(
         assets=[AssetId("EQ:SPY"), AssetId("EQ:QQQ")],
         start=date(2024, 1, 2),
-        end=date(2024, 1, 3),
+        end=date(2024, 1, 4),
         calendar=CalendarSpec(market="XNYS"),
     )
 
     bundle = service.get_timeseries(request)
 
     assert provider.calls == 1
-    assert bundle.lineage.request_hash
-    assert manifest_path(tmp_path, bundle.lineage.request_hash).exists()
+    manifest_file = manifest_path(tmp_path, bundle.lineage.request_hash)
+    assert manifest_file.exists()
+
+    payload = read_manifest(tmp_path, bundle.lineage.request_hash)
+    lineage = LineageMeta.from_dict(payload)
+
+    payload_map = cast(Mapping[str, object], payload)
+    assert payload_map["request_hash"] == bundle.lineage.request_hash
+    assert payload_map["provider"] == "TEST"
+    assert lineage.dataset_version == "2024-01-04"
+    quality = payload_map.get("quality")
+    assert isinstance(quality, Mapping)
+    assert quality.get("coverage")
+    storage_paths = payload_map.get("storage_paths")
+    assert isinstance(storage_paths, list)
+    assert storage_paths
+    assert all(Path(path).exists() for path in storage_paths)
 
     service.get_timeseries(request)
 
