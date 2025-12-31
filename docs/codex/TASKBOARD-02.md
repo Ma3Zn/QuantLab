@@ -6,29 +6,6 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16�
 
 ---
 
-## 0) Repository hygiene and scope control
-
-### 0.1 Scope compliance
-- [ ] No corporate action *correction* is implemented anywhere in `src/data/` (raw-only).
-- [ ] No FX conversion or cross-currency normalization has leaked into `src/data/`.
-- [ ] No intraday support exists (only `1D`).
-- [ ] No portfolio/risk computations exist in `src/data/` (returns are computed **only** for guardrail detection, not for metrics).
-
-### 0.2 Architecture separation
-- [ ] Providers (external I/O) are isolated under `src/data/providers/`.
-- [ ] Storage/caching is isolated under `src/data/storage/`.
-- [ ] Calendar/alignment/validation are isolated under `src/data/transforms/`.
-- [x] Typed models and serializable contracts are isolated under `src/data/schemas/`.
-- [ ] Orchestration façade exists as a composition object (e.g., `MarketDataService`) and does not mix I/O with transforms.
-- [ ] No circular imports between `providers/`, `storage/`, `transforms/`, `schemas/`.
-
-### 0.3 Determinism and reproducibility
-- [x] Request hashing is deterministic and order-invariant (assets/fields order does not matter).
-- [ ] “Replay semantics” are defined (via `request_hash` and `as_of` fields), and manifests exist for past runs.
-- [ ] All timestamps used in tests are either frozen or normalized so snapshots are stable.
-
----
-
 ## 1) Public contracts and models (PR-16)
 
 ### 1.1 Request and policy models
@@ -153,37 +130,37 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16�
 ## 4) Storage + manifests (PR-19)
 
 ### 4.1 Storage layout and git hygiene
-- [ ] Cache root exists under `data/cache/` and is gitignored.
-- [ ] Parquet path conventions are centralized (single source of truth).
-- [ ] Per-asset parquet partitioning exists (e.g., by year) and can be read back reliably.
+- [x] Cache root exists under `data/cache/` and is gitignored.
+- [x] Parquet path conventions are centralized (single source of truth).
+- [x] Per-asset parquet partitioning exists (e.g., by year) and can be read back reliably.
 
 ### 4.2 Parquet schema (minimum)
-- [ ] Stored rows include at least:
-  - [ ] `date`
-  - [ ] requested price/volume fields
-  - [ ] `vendor_symbol`
-  - [ ] `ingestion_ts_utc`
-  - [ ] optional `source_ts` if present
-- [ ] Types are stable (dates, floats, ints) and validated.
+- [x] Stored rows include at least:
+  - [x] `date`
+  - [x] requested price/volume fields
+  - [x] `vendor_symbol`
+  - [x] `ingestion_ts_utc`
+  - [x] optional `source_ts` if present
+- [x] Types are stable (dates, floats, ints) and validated.
 
 ### 4.3 Manifest schema and content
-- [ ] Manifest is written under `data/cache/manifests/<request_hash>.json`.
-- [ ] Manifest contains:
-  - [ ] `LineageMeta` (full)
-  - [ ] request_json
-  - [ ] provider identifier
-  - [ ] dataset_version
-  - [ ] storage_paths (parquet files)
-  - [ ] quality summary (at least coverage + suspect CA counts)
+- [x] Manifest is written under `data/cache/manifests/<request_hash>.json`.
+- [x] Manifest contains:
+  - [x] `LineageMeta` (full)
+  - [x] request_json
+  - [x] provider identifier
+  - [x] dataset_version
+  - [x] storage_paths (parquet files)
+  - [x] quality summary (at least coverage + suspect CA counts)
 
 ### 4.4 Replay capability
 - [ ] Given a request_hash, the system can load data + manifest without calling provider.
 - [ ] `as_of` semantics are respected or explicitly documented as “best effort” if not fully enforced.
 
 ### 4.5 Store + manifest tests
-- [ ] Parquet write/read round-trip test exists.
-- [ ] Manifest read/write round-trip test exists.
-- [ ] Golden snapshot(s) exist for manifests; timestamps are stable or normalized.
+- [x] Parquet write/read round-trip test exists.
+- [x] Manifest read/write round-trip test exists.
+- [x] Golden snapshot(s) exist for manifests; timestamps are stable or normalized.
 
 ---
 

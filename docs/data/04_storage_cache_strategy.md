@@ -20,6 +20,12 @@ Enable **immutability**, **replay**, and **audit** via clear zoning and dataset 
 - Returns, adjustments, continuous futures, factors, etc.
 - MUST record input dataset versions (lineage).
 
+### Access Cache (data/cache)
+- Market data access cache for aligned, raw-only prices and manifests.
+- Layout: `data/cache/market/<provider>/<asset_id>/1D/part-YYYY.parquet`
+- Manifests: `data/cache/manifests/<request_hash>.json`
+- `data/cache/` is gitignored and intended for deterministic replay.
+
 ---
 
 ## Dataset registry (required)
