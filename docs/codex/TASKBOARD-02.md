@@ -117,36 +117,36 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
 ## 3) Validation + guardrails (PR-18)
 
 ### 3.1 Deduplication
-- [ ] Duplicates on the same `date` are handled deterministically (LAST/FIRST/ERROR).
-- [ ] When dedup occurs, `DUPLICATE_RESOLVED` is present in quality outputs.
-- [ ] Dedup behavior is tested with synthetic inputs.
+- [x] Duplicates on the same `date` are handled deterministically (LAST/FIRST/ERROR).
+- [x] When dedup occurs, `DUPLICATE_RESOLVED` is present in quality outputs.
+- [x] Dedup behavior is tested with synthetic inputs.
 
 ### 3.2 Nonpositive price rule
-- [ ] For price fields (`open/high/low/close`), values `<= 0` are flagged.
-- [ ] Default behavior raises `DataValidationError` when `no_nonpositive_prices=True`.
+- [x] For price fields (`open/high/low/close`), values `<= 0` are flagged.
+- [x] Default behavior raises `DataValidationError` when `no_nonpositive_prices=True`.
 - [ ] Test coverage includes negative, zero, and borderline cases.
 
 ### 3.3 Suspect corporate action detection (raw + heuristic)
-- [ ] Simple returns are computed from **raw close** as guardrail input: `r_t = P_t / P_{t-1} - 1`.
-- [ ] `SUSPECT_CORP_ACTION` is flagged when `abs(r_t) >= corp_action_jump_threshold` (default 0.40).
-- [ ] Behavior is **warning-only** (does not block by default), but is reported prominently.
-- [ ] A synthetic split-like series is used in tests to confirm flagging.
+- [x] Simple returns are computed from **raw close** as guardrail input: `r_t = P_t / P_{t-1} - 1`.
+- [x] `SUSPECT_CORP_ACTION` is flagged when `abs(r_t) >= corp_action_jump_threshold` (default 0.40).
+- [x] Behavior is **warning-only** (does not block by default), but is reported prominently.
+- [x] A synthetic split-like series is used in tests to confirm flagging.
 
 ### 3.4 Outlier returns (non-CA)
-- [ ] If `max_abs_return` is set, `OUTLIER_RETURN` is flagged when exceeded.
-- [ ] Outlier flagging does not mutate/correct the data.
+- [x] If `max_abs_return` is set, `OUTLIER_RETURN` is flagged when exceeded.
+- [x] Outlier flagging does not mutate/correct the data.
 
 ### 3.5 QualityReport correctness
-- [ ] QualityReport aggregates per asset:
-  - [ ] missing counts
-  - [ ] duplicates resolved counts
-  - [ ] suspect CA counts + example dates
-  - [ ] outlier counts + example dates
-- [ ] QualityReport JSON round-trip is covered by tests.
+- [x] QualityReport aggregates per asset:
+  - [x] missing counts
+  - [x] duplicates resolved counts
+  - [x] suspect CA counts + example dates
+  - [x] outlier counts + example dates
+- [x] QualityReport JSON round-trip is covered by tests.
 
 ### 3.6 Logging / observability
-- [ ] Structured logs include at least: `request_hash`, `provider`, `asset_id`, key counts.
-- [ ] Logs are not excessively noisy in normal flows.
+- [x] Structured logs include at least: `request_hash`, `provider`, `asset_id`, key counts.
+- [x] Logs are not excessively noisy in normal flows.
 
 ---
 
