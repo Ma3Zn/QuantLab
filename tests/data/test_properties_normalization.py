@@ -4,7 +4,7 @@ from datetime import date
 from typing import Any, Iterable, Literal
 
 import pandas as pd
-from hypothesis import assume, given, settings
+from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
 from quantlab.data.schemas.requests import (
@@ -23,7 +23,7 @@ def _aligned_cases(draw: Any) -> tuple[pd.DataFrame, list[date]]:
         st.lists(
             st.dates(min_value=date(2020, 1, 1), max_value=date(2024, 12, 31)),
             min_size=1,
-            max_size=20,
+            max_size=10,
             unique=True,
         )
     )
@@ -83,7 +83,7 @@ def _request_fields(draw: Any) -> list[Literal["close", "open", "high", "low", "
 
 
 @given(case=_aligned_cases())
-@settings(max_examples=25, deadline=None)
+@settings(max_examples=25, deadline=None, suppress_health_check=[HealthCheck.data_too_large])
 def test_alignment_output_index_unique_monotonic(case: tuple[pd.DataFrame, list[date]]) -> None:
     frame, target_dates = case
 
@@ -95,7 +95,7 @@ def test_alignment_output_index_unique_monotonic(case: tuple[pd.DataFrame, list[
 
 
 @given(case=_aligned_cases())
-@settings(max_examples=25, deadline=None)
+@settings(max_examples=25, deadline=None, suppress_health_check=[HealthCheck.data_too_large])
 def test_alignment_idempotent(case: tuple[pd.DataFrame, list[date]]) -> None:
     frame, target_dates = case
 

@@ -10,7 +10,7 @@ import pandas as pd
 from quantlab.data.logging import get_logger
 from quantlab.data.providers import EodProvider, SymbolMapper
 from quantlab.data.schemas.bundle import TimeSeriesBundle
-from quantlab.data.schemas.errors import DataValidationError, ProviderFetchError
+from quantlab.data.schemas.errors import DataValidationError, ProviderFetchError, StorageError
 from quantlab.data.schemas.lineage import LineageMeta
 from quantlab.data.schemas.quality import QualityReport
 from quantlab.data.schemas.requests import AssetId, CalendarSpec, TimeSeriesRequest
@@ -18,9 +18,9 @@ from quantlab.data.storage.layout import manifest_path
 from quantlab.data.storage.manifests import read_manifest, write_manifest
 from quantlab.data.storage.parquet_store import ParquetMarketDataStore
 from quantlab.data.transforms.alignment import align_frame
-from quantlab.data.transforms.validation import validate_and_flag
-from quantlab.data.transforms.hashing import request_hash
 from quantlab.data.transforms.calendars import TradingCalendar
+from quantlab.data.transforms.hashing import request_hash
+from quantlab.data.transforms.validation import validate_and_flag
 
 CalendarFactory = Callable[[CalendarSpec], TradingCalendar]
 
@@ -40,19 +40,31 @@ def _normalize_provider_columns(frame: pd.DataFrame) -> pd.DataFrame:
     return frame.copy()
 
 
-def _validate_provider_frame(frame: pd.DataFrame) -> None:
+def _validate_provider_frame(frame: pd.DataFrame, provider_name: str, request_hash: str) -> None:
     if not isinstance(frame, pd.DataFrame):
-        raise ProviderFetchError("provider returned non-DataFrame result")
+        raise ProviderFetchError(
+            "provider returned non-DataFrame result",
+            context={
+                "provider": provider_name,
+                "request_hash": request_hash,
+                "value_type": type(frame).__name__,
+            },
+        )
     if frame.empty:
-        raise ProviderFetchError("provider returned empty data")
+        raise ProviderFetchError(
+            "provider returned empty data",
+            context={"provider": provider_name, "request_hash": request_hash},
+        )
 
 
 def _extract_provider_frames(
     frame: pd.DataFrame,
     asset_symbols: Mapping[AssetId, str],
     fields: Sequence[str],
+    provider_name: str,
+    request_hash: str,
 ) -> dict[AssetId, pd.DataFrame]:
-    _validate_provider_frame(frame)
+    _validate_provider_frame(frame, provider_name, request_hash)
     normalized = _normalize_provider_columns(frame)
     frames: dict[AssetId, pd.DataFrame] = {}
 
@@ -63,7 +75,12 @@ def _extract_provider_frames(
             if not mask.any():
                 raise ProviderFetchError(
                     "provider data missing symbol",
-                    context={"asset_id": str(asset_id), "provider_symbol": symbol},
+                    context={
+                        "asset_id": str(asset_id),
+                        "provider_symbol": symbol,
+                        "provider": provider_name,
+                        "request_hash": request_hash,
+                    },
                 )
             asset_frame = normalized.loc[:, mask].copy()
             asset_frame.columns = asset_frame.columns.get_level_values(1)
@@ -73,7 +90,11 @@ def _extract_provider_frames(
         if len(asset_symbols) != 1:
             raise ProviderFetchError(
                 "provider data must include multi-asset columns",
-                context={"asset_count": len(asset_symbols)},
+                context={
+                    "asset_count": len(asset_symbols),
+                    "provider": provider_name,
+                    "request_hash": request_hash,
+                },
             )
         asset_id = next(iter(asset_symbols.keys()))
         asset_frame = normalized.copy()
@@ -93,12 +114,18 @@ def _require_fields(frame: pd.DataFrame, asset_id: AssetId, fields: Sequence[str
 
 
 def _combine_asset_frames(
-    frames: Mapping[AssetId, pd.DataFrame], assets: Sequence[AssetId]
+    frames: Mapping[AssetId, pd.DataFrame],
+    assets: Sequence[AssetId],
+    request_hash: str,
+    provider_name: str,
 ) -> pd.DataFrame:
     ordered = {asset: frames[asset] for asset in assets}
     combined = pd.concat(ordered, axis=1)
     if not isinstance(combined.columns, pd.MultiIndex):
-        raise DataValidationError("combined frame must have MultiIndex columns")
+        raise DataValidationError(
+            "combined frame must have MultiIndex columns",
+            context={"request_hash": request_hash, "provider": provider_name},
+        )
     combined.columns.names = ["asset_id", "field"]
     combined.index.name = "date"
     return combined
@@ -125,6 +152,27 @@ def _build_assets_meta(
     return meta
 
 
+def _asset_symbols_from_frames(
+    frames: Mapping[AssetId, pd.DataFrame],
+    provider_name: str,
+    request_hash: str,
+) -> dict[AssetId, str]:
+    symbols: dict[AssetId, str] = {}
+    for asset_id, frame in frames.items():
+        vendor_symbol = frame.attrs.get("vendor_symbol")
+        if not vendor_symbol:
+            raise StorageError(
+                "cached frame missing vendor_symbol metadata",
+                context={
+                    "asset_id": str(asset_id),
+                    "provider": provider_name,
+                    "request_hash": request_hash,
+                },
+            )
+        symbols[asset_id] = str(vendor_symbol)
+    return symbols
+
+
 @dataclass
 class MarketDataService:
     provider: EodProvider
@@ -139,13 +187,16 @@ class MarketDataService:
         req_hash = request_hash(request)
         provider_name = getattr(self.provider, "name", None) or ""
         if not provider_name:
-            raise ProviderFetchError("provider name must be set")
+            raise ProviderFetchError(
+                "provider name must be set",
+                context={"provider_type": type(self.provider).__name__},
+            )
 
         assets = list(request.assets)
         fields = sorted(request.fields)
         asset_symbols = self.symbol_mapper.resolve_many(assets)
 
-        target_index = self._build_target_index(request)
+        target_index = self._build_target_index(request, req_hash, provider_name)
         logger = get_logger(__name__)
 
         manifest_file = manifest_path(self.store.root_path, req_hash)
@@ -175,7 +226,13 @@ class MarketDataService:
                 fields,
                 req_hash,
             )
-            asset_frames = _extract_provider_frames(raw_frame, asset_symbols, fields)
+            asset_frames = _extract_provider_frames(
+                raw_frame,
+                asset_symbols,
+                fields,
+                provider_name,
+                req_hash,
+            )
             storage_paths = self._store_provider_frames(
                 asset_frames,
                 asset_symbols,
@@ -226,7 +283,83 @@ class MarketDataService:
             lineage=lineage,
         )
 
-    def _build_target_index(self, request: TimeSeriesRequest) -> pd.Index:
+    def get_timeseries_from_cache(self, request_hash: str) -> TimeSeriesBundle:
+        """Load a cached request using its request_hash without calling the provider."""
+
+        manifest_payload = read_manifest(self.store.root_path, request_hash)
+        try:
+            lineage = LineageMeta.from_dict(manifest_payload)
+        except (KeyError, ValueError, TypeError) as exc:
+            raise StorageError(
+                "manifest missing required lineage fields",
+                context={"request_hash": request_hash},
+                cause=exc,
+            ) from exc
+        if lineage.request_hash != request_hash:
+            raise StorageError(
+                "manifest request_hash mismatch",
+                context={
+                    "request_hash": request_hash,
+                    "manifest_request_hash": lineage.request_hash,
+                },
+            )
+        request_payload = manifest_payload.get("request_json")
+        if not isinstance(request_payload, Mapping):
+            raise StorageError(
+                "manifest request_json missing or invalid",
+                context={"request_hash": request_hash},
+            )
+        try:
+            request = TimeSeriesRequest.from_dict(request_payload)
+        except (KeyError, ValueError, TypeError) as exc:
+            raise StorageError(
+                "manifest request_json invalid",
+                context={"request_hash": request_hash},
+                cause=exc,
+            ) from exc
+
+        assets = list(request.assets)
+        fields = sorted(request.fields)
+        target_index = self._build_target_index(request, request_hash, lineage.provider)
+        cached_frames = self._read_cached_assets(
+            assets,
+            request,
+            fields,
+            lineage.provider,
+        )
+        aligned, computed_quality = self._align_and_validate(
+            cached_frames,
+            assets,
+            target_index,
+            request,
+            request_hash,
+            lineage.provider,
+        )
+        quality_payload = manifest_payload.get("quality")
+        if not isinstance(quality_payload, Mapping):
+            quality = computed_quality
+        else:
+            quality = QualityReport.from_dict(dict(quality_payload))
+
+        asset_symbols = _asset_symbols_from_frames(
+            cached_frames,
+            lineage.provider,
+            request_hash,
+        )
+        assets_meta = _build_assets_meta(cached_frames, asset_symbols, lineage.provider)
+        return TimeSeriesBundle(
+            data=aligned,
+            assets_meta=assets_meta,
+            quality=quality,
+            lineage=lineage,
+        )
+
+    def _build_target_index(
+        self,
+        request: TimeSeriesRequest,
+        request_hash: str | None = None,
+        provider_name: str | None = None,
+    ) -> pd.Index:
         if request.calendar is None:
             raise DataValidationError(
                 "calendar must be provided", context={"request": request.to_dict()}
@@ -235,9 +368,23 @@ class MarketDataService:
         sessions = calendar.sessions(request.start, request.end)
         target_index = pd.Index(sessions, name="date")
         if not target_index.is_unique:
-            raise DataValidationError("target calendar sessions must be unique")
+            raise DataValidationError(
+                "target calendar sessions must be unique",
+                context={
+                    "request_hash": request_hash,
+                    "provider": provider_name,
+                    "market": request.calendar.market,
+                },
+            )
         if not target_index.is_monotonic_increasing:
-            raise DataValidationError("target calendar sessions must be monotonic increasing")
+            raise DataValidationError(
+                "target calendar sessions must be monotonic increasing",
+                context={
+                    "request_hash": request_hash,
+                    "provider": provider_name,
+                    "market": request.calendar.market,
+                },
+            )
         return target_index
 
     def _fetch_provider_frame(
@@ -309,7 +456,7 @@ class MarketDataService:
         request_hash: str,
         provider_name: str,
     ) -> tuple[pd.DataFrame, QualityReport]:
-        combined = _combine_asset_frames(frames, assets)
+        combined = _combine_asset_frames(frames, assets, request_hash, provider_name)
         combined.attrs["request_hash"] = request_hash
         combined.attrs["provider"] = provider_name
 

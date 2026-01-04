@@ -15,6 +15,7 @@
 ## Public API (MVP)
 - `TimeSeriesRequest` (schemas/requests.py)
 - `MarketDataService.get_timeseries(request) -> TimeSeriesBundle` (service.py)
+- `MarketDataService.get_timeseries_from_cache(request_hash) -> TimeSeriesBundle` (service.py)
 - `TimeSeriesBundle` contains `data`, `assets_meta`, `quality`, `lineage`.
 
 Example (see `examples/scripts/data_pull_demo.py` for a runnable demo):
@@ -73,6 +74,7 @@ Known limitations:
 - Each request has a deterministic `request_hash`.
 - Cached parquet lives under `data/cache/market/<provider>/<asset_id>/1D/`.
 - Each request writes a manifest under `data/cache/manifests/<request_hash>.json`.
+- `as_of` is recorded in manifests and request hashes; historical as-of replay is best-effort.
 
 ## Failure modes (typed)
 - Missing symbol mapping: `ProviderFetchError`.

@@ -54,7 +54,7 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
   - [x] `ProviderFetchError`
   - [x] `StorageError`
   - [x] `DataValidationError`
-- [ ] Exceptions carry actionable context (asset_id, provider, request_hash, failing dates/counts).
+- [x] Exceptions carry actionable context (asset_id, provider, request_hash, failing dates/counts).
 
 ### 1.4 Canonical hashing
 - [x] `canonical_request_dict()` exists and:
@@ -84,10 +84,10 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
   - [x] ensure uniqueness and monotonicity
 
 ### 2.3 Missing data policies
-- [ ] `NAN_OK` leaves missing values as NaN and reports them.
+- [x] `NAN_OK` leaves missing values as NaN and reports them.
 - [x] `DROP_DATES` drops dates where any required field is missing (define exact semantics and test them).
 - [x] `ERROR` raises a typed validation error when missing data exists.
-- [ ] Coverage computation exists and is consistent with the chosen missing policy.
+- [x] Coverage computation exists and is consistent with the chosen missing policy.
 
 ---
 
@@ -101,7 +101,7 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
 ### 3.2 Nonpositive price rule
 - [x] For price fields (`open/high/low/close`), values `<= 0` are flagged.
 - [x] Default behavior raises `DataValidationError` when `no_nonpositive_prices=True`.
-- [ ] Test coverage includes negative, zero, and borderline cases.
+- [x] Test coverage includes negative, zero, and borderline cases.
 
 ### 3.3 Suspect corporate action detection (raw + heuristic)
 - [x] Simple returns are computed from **raw close** as guardrail input: `r_t = P_t / P_{t-1} - 1`.
@@ -154,8 +154,8 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
   - [x] quality summary (at least coverage + suspect CA counts)
 
 ### 4.4 Replay capability
-- [ ] Given a request_hash, the system can load data + manifest without calling provider.
-- [ ] `as_of` semantics are respected or explicitly documented as â€œbest effortâ€ if not fully enforced.
+- [x] Given a request_hash, the system can load data + manifest without calling provider.
+- [x] `as_of` semantics are respected or explicitly documented as â€œbest effortâ€ if not fully enforced.
 
 ### 4.5 Store + manifest tests
 - [x] Parquet write/read round-trip test exists.
@@ -246,28 +246,28 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
 ## 7) Final â€œdefinition of completeâ€ acceptance checks
 
 ### 7.1 Functional acceptance
-- [ ] Calling `MarketDataService.get_timeseries()` with multiple assets returns:
-  - [ ] a DataFrame indexed by `date`
-  - [ ] aligned to the requested market calendar
-  - [ ] raw-only values
-  - [ ] a QualityReport that flags missing and suspect CA jumps
-  - [ ] a LineageMeta with request hash, provider, ingestion timestamp, storage paths
+- [x] Calling `MarketDataService.get_timeseries()` with multiple assets returns:
+  - [x] a DataFrame indexed by `date`
+  - [x] aligned to the requested market calendar
+  - [x] raw-only values
+  - [x] a QualityReport that flags missing and suspect CA jumps
+  - [x] a LineageMeta with request hash, provider, ingestion timestamp, storage paths
 
 ### 7.2 Guardrails acceptance
-- [ ] A synthetic split-like jump produces at least one `SUSPECT_CORP_ACTION` flag and appears in report examples.
-- [ ] Nonpositive price input fails deterministically with `DataValidationError` (default policy).
-- [ ] Duplicates are resolved deterministically and flagged.
+- [x] A synthetic split-like jump produces at least one `SUSPECT_CORP_ACTION` flag and appears in report examples.
+- [x] Nonpositive price input fails deterministically with `DataValidationError` (default policy).
+- [x] Duplicates are resolved deterministically and flagged.
 
 ### 7.3 Reproducibility acceptance
-- [ ] Re-running the same request (same policies + as_of) produces the same request_hash.
-- [ ] With cache present, the second run does not hit the provider.
-- [ ] Manifests enable audit: you can locate the exact stored parquet files and re-load them.
+- [x] Re-running the same request (same policies + as_of) produces the same request_hash.
+- [x] With cache present, the second run does not hit the provider.
+- [x] Manifests enable audit: you can locate the exact stored parquet files and re-load them.
 
 ### 7.4 Test suite acceptance
-- [ ] Unit tests pass.
-- [ ] Property-based tests pass.
-- [ ] Integration tests pass.
-- [ ] Golden manifest snapshots pass.
+- [x] Unit tests pass.
+- [x] Property-based tests pass.
+- [x] Integration tests pass.
+- [x] Golden manifest snapshots pass.
 
 ### 7.5 Engineering acceptance (optional but recommended)
 - [ ] Lint/format checks pass (ruff/black if configured).
@@ -278,10 +278,10 @@ This checklist is intended as a **post-backlog verification gate**. Once PR-16â€
 
 ## 8) Manual audit steps (quick, high-signal)
 
-- [ ] Open a manifest JSON and confirm it includes: request_json, request_hash, provider, ingestion_ts, dataset_version, storage_paths, quality summary.
-- [ ] Inspect a cached parquet file and confirm `date` is the primary time key and types look correct.
-- [ ] Run the example script and verify it prints (or writes) coverage + suspect CA dates for at least one asset.
-- [ ] Trigger a deliberate error (missing symbol mapping) and confirm a typed exception with actionable message.
+- [x] Open a manifest JSON and confirm it includes: request_json, request_hash, provider, ingestion_ts, dataset_version, storage_paths, quality summary.
+- [x] Inspect a cached parquet file and confirm `date` is the primary time key and types look correct.
+- [x] Run the example script and verify it prints (or writes) coverage + suspect CA dates for at least one asset.
+- [x] Trigger a deliberate error (missing symbol mapping) and confirm a typed exception with actionable message.
 
 ---
 
