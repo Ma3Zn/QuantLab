@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from math import isfinite
 from typing import Callable, Hashable, Iterable, Sequence
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from quantlab.data.errors import ValidationError
 from quantlab.data.normalizers import EQUITY_EOD_DATASET_ID, FX_DAILY_DATASET_ID
@@ -14,10 +15,15 @@ from quantlab.data.schemas import (
     PointRecord,
     TimestampProvenance,
 )
+from quantlab.data.sessionrules import SessionRule, SessionRulesSnapshot
+from quantlab.data.transforms.calendars import TradingCalendar
+from quantlab.data.universe import UniverseSnapshot
+from quantlab.instruments.master import InstrumentMasterRecord, InstrumentType
 
 DEFAULT_EQUITY_OUTLIER_THRESHOLD = 0.30
 DEFAULT_FX_OUTLIER_THRESHOLD = 0.05
 DEFAULT_STALE_WINDOW = 3
+DEFAULT_CLOSE_TOLERANCE_SECONDS = 60
 
 
 def _require_non_empty(value: str, name: str) -> None:
@@ -100,6 +106,21 @@ class ValidationContext:
         _require_non_empty(self.ingest_run_id, "ingest_run_id")
 
 
+CalendarFactory = Callable[[str], TradingCalendar]
+
+
+@dataclass(frozen=True)
+class TimeSemanticsContext:
+    universe: UniverseSnapshot
+    sessionrules: SessionRulesSnapshot
+    calendar_factory: CalendarFactory
+    close_tolerance_seconds: int = DEFAULT_CLOSE_TOLERANCE_SECONDS
+
+    def __post_init__(self) -> None:
+        if self.close_tolerance_seconds < 0:
+            raise ValueError("close_tolerance_seconds must be >= 0")
+
+
 def validate_records(
     records: Sequence[CanonicalRecord],
     *,
@@ -108,6 +129,7 @@ def validate_records(
     equity_outlier_threshold: float = DEFAULT_EQUITY_OUTLIER_THRESHOLD,
     fx_outlier_threshold: float = DEFAULT_FX_OUTLIER_THRESHOLD,
     stale_window: int = DEFAULT_STALE_WINDOW,
+    time_context: TimeSemanticsContext | None = None,
     raise_on_hard_error: bool = True,
 ) -> tuple[tuple[CanonicalRecord, ...], ValidationReport]:
     if stale_window < 2:
@@ -136,8 +158,6 @@ def validate_records(
             hard_errors.append(f"record {index} dataset_version mismatch: {record.dataset_version}")
         if record.ingest_run_id != context.ingest_run_id:
             hard_errors.append(f"record {index} ingest_run_id mismatch: {record.ingest_run_id}")
-        if record.ts_provenance != TimestampProvenance.EXCHANGE_CLOSE:
-            additions[index].add(QualityFlag.PROVIDER_TIMESTAMP_USED)
 
         if dataset_id == EQUITY_EOD_DATASET_ID:
             if not isinstance(record, BarRecord):
@@ -190,6 +210,19 @@ def validate_records(
         else:
             hard_errors.append(f"unsupported dataset_id: {dataset_id}")
             break
+
+    if time_context is not None:
+        _apply_time_semantics_flags(
+            records,
+            additions,
+            hard_errors,
+            dataset_id=dataset_id,
+            time_context=time_context,
+        )
+
+    for index, record in enumerate(records):
+        if record.ts_provenance != TimestampProvenance.EXCHANGE_CLOSE:
+            additions[index].add(QualityFlag.PROVIDER_TIMESTAMP_USED)
 
     if dataset_id == EQUITY_EOD_DATASET_ID:
         seen_equity: set[tuple[str, datetime]] = set()
@@ -285,3 +318,125 @@ def validate_records(
         )
 
     return tuple(validated_records), report
+
+
+def _apply_time_semantics_flags(
+    records: Sequence[CanonicalRecord],
+    additions: list[set[QualityFlag]],
+    hard_errors: list[str],
+    *,
+    dataset_id: str,
+    time_context: TimeSemanticsContext,
+) -> None:
+    if dataset_id != EQUITY_EOD_DATASET_ID:
+        return
+
+    instrument_lookup = _build_instrument_lookup(time_context.universe)
+    sessionrule_lookup = {rule.mic: rule for rule in time_context.sessionrules.rules}
+    calendar_cache: dict[str, TradingCalendar] = {}
+
+    for index, record in enumerate(records):
+        if not isinstance(record, BarRecord):
+            continue
+        instrument = instrument_lookup.get(record.instrument_id)
+        if instrument is None or instrument.instrument_type != InstrumentType.EQUITY:
+            continue
+        mic = instrument.mic
+        if not mic:
+            continue
+        trading_date = record.trading_date_local
+        if trading_date is None:
+            continue
+
+        calendar = _resolve_calendar(
+            mic,
+            calendar_cache,
+            time_context.calendar_factory,
+            hard_errors,
+        )
+        if calendar is not None and not _is_session_day(calendar, trading_date):
+            additions[index].add(QualityFlag.CALENDAR_CONFLICT)
+
+        rule = sessionrule_lookup.get(mic)
+        timezone_value = _resolve_timezone(record, instrument, rule)
+        if timezone_value is not None:
+            try:
+                local_date = record.ts.astimezone(ZoneInfo(timezone_value)).date()
+            except ZoneInfoNotFoundError as exc:
+                hard_errors.append(
+                    "invalid timezone for instrument "
+                    f"{record.instrument_id}: {timezone_value}"
+                )
+            else:
+                if local_date != trading_date:
+                    additions[index].add(QualityFlag.CALENDAR_CONFLICT)
+
+        expected_ts = _expected_close_ts(trading_date, rule, hard_errors)
+        if expected_ts is not None:
+            delta = abs((record.ts - expected_ts).total_seconds())
+            if delta > time_context.close_tolerance_seconds:
+                additions[index].add(QualityFlag.CALENDAR_CONFLICT)
+
+
+def _build_instrument_lookup(
+    universe: UniverseSnapshot,
+) -> dict[str, InstrumentMasterRecord]:
+    return {record.instrument_id: record for record in universe.instruments}
+
+
+def _resolve_timezone(
+    record: BarRecord,
+    instrument: InstrumentMasterRecord,
+    rule: SessionRule | None,
+) -> str | None:
+    if record.timezone_local:
+        return record.timezone_local
+    if rule is not None:
+        return rule.timezone_local
+    return instrument.exchange_timezone
+
+
+def _resolve_calendar(
+    mic: str,
+    cache: dict[str, TradingCalendar],
+    factory: CalendarFactory,
+    hard_errors: list[str],
+) -> TradingCalendar | None:
+    if mic in cache:
+        return cache[mic]
+    try:
+        calendar = factory(mic)
+    except Exception as exc:  # pragma: no cover - defensive
+        hard_errors.append(f"calendar lookup failed for {mic}: {exc}")
+        return None
+    cache[mic] = calendar
+    return calendar
+
+
+def _is_session_day(calendar: TradingCalendar, trading_date: date) -> bool:
+    sessions = calendar.sessions(trading_date, trading_date)
+    return trading_date in sessions
+
+
+def _expected_close_ts(
+    trading_date: date,
+    rule: SessionRule | None,
+    hard_errors: list[str],
+) -> datetime | None:
+    if rule is None:
+        return None
+    if rule.effective_from and trading_date < rule.effective_from:
+        return None
+    if rule.effective_to and trading_date > rule.effective_to:
+        return None
+    try:
+        close_time = datetime.strptime(rule.regular_close_local, "%H:%M").time()
+        local_dt = datetime.combine(trading_date, close_time)
+        expected = local_dt.replace(tzinfo=ZoneInfo(rule.timezone_local))
+    except (ValueError, ZoneInfoNotFoundError) as exc:
+        hard_errors.append(
+            "failed to compute expected close time for "
+            f"{rule.mic}: {exc}"
+        )
+        return None
+    return expected.astimezone(timezone.utc)

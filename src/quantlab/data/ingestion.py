@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from enum import Enum
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 from quantlab.data.errors import ProviderResponseError
+from quantlab.data.identity import request_fingerprint
 from quantlab.data.normalizers import (
     EQUITY_EOD_DATASET_ID,
     FX_DAILY_DATASET_ID,
@@ -19,7 +18,7 @@ from quantlab.data.normalizers import (
 from quantlab.data.providers import FetchRequest, ProviderAdapter
 from quantlab.data.quality import ValidationReport
 from quantlab.data.registry import DatasetRegistryEntry, append_registry_entry
-from quantlab.data.schemas import CanonicalRecord, Source
+from quantlab.data.schemas import CanonicalRecord, IngestRunMeta, Source
 from quantlab.data.sessionrules import SessionRulesSnapshot
 from quantlab.data.storage import (
     PublishedSnapshot,
@@ -27,9 +26,12 @@ from quantlab.data.storage import (
     publish_canonical_snapshot,
     stage_canonical_snapshot,
     store_raw_payload,
+    write_ingest_run_meta,
 )
+from quantlab.data.storage.canonical_parquet import serialize_canonical_records
+from quantlab.data.transforms.calendars import MarketCalendarAdapter
 from quantlab.data.universe import UniverseSnapshot
-from quantlab.data.validators import ValidationContext, validate_records
+from quantlab.data.validators import TimeSemanticsContext, ValidationContext, validate_records
 from quantlab.instruments.master import InstrumentMasterRecord, InstrumentType
 
 
@@ -84,21 +86,7 @@ def _instrument_lookup_for_dataset(
 def build_canonical_parts(
     records: Sequence[CanonicalRecord],
 ) -> dict[str, bytes]:
-    def _json_default(value: object) -> object:
-        if isinstance(value, Enum):
-            return value.value
-        raise TypeError(f"object of type {type(value).__name__} is not JSON serializable")
-
-    lines = [
-        json.dumps(
-            record.metadata_payload(),
-            sort_keys=True,
-            ensure_ascii=True,
-            default=_json_default,
-        )
-        for record in records
-    ]
-    payload = ("\n".join(lines) + ("\n" if lines else "")).encode("utf-8")
+    payload = serialize_canonical_records(records)
     return {"part-0001.parquet": payload}
 
 
@@ -199,6 +187,7 @@ class IngestionResult:
     published_snapshot: PublishedSnapshot
     registry_entry: DatasetRegistryEntry
     validation_report: ValidationReport
+    ingest_run_meta: IngestRunMeta
 
 
 def run_ingestion(
@@ -211,9 +200,14 @@ def run_ingestion(
     asof_ts: datetime | None = None,
     generated_ts: datetime | None = None,
     created_at_ts: datetime | None = None,
+    started_at_ts: datetime | None = None,
+    finished_at_ts: datetime | None = None,
 ) -> IngestionResult:
     if request.dataset_id != config.dataset_id:
         raise ValueError("request dataset_id does not match ingestion config")
+
+    started_at_ts = started_at_ts or datetime.now(timezone.utc)
+    _ensure_utc(started_at_ts, "started_at_ts")
 
     response = adapter.fetch(request)
     if response.request_fingerprint != request.fingerprint():
@@ -289,6 +283,11 @@ def run_ingestion(
             ingest_run_id=config.ingest_run_id,
         ),
         generated_ts=generated_ts,
+        time_context=TimeSemanticsContext(
+            universe=universe,
+            sessionrules=sessionrules,
+            calendar_factory=lambda mic: MarketCalendarAdapter(mic),
+        ),
         raise_on_hard_error=True,
     )
 
@@ -337,9 +336,39 @@ def run_ingestion(
         canonical_root=config.canonical_root,
     )
 
+    finished_at_ts = finished_at_ts or datetime.now(timezone.utc)
+    _ensure_utc(finished_at_ts, "finished_at_ts")
+
+    ingest_run_meta = IngestRunMeta(
+        ingest_run_id=config.ingest_run_id,
+        started_at_ts=started_at_ts,
+        finished_at_ts=finished_at_ts,
+        config_fingerprint=_config_fingerprint(config, universe, sessionrules),
+    )
+    write_ingest_run_meta(config.raw_root, ingest_run_meta)
+
     return IngestionResult(
         raw_paths=raw_paths,
         published_snapshot=published,
         registry_entry=entry,
         validation_report=report,
+        ingest_run_meta=ingest_run_meta,
     )
+
+
+def _config_fingerprint(
+    config: IngestionConfig,
+    universe: UniverseSnapshot,
+    sessionrules: SessionRulesSnapshot,
+) -> str:
+    payload: dict[str, object] = {
+        "dataset_id": config.dataset_id,
+        "dataset_version": config.dataset_version,
+        "schema_version": config.schema_version,
+        "calendar_version": config.calendar_version,
+        "universe_hash": universe.universe_hash,
+        "sessionrules_version": sessionrules.sessionrules_hash,
+    }
+    if config.notes is not None:
+        payload["notes"] = config.notes
+    return request_fingerprint(payload)

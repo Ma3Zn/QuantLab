@@ -8,6 +8,12 @@ from quantlab.data.storage.layout import (
 )
 from quantlab.data.storage.manifests import read_manifest, write_manifest
 from quantlab.data.storage.parquet_store import ParquetMarketDataStore
+from quantlab.data.storage.ingest_runs import (
+    ingest_run_dir,
+    ingest_run_metadata_path,
+    read_ingest_run_meta,
+    write_ingest_run_meta,
+)
 from quantlab.data.storage.snapshots import (
     CanonicalPaths,
     PublishedSnapshot,
@@ -39,4 +45,8 @@ __all__ = [
     "asset_dir",
     "asset_cache_path",
     "manifest_path",
+    "ingest_run_dir",
+    "ingest_run_metadata_path",
+    "write_ingest_run_meta",
+    "read_ingest_run_meta",
 ]

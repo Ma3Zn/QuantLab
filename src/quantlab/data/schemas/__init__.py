@@ -1,6 +1,7 @@
 """Canonical schema models for data layer."""
 
 from quantlab.data.schemas.bundle import TimeSeriesBundle
+from quantlab.data.schemas.ingest_run import IngestRunMeta
 from quantlab.data.schemas.lineage import LineageMeta
 from quantlab.data.schemas.quality import QualityFlag, QualityReport
 from quantlab.data.schemas.records import (
@@ -36,5 +37,6 @@ __all__ = [
     "QualityFlag",
     "QualityReport",
     "LineageMeta",
+    "IngestRunMeta",
     "TimeSeriesBundle",
 ]

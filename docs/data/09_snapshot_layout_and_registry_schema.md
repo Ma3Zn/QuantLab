@@ -12,6 +12,7 @@ so that every dataset snapshot is reproducible, auditable, and discoverable.
 ```
 data/raw/
   ingest_run_id=<INGEST_RUN_ID>/
+    ingest_run.json
     request=<REQUEST_FINGERPRINT>/
       payload.<ext>
       metadata.json
@@ -20,6 +21,7 @@ data/raw/
 **Invariants**
 - Raw payloads are immutable.
 - One directory per (ingest_run_id, request_fingerprint).
+- `ingest_run.json` captures start/end timestamps and config fingerprint per ingest run.
 
 ### Canonical Zone
 ```

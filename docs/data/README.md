@@ -4,6 +4,8 @@
 - Defines a **canonical representation** for market data consumed by pricing, risk, stress, and optimization layers.
 - Defines the **instrument universe** (MVP) and the **identifier strategy** needed for stable joins across sources.
 - Enforces **reproducibility hooks** at the contract level (e.g., `asof_ts`, `source`, `ingest_run_id`).
+- Produces **canonical Parquet snapshots** with content hashes and a lightweight registry.
+- Stores **ingest-run metadata** (`ingest_run.json`) with config fingerprint + timings.
 
 ## What this module does *not* do
 - No pricing, risk, stress, portfolio optimization, or decision logic.
@@ -19,6 +21,7 @@
 - **Stable internal identifiers**: downstream code never keys on vendor tickers.
 - **No look-ahead by construction**: canonical records support `asof_ts` for “as-of” replay.
 - **Schema versioning**: canonical datasets have an explicit schema version and dataset version.
+- **No silent cleaning**: hard errors block publishing; soft issues are flags.
 
 ## Deliverables for the MVP (Steps 1–6)
 - Instrument universe spec + identifier policy.
@@ -29,10 +32,16 @@
 - Calendar/timezone alignment policy (global venues) + explicit join policies.
 - Baseline calendar source + versioned overrides governance.
 - MIC SessionRules for venue close times + deterministic fallbacks.
+- Access cache with request hashing and manifest lineage for aligned time series.
 
 ## Known limitations (current MVP)
 - Corporate actions handled minimally (adj close or explicit adjustment factors), no survivorship-safe universe yet.
 - EOD-only; intraday microstructure and futures rolls are explicitly out of scope for this phase.
+
+## MVP status
+The Data layer MVP is **complete** per `quantlab_mvp_modules.md` for its scope:
+raw + canonical zoning, registry, calendars/session semantics flags, deterministic ingestion,
+aligned access cache, and tests (unit/integration/golden).
 
 ## References
 See `docs/data/INDEX.md` for the documentation map.

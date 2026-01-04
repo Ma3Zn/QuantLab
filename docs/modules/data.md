@@ -22,9 +22,11 @@ to consider the module complete for the first QuantLab MVP.
   `dataset_id`, `dataset_version`, `schema_version`, `instrument_id`, `ts`, `asof_ts`,
   `ts_provenance`, `source`, `ingest_run_id`, and `quality_flags`.
 - Validation pipeline with hard errors + soft flags and a structured `ValidationReport`.
+- Canonical snapshots serialized as **Parquet** for storage and replay.
 
 ### 3. Raw + canonical storage zoning and registry
 - Raw zone storage (immutable payload + metadata) keyed by `ingest_run_id` and `request_fingerprint`.
+- Per-ingest-run metadata (`ingest_run.json`) with start/end timestamps and config fingerprint.
 - Canonical snapshots staged and published with content hashes.
 - Registry entries with dataset/version, universe hash, calendar/sessionrules versions, and row counts.
 
@@ -37,6 +39,7 @@ to consider the module complete for the first QuantLab MVP.
 - Calendar spec and adapter backed by `pandas_market_calendars`.
 - SessionRules seeds and hashing (stored in registry metadata).
 - Calendar baseline version helpers (scaffolding for future overrides).
+- Calendar/session validation for canonical records (close-time checks + conflict flags).
 
 ### 6. Quality reporting and structured logging
 - Access-layer `QualityReport` (coverage + guardrail flags).
@@ -47,24 +50,6 @@ to consider the module complete for the first QuantLab MVP.
 - Unit + integration + property tests for ingestion, storage, hashing, validation, and service.
 - Golden snapshot tests for canonical datasets.
 - Offline CSV fixtures under `data/external` and runnable examples under `examples/`.
-
----
-
-## What is still missing for a complete Data MVP
-
-### 1. Canonical Parquet serialization
-Canonical snapshots are currently written as JSON lines under `part-*.parquet`.
-The MVP ADR expects **real Parquet serialization** for canonical datasets.
-
-### 2. Calendar/session enforcement for canonical records
-The time-semantics policy is only partially enforced:
-- no conversion to exchange close times using `SessionRules`,
-- no `CALENDAR_CONFLICT` detection vs the chosen calendar,
-- no validation that `trading_date_local` and `ts` are consistent with session rules.
-
-### 3. Ingest-run metadata beyond `ingest_run_id`
-The provider contract calls for a fuller ingest-run record
-(start/end timestamps and config fingerprint). This is not yet modeled or stored.
 
 ---
 

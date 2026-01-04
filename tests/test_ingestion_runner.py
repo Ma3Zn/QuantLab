@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import importlib.util
+import io
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 
+import pandas as pd
 import pytest
 
+from quantlab.data.identity import request_fingerprint
 from quantlab.data.ingestion import IngestionConfig, build_canonical_parts, run_ingestion
 from quantlab.data.normalizers import (
     EQUITY_EOD_DATASET_ID,
@@ -20,7 +24,7 @@ from quantlab.data.providers import FetchRequest, LocalFileProviderAdapter, Time
 from quantlab.data.registry import lookup_registry_entry
 from quantlab.data.schemas import CanonicalRecord, Source
 from quantlab.data.sessionrules import load_seed_sessionrules
-from quantlab.data.storage import compute_content_hash
+from quantlab.data.storage import compute_content_hash, read_ingest_run_meta
 from quantlab.data.universe import load_seed_universe
 from quantlab.data.validators import ValidationContext, validate_records
 from quantlab.instruments.master import InstrumentType
@@ -38,6 +42,14 @@ def _write_payload(tmp_path: Path, payload: dict[str, object]) -> Path:
     payload_path = tmp_path / "payload.json"
     payload_path.write_text(json.dumps(payload), encoding="utf-8")
     return payload_path
+
+
+def _require_parquet_engine() -> None:
+    if (
+        importlib.util.find_spec("pyarrow") is None
+        and importlib.util.find_spec("fastparquet") is None
+    ):
+        pytest.skip("parquet engine not installed")
 
 
 @pytest.mark.parametrize(
@@ -86,6 +98,7 @@ def test_run_ingestion_pipeline_rebuilds_from_raw(
     payload: dict[str, object],
     instrument_ids: tuple[str, ...],
 ) -> None:
+    _require_parquet_engine()
     universe = load_seed_universe(_universe_seed_path())
     sessionrules = load_seed_sessionrules(_sessionrules_seed_path())
 
@@ -118,6 +131,8 @@ def test_run_ingestion_pipeline_rebuilds_from_raw(
     )
     asof_ts = datetime(2024, 1, 3, 7, 10, tzinfo=timezone.utc)
     generated_ts = datetime(2024, 1, 3, 7, 11, tzinfo=timezone.utc)
+    started_at_ts = datetime(2024, 1, 3, 7, 9, tzinfo=timezone.utc)
+    finished_at_ts = datetime(2024, 1, 3, 7, 12, tzinfo=timezone.utc)
 
     result = run_ingestion(
         request,
@@ -128,6 +143,8 @@ def test_run_ingestion_pipeline_rebuilds_from_raw(
         asof_ts=asof_ts,
         generated_ts=generated_ts,
         created_at_ts=generated_ts,
+        started_at_ts=started_at_ts,
+        finished_at_ts=finished_at_ts,
     )
 
     assert result.registry_entry.dataset_id == dataset_id
@@ -198,4 +215,24 @@ def test_run_ingestion_pipeline_rebuilds_from_raw(
     rebuilt_parts = build_canonical_parts(rebuilt)
     rebuilt_payload = rebuilt_parts["part-0001.parquet"]
     stored_payload = result.published_snapshot.part_paths[0].read_bytes()
-    assert rebuilt_payload == stored_payload
+    rebuilt_frame = pd.read_parquet(io.BytesIO(rebuilt_payload))
+    stored_frame = pd.read_parquet(io.BytesIO(stored_payload))
+    pd.testing.assert_frame_equal(rebuilt_frame, stored_frame, check_dtype=False)
+
+    expected_fingerprint = request_fingerprint(
+        {
+            "dataset_id": config.dataset_id,
+            "dataset_version": config.dataset_version,
+            "schema_version": config.schema_version,
+            "calendar_version": config.calendar_version,
+            "universe_hash": universe.universe_hash,
+            "sessionrules_version": sessionrules.sessionrules_hash,
+            "notes": config.notes,
+        }
+    )
+    assert result.ingest_run_meta.config_fingerprint == expected_fingerprint
+    assert result.ingest_run_meta.started_at_ts == started_at_ts
+    assert result.ingest_run_meta.finished_at_ts == finished_at_ts
+
+    stored_meta = read_ingest_run_meta(config.raw_root, config.ingest_run_id)
+    assert stored_meta == result.ingest_run_meta

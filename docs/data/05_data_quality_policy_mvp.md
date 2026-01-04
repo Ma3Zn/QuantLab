@@ -29,6 +29,7 @@ Prevent silent data issues by enforcing:
 - `PROVIDER_TIMESTAMP_USED`: ts taken directly from provider without exchange-close normalization
 - `ADJUSTED_PRICE_PRESENT`: adj_close or declared adjustments
 - `MISSING_VALUE`: explicit missing observation
+- `CALENDAR_CONFLICT`: record conflicts with venue calendar or session rules
 - `IMPUTED`: only in derived datasets
 
 ---

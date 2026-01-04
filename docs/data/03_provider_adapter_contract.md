@@ -36,6 +36,8 @@ Returned by ProviderAdapter:
 - `config_fingerprint` (includes universe snapshot)
 - optional `environment_fingerprint`
 
+MVP storage: `data/raw/ingest_run_id=<INGEST_RUN_ID>/ingest_run.json`.
+
 ---
 
 ## Behavioral requirements

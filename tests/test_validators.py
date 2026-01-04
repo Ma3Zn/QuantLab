@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import pytest
 
@@ -12,7 +13,9 @@ from quantlab.data.normalizers import (
 )
 from quantlab.data.quality import QualityFlag
 from quantlab.data.schemas import Bar, BarRecord, PointRecord, Source, TimestampProvenance
-from quantlab.data.validators import validate_records
+from quantlab.data.sessionrules import load_seed_sessionrules
+from quantlab.data.universe import load_seed_universe
+from quantlab.data.validators import TimeSemanticsContext, validate_records
 
 _ASOF_TS = datetime(2024, 1, 3, 7, 10, tzinfo=timezone.utc)
 
@@ -129,3 +132,53 @@ def test_validate_records_adds_provider_timestamp_flag() -> None:
 
     assert QualityFlag.PROVIDER_TIMESTAMP_USED in validated[0].quality_flags
     assert report.flag_counts[QualityFlag.PROVIDER_TIMESTAMP_USED] == 1
+
+
+class _ClosedCalendar:
+    def sessions(self, start: date, end: date) -> list[date]:
+        return []
+
+
+def test_validate_records_flags_calendar_conflict_on_closed_day() -> None:
+    universe = load_seed_universe(
+        Path(__file__).resolve().parents[1] / "data" / "seeds" / "universe_v1.yaml"
+    )
+    sessionrules = load_seed_sessionrules(
+        Path(__file__).resolve().parents[1] / "data" / "seeds" / "sessionrules_v1.yaml"
+    )
+    instrument = next(
+        record for record in universe.instruments if record.vendor_symbol == "AAPL"
+    )
+    record = BarRecord(
+        dataset_id=EQUITY_EOD_DATASET_ID,
+        schema_version=SCHEMA_VERSION,
+        dataset_version="2024-01-03",
+        instrument_id=instrument.instrument_id,
+        ts=datetime(2024, 1, 2, 21, 0, tzinfo=timezone.utc),
+        asof_ts=_ASOF_TS,
+        ts_provenance=TimestampProvenance.PROVIDER_EOD,
+        source=Source(provider="TEST", endpoint="eod_bars"),
+        ingest_run_id="ing_001",
+        quality_flags=(),
+        trading_date_local=date(2024, 1, 2),
+        timezone_local=instrument.exchange_timezone,
+        currency=instrument.currency,
+        unit=None,
+        bar=Bar(close=192.8),
+    )
+
+    time_context = TimeSemanticsContext(
+        universe=universe,
+        sessionrules=sessionrules,
+        calendar_factory=lambda _mic: _ClosedCalendar(),
+    )
+
+    validated, report = validate_records(
+        (record,),
+        generated_ts=datetime(2024, 1, 3, tzinfo=timezone.utc),
+        time_context=time_context,
+        raise_on_hard_error=False,
+    )
+
+    assert QualityFlag.CALENDAR_CONFLICT in validated[0].quality_flags
+    assert report.flag_counts[QualityFlag.CALENDAR_CONFLICT] == 1
