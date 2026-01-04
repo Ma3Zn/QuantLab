@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
-from typing import Sequence
+from typing import Callable, Sequence, TypeVar
 
 import pandas as pd
 
@@ -62,23 +62,11 @@ def canonical_records_to_frame(records: Sequence[CanonicalRecord]) -> pd.DataFra
         raise ValueError("records must not be empty")
 
     if isinstance(records[0], BarRecord):
-        columns = CANONICAL_BAR_COLUMNS
-        row_builder = _bar_row
-        record_type = BarRecord
+        return _records_to_frame(records, CANONICAL_BAR_COLUMNS, _bar_row, BarRecord)
     elif isinstance(records[0], PointRecord):
-        columns = CANONICAL_POINT_COLUMNS
-        row_builder = _point_row
-        record_type = PointRecord
+        return _records_to_frame(records, CANONICAL_POINT_COLUMNS, _point_row, PointRecord)
     else:  # pragma: no cover - defensive
         raise ValueError("unsupported canonical record type")
-
-    rows: list[dict[str, object]] = []
-    for index, record in enumerate(records):
-        if not isinstance(record, record_type):
-            raise ValueError(f"record {index} type mismatch in canonical payload")
-        rows.append(row_builder(record))
-
-    return pd.DataFrame(rows, columns=columns)
 
 
 def serialize_canonical_records(records: Sequence[CanonicalRecord]) -> bytes:
@@ -100,6 +88,24 @@ def serialize_canonical_records(records: Sequence[CanonicalRecord]) -> bytes:
             cause=exc,
         ) from exc
     return buffer.getvalue()
+
+
+TCanonicalRecord = TypeVar("TCanonicalRecord", bound=CanonicalRecord)
+
+
+def _records_to_frame(
+    records: Sequence[CanonicalRecord],
+    columns: Sequence[str],
+    row_builder: Callable[[TCanonicalRecord], dict[str, object]],
+    record_type: type[TCanonicalRecord],
+) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+    for index, record in enumerate(records):
+        if not isinstance(record, record_type):
+            raise ValueError(f"record {index} type mismatch in canonical payload")
+        rows.append(row_builder(record))
+
+    return pd.DataFrame(rows, columns=columns)
 
 
 def _serialize_quality_flags(flags: Sequence[QualityFlag]) -> str:
