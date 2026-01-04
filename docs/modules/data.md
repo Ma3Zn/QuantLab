@@ -1,97 +1,97 @@
 # QuantLab — Data Module
 
 ## Overview
-The `data` module provides a **reproducible, auditable, provider-agnostic market data foundation** for QuantLab.
-It is designed to support serious quantitative research and risk systems, prioritizing correctness,
-traceability, and explicit assumptions over convenience.
+The `data` module provides a reproducible, auditable, provider-agnostic market data foundation.
+It focuses on correctness, traceability, and explicit assumptions over convenience.
 
-This document summarizes **what the module will be able to do** and **what it will explicitly not do** for the actual release.
-
----
-
-## What the Data module WILL be able to do
-
-### 1. Deterministic market data ingestion
-- Ingest **EOD global equities** and **daily FX spot** data through a provider-agnostic interface.
-- Persist **raw provider payloads immutably**, enabling full replay and audit.
-- Generate deterministic ingestion identities (`ingest_run_id`, request fingerprint).
-
-### 2. Canonical normalization with strict contracts
-- Normalize raw data into **typed canonical records** (`BarRecord`, `PointRecord`).
-- Enforce a stable **canonical schema** with explicit required/optional fields.
-- Guarantee core invariants:
-  - UTC timestamps,
-  - explicit `asof_ts` (anti–look-ahead),
-  - stable internal `instrument_id` usage.
-
-### 3. Explicit time, calendar, and session semantics
-- Attach **local trading dates**, timezones, and timestamp provenance to every record.
-- Apply venue close times via **SessionRules** with deterministic fallbacks.
-- Detect and flag **calendar conflicts** instead of silently correcting them.
-
-### 4. Transparent data quality enforcement
-- Apply **hard validation rules** that block publishing invalid datasets.
-- Surface **soft data issues** (missing values, suspicious prices, provider timestamps, calendar conflicts)
-  via record-level quality flags.
-- Emit structured **validation reports** for every ingestion run.
-
-### 5. Versioned storage and dataset registry
-- Store data in clearly separated **Raw**, **Canonical**, and (future) **Derived** zones.
-- Publish **immutable, versioned dataset snapshots** (Parquet).
-- Maintain a **dataset registry** capturing lineage:
-  - dataset versions,
-  - universe hash,
-  - calendar and SessionRules versions,
-  - content hashes.
-
-### 6. Reproducibility and regression protection
-- Rebuild canonical datasets from raw payloads deterministically.
-- Protect semantics with **golden snapshot tests** and explicit version bumps.
-- Enable confident refactoring without silent behavioral drift.
-
-### 7. Testability and engineering hygiene
-- Full unit, integration, and property-based test coverage for the data pipeline.
-- Clear error taxonomy and structured logging.
-- Tooling and CI enforcing linting, typing, and test execution.
+This document reflects the **current implementation** and highlights **what is still missing**
+to consider the module complete for the first QuantLab MVP.
 
 ---
 
-## What the Data module will NOT do (by design, at MVP)
+## What the Data module does today
 
-### 1. No intraday or tick-level data [WiP]
-- No minute bars, ticks, order book data, or microstructure modeling.
-- No latency-sensitive ingestion or real-time feeds.
+### 1. Provider boundary + symbol mapping
+- Provider adapter contract (`FetchRequest`, `RawResponse`, `ProviderAdapter`) for raw ingestion.
+- Local file adapter for offline CSV/JSON fixtures (MVP provider choice).
+- EOD provider protocol for access-time pulls plus `SymbolMapper` for asset-to-vendor mapping.
 
-### 2. No derivatives or complex instruments [WiP]
-- No futures rolls or continuous futures.
-- No options chains, implied volatility surfaces, or dividend term structures.
-- No rates curves or instrument-specific day-count conventions.
+### 2. Deterministic ingestion to canonical schema
+- Normalizers for **equity EOD bars** and **FX daily points** (JSON or CSV payloads).
+- Canonical records (`BarRecord`, `PointRecord`) with required metadata:
+  `dataset_id`, `dataset_version`, `schema_version`, `instrument_id`, `ts`, `asof_ts`,
+  `ts_provenance`, `source`, `ingest_run_id`, and `quality_flags`.
+- Validation pipeline with hard errors + soft flags and a structured `ValidationReport`.
+
+### 3. Raw + canonical storage zoning and registry
+- Raw zone storage (immutable payload + metadata) keyed by `ingest_run_id` and `request_fingerprint`.
+- Canonical snapshots staged and published with content hashes.
+- Registry entries with dataset/version, universe hash, calendar/sessionrules versions, and row counts.
+
+### 4. Access cache + aligned time series retrieval
+- `MarketDataService.get_timeseries()` and replay-by-hash API.
+- Deterministic request hashing and manifests storing lineage + quality.
+- Parquet cache layout per provider/asset/year, aligned to a market calendar.
+
+### 5. Time/calendar scaffolding
+- Calendar spec and adapter backed by `pandas_market_calendars`.
+- SessionRules seeds and hashing (stored in registry metadata).
+- Calendar baseline version helpers (scaffolding for future overrides).
+
+### 6. Quality reporting and structured logging
+- Access-layer `QualityReport` (coverage + guardrail flags).
+- Canonical `ValidationReport` with hard errors and soft flags.
+- Structured logging helpers and typed errors for data operations.
+
+### 7. Tests and fixtures
+- Unit + integration + property tests for ingestion, storage, hashing, validation, and service.
+- Golden snapshot tests for canonical datasets.
+- Offline CSV fixtures under `data/external` and runnable examples under `examples/`.
+
+---
+
+## What is still missing for a complete Data MVP
+
+### 1. Canonical Parquet serialization
+Canonical snapshots are currently written as JSON lines under `part-*.parquet`.
+The MVP ADR expects **real Parquet serialization** for canonical datasets.
+
+### 2. Calendar/session enforcement for canonical records
+The time-semantics policy is only partially enforced:
+- no conversion to exchange close times using `SessionRules`,
+- no `CALENDAR_CONFLICT` detection vs the chosen calendar,
+- no validation that `trading_date_local` and `ts` are consistent with session rules.
+
+### 3. Ingest-run metadata beyond `ingest_run_id`
+The provider contract calls for a fuller ingest-run record
+(start/end timestamps and config fingerprint). This is not yet modeled or stored.
+
+---
+
+## What the Data module does NOT do (MVP scope)
+
+### 1. No intraday or tick-level data
+- No minute bars, ticks, order book data, or real-time feeds.
+
+### 2. No derivatives or complex instruments
+- No futures rolls, options chains, or rates curves.
 
 ### 3. No implicit data transformations
 - No forward/backward filling.
 - No silent corporate action adjustments.
-- No smoothing, interpolation, or “cleaning” beyond explicit flags.
 
 ### 4. No analytics, pricing, or risk logic
-- No returns computation, factor construction, or signals.
-- No pricing models or valuation logic.
-- No portfolio aggregation, risk metrics, or stress testing.
+- No returns, factor models, or portfolio aggregation.
 
 ### 5. No strategy or decision outputs
-- No buy/sell signals.
-- No portfolio weights or execution logic.
+- No signals or execution logic.
 
 ### 6. No institutional guarantees
-- MVP provider data is not survivorship-safe.
-- Corporate actions may be incomplete or approximate.
-- Regulatory or production-grade SLAs are out of scope.
+- No survivorship-safe guarantees or production SLAs at MVP.
 
 ---
 
 ## Intended role in the QuantLab architecture
-The `data` module is a **pure upstream dependency**:
-- it feeds clean, well-specified datasets into pricing, risk, stress, optimization, and decision layers;
-- it does not embed modeling assumptions that belong downstream;
-- it makes uncertainty and data imperfections explicit rather than hidden.
-
-In short: **the Data module makes it possible to trust everything built on top of it — or to know exactly why you should not.**
+The `data` module is a pure upstream dependency:
+it feeds reproducible datasets into pricing, risk, stress, optimization, and decision layers,
+while making uncertainty explicit and auditable.
