@@ -15,5 +15,6 @@ This quickstart verifies the `instruments/` domain model end-to-end:
 
 ## Minimal example (conceptual)
 - Create a cash instrument and an equity instrument (with a `market_data_id` from `data/`).
+- For cash/future/bond specs, set `market_data_binding` explicitly (`"NONE"` or `"REQUIRED"`).
 - Build a portfolio snapshot at `as_of`.
 - Serialize and compare with a reference JSON fixture.

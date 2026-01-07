@@ -55,6 +55,8 @@ Supported instrument specs (representation-level):
 
 Position semantics (MVP):
 - Long-only: `quantity >= 0` (explicitly documented limitation)
+- Optional: embedded `instrument` must match `instrument_id`
+- Optional: `cost_basis` stored only (no realized/unrealized accounting)
 
 ---
 
@@ -100,7 +102,7 @@ eur_cash = Instrument(
     instrument_type=InstrumentType.CASH,
     market_data_id=None,
     currency="EUR",
-    spec=CashSpec(),
+    spec=CashSpec(market_data_binding="NONE"),
 )
 
 aapl = Instrument(

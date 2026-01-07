@@ -33,6 +33,11 @@ This directory documents the **Instruments layer** of QuantLab: the canonical do
 - `docs/adr/0109-instruments-errors-and-tests.md` — error model + test strategy.
 - `docs/adr/0110-instruments-seams-pricing-risk.md` — seams as data contracts (no interfaces in instruments).
 
+## Tests and fixtures
+- `tests/unit/instruments/` — unit tests for invariants and validation.
+- `tests/property/instruments/` — property-based tests for canonicalization and round-trips.
+- `tests/golden/instruments/` — golden JSON portfolio fixtures.
+
 ## Next planned docs (not yet written)
 - Shorting + financing/margin semantics extension (separate module proposal).
 - Corporate actions and instrument master data (event model and provenance).

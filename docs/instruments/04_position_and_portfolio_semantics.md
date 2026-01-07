@@ -2,7 +2,9 @@
 
 ## Position
 A Position is a holding:
+- `schema_version`
 - `instrument_id`
+- optional embedded `instrument` (must match `instrument_id`)
 - `quantity`
 
 MVP rule:

@@ -31,7 +31,7 @@ Define a module constant:
 
 Embed `schema_version` in:
 - `Instrument`
-- `Position` (optional, but recommended for stability)
+- `Position`
 - `Portfolio`
 
 Breaking changes require bump and migration notes.
@@ -44,6 +44,9 @@ Canonicalization must occur at validation-time:
 Use Pydantic validators:
 - `@field_validator("positions")` to sort and validate uniqueness
 - `@field_validator("cash")` to normalize and sort keys
+
+Where a spec allows `market_data_id=None`, include an explicit `market_data_binding` flag
+to avoid silent reference-only instruments.
 
 ## Type constraints (MVP)
 - `Currency`: regex `^[A-Z]{3}$`

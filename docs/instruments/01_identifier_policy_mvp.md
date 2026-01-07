@@ -31,6 +31,8 @@ Examples:
 ## Binding rules
 - If an instrument is intended to be priced from market data, `market_data_id` MUST be set.
 - If reference-only, `market_data_id` MAY be `None` but this must be explicit via a flag in the spec.
+  - Indexes use `IndexSpec.is_tradable` to make this explicit.
+  - Cash/Future/Bond use `market_data_binding="NONE"` to make this explicit.
 
 ## Failure modes
 - ticker collisions across venues/currencies

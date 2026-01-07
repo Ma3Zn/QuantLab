@@ -3,10 +3,12 @@
   "as_of": "2026-01-06T00:00:00+00:00",
   "positions": [
     {
+      "schema_version": 1,
       "instrument_id": "EQ.AAPL",
       "quantity": 10.0
     },
     {
+      "schema_version": 1,
       "instrument_id": "EQ.MSFT",
       "quantity": 5.0
     }

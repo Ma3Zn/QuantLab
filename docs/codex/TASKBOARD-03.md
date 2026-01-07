@@ -149,7 +149,7 @@ Legend:
 - [x] Currency validation test matrix (accept EUR/USD; reject eur/EU/whitespace)
 - [x] FutureSpec invariants (expiry required, multiplier > 0)
 - [x] Position invariants (long-only; reject NaN/Inf)
-- [ ] Portfolio invariants:
+- [x] Portfolio invariants:
   - [x] tz-aware as_of required
   - [x] duplicate positions rejected
   - [x] canonical ordering enforced
@@ -169,16 +169,16 @@ Legend:
 
 ### 9.2 Docs consistency gate (PR-33)
 - [ ] `docs/modules/instruments.md` references the final import paths
-- [ ] `docs/instruments/QUICKSTART.md` reflects how to run tests in this repo
-- [ ] `docs/instruments/INDEX.md` lists all newly added tests/fixtures paths
+- [x] `docs/instruments/QUICKSTART.md` reflects how to run tests in this repo
+- [x] `docs/instruments/INDEX.md` lists all newly added tests/fixtures paths
 
 ---
 
 ## 10) Explicit limitations (must remain visible)
-- [ ] Long-only positions are explicitly documented (README + module doc)
-- [ ] Futures are representational only (no roll/margining) documented
-- [ ] Bonds are representational only (no accrued interest / conventions) documented
-- [ ] FX conversion is out of scope for instruments documented
+- [x] Long-only positions are explicitly documented (README + module doc)
+- [x] Futures are representational only (no roll/margining) documented
+- [x] Bonds are representational only (no accrued interest / conventions) documented
+- [x] FX conversion is out of scope for instruments documented
 
 ---
 

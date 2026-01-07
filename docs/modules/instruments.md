@@ -26,6 +26,8 @@ while integrating cleanly with upstream market data (`data`).
 - `InstrumentId`: internal identity used in portfolios and reports.
 - `MarketDataId`: identifier used to retrieve time series from `data` (prefer reusing `data.AssetId`).
 - Every `Instrument` carries a `market_data_id` (or explicitly declares no market data binding, e.g. reference-only).
+  - Indexes use `is_tradable` to express binding intent.
+  - Cash/Future/Bond specs use `market_data_binding` to make non-priced instruments explicit.
 
 This separation is deliberate:
 instrument identity is not always the same as the identifier used to fetch data
@@ -71,9 +73,10 @@ and for `simulation` to produce and store snapshots reproducibly.
   - cash: currency required, quantity is amount
   - long-only positions: `quantity >= 0`
   - currency fields must be explicit and validated (ISO-4217 uppercase)
+  - tradable instruments require explicit `currency`
 
 ### 6. Canonical JSON serialization + schema versioning
-- All major objects include `schema_version`.
+- All major objects include `schema_version` (including `Position`).
 - Serialization produces canonical JSON suited for:
   - golden/snapshot testing
   - stable report generation
@@ -103,6 +106,7 @@ These belong to `data`.
 ### 2. No pricing logic
 - No discounting, no curve building, no accrued interest, no carry/roll logic.
 - No pricing interfaces baked into `instruments`.
+- No FX conversion or rate application inside `instruments`.
 
 These belong to `pricing`.
 

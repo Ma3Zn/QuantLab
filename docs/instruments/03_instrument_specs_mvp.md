@@ -26,16 +26,20 @@ Required:
 Rules:
 - If `is_tradable=False`, `market_data_id` may be None.
 - If `is_tradable=True`, `market_data_id` must be provided.
+- If `is_tradable=True`, `currency` must be provided.
 
 ## CashSpec
 Purpose: represent cash holdings in a currency.
 
 Required:
 - `kind = "cash"`
+- `market_data_binding: "REQUIRED" | "NONE"`
 
 Rules:
 - Currency is mandatory.
 - `market_data_id` typically None in MVP (cash is valued at par in its own currency; FX belongs to pricing).
+  - If `market_data_binding="NONE"`, `market_data_id` must be None.
+  - If `market_data_binding="REQUIRED"`, `market_data_id` must be provided.
 
 ## FutureSpec
 Purpose: represent a futures contract (representation-level).
@@ -44,6 +48,7 @@ Required:
 - `kind = "future"`
 - `expiry: date`
 - `multiplier: float` (must be > 0)
+- `market_data_binding: "REQUIRED" | "NONE"`
 Optional:
 - `root` (e.g., ES)
 - `exchange` (MIC)
@@ -51,6 +56,8 @@ Optional:
 Rules:
 - No roll logic, no margining in `instruments/`.
 - `market_data_id` required if priced from futures settlement series.
+  - If `market_data_binding="NONE"`, `market_data_id` must be None.
+- Instrument currency must be explicit.
 
 ## BondSpec
 Purpose: represent a bond (metadata-level).
@@ -58,12 +65,14 @@ Purpose: represent a bond (metadata-level).
 Required:
 - `kind = "bond"`
 - `maturity: date`
+- `market_data_binding: "REQUIRED" | "NONE"`
 Optional:
 - `issuer`, `coupon_rate`, `coupon_frequency`, `day_count` (metadata only)
 
 Rules:
 - No accrued interest or curve references.
 - `market_data_id` may be None in MVP (if bond pricing not implemented yet), but this must be explicit.
+- Instrument currency must be explicit.
 
 ## Instrument invariants (cross-cutting)
 - `instrument_id` must be non-empty, stable.
