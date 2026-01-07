@@ -8,6 +8,8 @@ from pydantic import field_validator
 from quantlab.instruments.types import InstrumentBaseModel
 from quantlab.instruments.value_types import FiniteFloat
 
+MarketDataBinding = Literal["REQUIRED", "NONE"]
+
 
 class EquitySpec(InstrumentBaseModel):
     kind: Literal["equity"] = "equity"
@@ -22,12 +24,14 @@ class IndexSpec(InstrumentBaseModel):
 
 class CashSpec(InstrumentBaseModel):
     kind: Literal["cash"] = "cash"
+    market_data_binding: MarketDataBinding
 
 
 class FutureSpec(InstrumentBaseModel):
     kind: Literal["future"] = "future"
     expiry: date
     multiplier: FiniteFloat
+    market_data_binding: MarketDataBinding
     root: str | None = None
     exchange: str | None = None
 
@@ -42,6 +46,7 @@ class FutureSpec(InstrumentBaseModel):
 class BondSpec(InstrumentBaseModel):
     kind: Literal["bond"] = "bond"
     maturity: date
+    market_data_binding: MarketDataBinding
     issuer: str | None = None
     coupon_rate: float | None = None
     coupon_frequency: str | None = None
@@ -54,4 +59,5 @@ __all__ = [
     "EquitySpec",
     "FutureSpec",
     "IndexSpec",
+    "MarketDataBinding",
 ]

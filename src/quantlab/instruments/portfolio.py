@@ -6,6 +6,7 @@ from typing import Any, Iterable, Mapping
 
 from pydantic import field_validator
 
+from quantlab.instruments.errors import DuplicateCashCurrencyError, DuplicatePositionError
 from quantlab.instruments.position import Position
 from quantlab.instruments.types import INSTRUMENTS_SCHEMA_VERSION, InstrumentBaseModel
 from quantlab.instruments.value_types import Currency, FiniteFloat
@@ -32,7 +33,7 @@ class Portfolio(InstrumentBaseModel):
         for position in value:
             instrument_id = position.instrument_id
             if instrument_id in seen:
-                raise ValueError("duplicate position instrument_id")
+                raise DuplicatePositionError(str(instrument_id))
             seen.add(instrument_id)
         return sorted(value, key=lambda position: position.instrument_id)
 
@@ -52,7 +53,7 @@ class Portfolio(InstrumentBaseModel):
                 raise TypeError("cash currency must be a string")
             currency = key.upper()
             if currency in normalized:
-                raise ValueError("duplicate cash currency")
+                raise DuplicateCashCurrencyError(currency)
             normalized[currency] = amount
         return dict(sorted(normalized.items(), key=lambda item: item[0]))
 
