@@ -93,7 +93,7 @@ from quantlab.instruments import (
 )
 
 # MarketDataId is expected to reuse data.AssetId (or an alias)
-from quantlab.data.ids import AssetId
+from quantlab.data.schemas import AssetId
 
 eur_cash = Instrument(
     instrument_id="CASH.EUR",
@@ -106,7 +106,7 @@ eur_cash = Instrument(
 aapl = Instrument(
     instrument_id="EQ.AAPL",
     instrument_type=InstrumentType.EQUITY,
-    market_data_id=AssetId("AAPL", venue="XNAS"),  # example; depends on data layer
+    market_data_id=AssetId("AAPL"),  # example; depends on data layer
     currency="USD",
     spec=EquitySpec(exchange="XNAS"),
 )

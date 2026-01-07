@@ -164,8 +164,8 @@ Legend:
 ## 9) Packaging / API exports / docs consistency
 
 ### 9.1 Public exports (PR-33)
-- [ ] `src/instruments/__init__.py` exports the intended stable API
-- [ ] README quickstart imports match real module paths
+- [x] `src/instruments/__init__.py` exports the intended stable API
+- [x] README quickstart imports match real module paths
 
 ### 9.2 Docs consistency gate (PR-33)
 - [ ] `docs/modules/instruments.md` references the final import paths
