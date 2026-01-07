@@ -75,15 +75,15 @@ Legend:
 ## 3) Instrument Specs (discriminated union, composition-over-inheritance)
 
 ### 3.1 Spec models exist (PR-26)
-- [ ] `EquitySpec(kind="equity", ...)`
-- [ ] `IndexSpec(kind="index", is_tradable: bool, ...)`
-- [ ] `CashSpec(kind="cash", ...)`
-- [ ] `FutureSpec(kind="future", expiry: date, multiplier: float, ...)`
-- [ ] `BondSpec(kind="bond", maturity: date, ...)`
-- [ ] Specs contain only identity/descriptor fields (no pricing logic)
+- [x] `EquitySpec(kind="equity", ...)`
+- [x] `IndexSpec(kind="index", is_tradable: bool, ...)`
+- [x] `CashSpec(kind="cash", ...)`
+- [x] `FutureSpec(kind="future", expiry: date, multiplier: float, ...)`
+- [x] `BondSpec(kind="bond", maturity: date, ...)`
+- [x] Specs contain only identity/descriptor fields (no pricing logic)
 
 ### 3.2 Spec invariants enforced (PR-26)
-- [ ] Futures: `expiry` required, `multiplier > 0`
+- [x] Futures: `expiry` required, `multiplier > 0`
 - [x] Currency: ISO-4217 uppercase validation (`^[A-Z]{3}$`)
 - [ ] Index: `is_tradable=False` allows `market_data_id=None` (explicit); `is_tradable=True` requires market data binding
 
@@ -147,7 +147,7 @@ Legend:
 
 ### 8.1 Unit tests (PR-25..PR-29)
 - [x] Currency validation test matrix (accept EUR/USD; reject eur/EU/whitespace)
-- [ ] FutureSpec invariants (expiry required, multiplier > 0)
+- [x] FutureSpec invariants (expiry required, multiplier > 0)
 - [ ] Position invariants (long-only; reject NaN/Inf)
 - [ ] Portfolio invariants:
   - [ ] tz-aware as_of required
