@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from typing import Any, Iterable, Mapping
 
@@ -54,6 +55,23 @@ class Portfolio(InstrumentBaseModel):
                 raise ValueError("duplicate cash currency")
             normalized[currency] = amount
         return dict(sorted(normalized.items(), key=lambda item: item[0]))
+
+    def to_canonical_dict(self) -> dict[str, Any]:
+        payload = self.model_dump(mode="json", exclude_none=False)
+        return {
+            "schema_version": payload["schema_version"],
+            "as_of": payload["as_of"],
+            "positions": payload["positions"],
+            "cash": payload["cash"],
+            "meta": payload["meta"],
+        }
+
+    def to_canonical_json(self) -> str:
+        return json.dumps(
+            self.to_canonical_dict(),
+            separators=(",", ":"),
+            ensure_ascii=False,
+        )
 
 
 __all__ = ["Portfolio"]

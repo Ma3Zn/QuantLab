@@ -59,3 +59,25 @@ def test_portfolio_rejects_duplicate_cash_currency() -> None:
             positions=[],
             cash={"USD": 10.0, "usd": 5.0},
         )
+
+
+def test_portfolio_canonical_json_is_stable() -> None:
+    positions_a = [
+        Position(instrument_id="EQ.MSFT", quantity=1.0),
+        Position(instrument_id="EQ.AAPL", quantity=2.0),
+    ]
+    positions_b = [
+        Position(instrument_id="EQ.AAPL", quantity=2.0),
+        Position(instrument_id="EQ.MSFT", quantity=1.0),
+    ]
+    portfolio_a = Portfolio(
+        as_of=datetime(2024, 1, 1, tzinfo=timezone.utc),
+        positions=positions_a,
+        cash={"usd": 10.0, "eur": 5.0},
+    )
+    portfolio_b = Portfolio(
+        as_of=datetime(2024, 1, 1, tzinfo=timezone.utc),
+        positions=positions_b,
+        cash={"EUR": 5.0, "USD": 10.0},
+    )
+    assert portfolio_a.to_canonical_json() == portfolio_b.to_canonical_json()

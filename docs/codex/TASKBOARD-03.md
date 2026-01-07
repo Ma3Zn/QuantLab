@@ -133,9 +133,9 @@ Legend:
 ## 7) Canonical serialization (JSON) + golden fixtures
 
 ### 7.1 Canonical dict/json methods (PR-30)
-- [ ] `Portfolio.to_canonical_dict()` exists
-- [ ] `Portfolio.to_canonical_json()` exists and is stable (no whitespace variance)
-- [ ] Serialization excludes `None` where appropriate (consistent policy)
+- [x] `Portfolio.to_canonical_dict()` exists
+- [x] `Portfolio.to_canonical_json()` exists and is stable (no whitespace variance)
+- [x] Serialization handles `None` fields consistently (policy fixed)
 
 ### 7.2 Golden fixtures exist and tests pass (PR-31)
 - [ ] Golden fixtures live under `docs/instruments/examples/*.json` (or copied to `tests/golden/`)
