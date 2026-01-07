@@ -44,13 +44,13 @@ Legend:
 
 ### 1.1 Base modeling configuration (PR-23 / PR-25)
 - [ ] Pydantic v2 is the modeling basis for all public models:
-  - [ ] `extra='forbid'` (no silent fields)
-  - [ ] `frozen=True` (immutable domain objects)
+  - [x] `extra='forbid'` (no silent fields)
+  - [x] `frozen=True` (immutable domain objects)
   - [ ] strict typing where feasible (e.g., StrictStr for IDs)
 - [ ] NaN/Inf rejected in numeric inputs (quantity, cash amounts, multiplier)
 
 ### 1.2 Schema versioning (PR-23)
-- [ ] `INSTRUMENTS_SCHEMA_VERSION = 1` exists (single source of truth)
+- [x] `INSTRUMENTS_SCHEMA_VERSION = 1` exists (single source of truth)
 - [ ] `schema_version` is present in `Instrument` and `Portfolio` (and in `Position` if chosen)
 - [ ] Breaking-change policy documented (bump + migration notes)
 

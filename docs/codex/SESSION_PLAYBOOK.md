@@ -3,7 +3,7 @@
 ## 0) Preconditions
 - Work on a clean git working tree.
 - Ensure docs under `docs/data/` and ADRs are present.
-- Confirm the repo structure matches `docs/adr/0001-repo-structure.md`.
+- Confirm the repo structure matches `repo-structure.txt`.
 
 ## 1) Start each task
 1. State objective + non-goals.
@@ -18,6 +18,7 @@
 - Keep all I/O in provider/storage layer; keep transformations pure.
 
 ## 3) Completion
+- use the local virtual environment .venv
 - Run full checks: ruff, mypy, pytest.
 - Update docs if file paths/config changed.
 - Provide a final summary:

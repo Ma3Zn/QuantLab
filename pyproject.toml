@@ -11,6 +11,7 @@ authors = [{ name = "QuantLab" }]
 dependencies = [
   "pandas>=2.0",
   "pandas_market_calendars>=4.1",
+  "pydantic>=2.5",
 ]
 
 [project.optional-dependencies]
