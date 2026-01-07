@@ -138,8 +138,8 @@ Legend:
 - [x] Serialization handles `None` fields consistently (policy fixed)
 
 ### 7.2 Golden fixtures exist and tests pass (PR-31)
-- [ ] Golden fixtures live under `docs/instruments/examples/*.json` (or copied to `tests/golden/`)
-- [ ] Golden tests load fixture JSON and compare to canonical output deterministically
+- [x] Golden fixtures live under `docs/instruments/examples/*.json` (or copied to `tests/golden/`)
+- [x] Golden tests load fixture JSON and compare to canonical output deterministically
 
 ---
 

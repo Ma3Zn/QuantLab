@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-01-06T00:00:00+00:00",
+  "positions": [
+    {
+      "instrument_id": "EQ.AAPL",
+      "quantity": 10.0
+    },
+    {
+      "instrument_id": "EQ.MSFT",
+      "quantity": 5.0
+    }
+  ],
+  "cash": {
+    "EUR": 1000.0
+  },
+  "meta": {
+    "name": "equities+cash"
+  }
+}

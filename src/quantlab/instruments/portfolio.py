@@ -57,13 +57,15 @@ class Portfolio(InstrumentBaseModel):
         return dict(sorted(normalized.items(), key=lambda item: item[0]))
 
     def to_canonical_dict(self) -> dict[str, Any]:
-        payload = self.model_dump(mode="json", exclude_none=False)
+        payload = self.model_dump(mode="python", exclude_none=True)
         return {
             "schema_version": payload["schema_version"],
-            "as_of": payload["as_of"],
-            "positions": payload["positions"],
-            "cash": payload["cash"],
-            "meta": payload["meta"],
+            "as_of": self.as_of.isoformat(),
+            "positions": [
+                position.model_dump(mode="json", exclude_none=True) for position in self.positions
+            ],
+            "cash": dict(self.cash),
+            "meta": payload.get("meta"),
         }
 
     def to_canonical_json(self) -> str:
