@@ -53,6 +53,9 @@ Supported instrument specs (representation-level):
 - Future (expiry + multiplier; **no roll/margining logic here**)
 - Bond (metadata only; **no accrued-interest logic here**)
 
+Market data binding note:
+- Use `market_data_binding` on Cash/Future/Bond specs to make reference-only instruments explicit.
+
 Position semantics (MVP):
 - Long-only: `quantity >= 0` (explicitly documented limitation)
 - Optional: embedded `instrument` must match `instrument_id`
