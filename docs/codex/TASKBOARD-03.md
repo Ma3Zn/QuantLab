@@ -51,7 +51,7 @@ Legend:
 
 ### 1.2 Schema versioning (PR-23)
 - [x] `INSTRUMENTS_SCHEMA_VERSION = 1` exists (single source of truth)
-- [ ] `schema_version` is present in `Instrument` and `Portfolio` (and in `Position` if chosen)
+- [x] `schema_version` is present in `Instrument` and `Portfolio` (and in `Position` if chosen)
 - [ ] Breaking-change policy documented (bump + migration notes)
 
 ---
@@ -119,14 +119,14 @@ Legend:
 ## 6) Portfolio snapshot (deterministic and reproducible)
 
 ### 6.1 Portfolio structure (PR-29)
-- [ ] `Portfolio(as_of, positions, cash, meta, schema_version)` exists
-- [ ] `as_of` must be timezone-aware
-- [ ] `cash` is mapping `Currency -> float` (or Decimal if adopted later)
+- [x] `Portfolio(as_of, positions, cash, meta, schema_version)` exists
+- [x] `as_of` must be timezone-aware
+- [x] `cash` is mapping `Currency -> float` (or Decimal if adopted later)
 
 ### 6.2 Uniqueness + canonical ordering (PR-29)
-- [ ] positions are unique by `instrument_id` (reject duplicates; do not silently merge)
-- [ ] positions are canonical-sorted by `instrument_id`
-- [ ] cash keys canonicalized to uppercase and sorted deterministically
+- [x] positions are unique by `instrument_id` (reject duplicates; do not silently merge)
+- [x] positions are canonical-sorted by `instrument_id`
+- [x] cash keys canonicalized to uppercase and sorted deterministically
 
 ---
 
@@ -150,9 +150,9 @@ Legend:
 - [x] FutureSpec invariants (expiry required, multiplier > 0)
 - [x] Position invariants (long-only; reject NaN/Inf)
 - [ ] Portfolio invariants:
-  - [ ] tz-aware as_of required
-  - [ ] duplicate positions rejected
-  - [ ] canonical ordering enforced
+  - [x] tz-aware as_of required
+  - [x] duplicate positions rejected
+  - [x] canonical ordering enforced
 
 ### 8.2 Property-based tests (Hypothesis) (PR-32)
 - [ ] round-trip: object → canonical JSON → object preserves semantics
