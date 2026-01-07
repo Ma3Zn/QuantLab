@@ -68,7 +68,7 @@ Legend:
 ### 2.2 MarketDataId integration with `data/` (PR-24)
 - [x] A typed alias `MarketDataId` exists and **reuses** `data.AssetId` if present
 - [ ] No “ticker string soup” in public APIs
-- [ ] `Instrument.market_data_id` is optional only where explicit in spec rules
+- [x] `Instrument.market_data_id` is optional only where explicit in spec rules
 
 ---
 
@@ -85,22 +85,22 @@ Legend:
 ### 3.2 Spec invariants enforced (PR-26)
 - [x] Futures: `expiry` required, `multiplier > 0`
 - [x] Currency: ISO-4217 uppercase validation (`^[A-Z]{3}$`)
-- [ ] Index: `is_tradable=False` allows `market_data_id=None` (explicit); `is_tradable=True` requires market data binding
+- [x] Index: `is_tradable=False` allows `market_data_id=None` (explicit); `is_tradable=True` requires market data binding
 
 ---
 
 ## 4) Instrument model (canonical, validated)
 
 ### 4.1 InstrumentType + spec-kind consistency (PR-27)
-- [ ] `InstrumentType` enum exists (EQUITY, INDEX, CASH, FUTURE, BOND)
-- [ ] `Instrument.spec` is a discriminated union (`kind` discriminator)
-- [ ] Validation enforces `instrument_type` matches `spec.kind` mapping
-- [ ] Validation enforces market_data binding policy (per spec)
+- [x] `InstrumentType` enum exists (EQUITY, INDEX, CASH, FUTURE, BOND)
+- [x] `Instrument.spec` is a discriminated union (`kind` discriminator)
+- [x] Validation enforces `instrument_type` matches `spec.kind` mapping
+- [x] Validation enforces market_data binding policy (per spec)
 
 ### 4.2 Instrument is pure domain (PR-27)
-- [ ] No provider mapping logic
-- [ ] No I/O or caching logic
-- [ ] No pricing logic
+- [x] No provider mapping logic
+- [x] No I/O or caching logic
+- [x] No pricing logic
 
 ---
 
