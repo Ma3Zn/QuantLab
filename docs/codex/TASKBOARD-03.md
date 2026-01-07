@@ -47,7 +47,7 @@ Legend:
   - [x] `extra='forbid'` (no silent fields)
   - [x] `frozen=True` (immutable domain objects)
   - [ ] strict typing where feasible (e.g., StrictStr for IDs)
-- [ ] NaN/Inf rejected in numeric inputs (quantity, cash amounts, multiplier)
+- [x] NaN/Inf rejected in numeric inputs (quantity, cash amounts, multiplier)
 
 ### 1.2 Schema versioning (PR-23)
 - [x] `INSTRUMENTS_SCHEMA_VERSION = 1` exists (single source of truth)
@@ -84,7 +84,7 @@ Legend:
 
 ### 3.2 Spec invariants enforced (PR-26)
 - [ ] Futures: `expiry` required, `multiplier > 0`
-- [ ] Currency: ISO-4217 uppercase validation (`^[A-Z]{3}$`)
+- [x] Currency: ISO-4217 uppercase validation (`^[A-Z]{3}$`)
 - [ ] Index: `is_tradable=False` allows `market_data_id=None` (explicit); `is_tradable=True` requires market data binding
 
 ---
@@ -146,7 +146,7 @@ Legend:
 ## 8) Tests (unit, property, golden)
 
 ### 8.1 Unit tests (PR-25..PR-29)
-- [ ] Currency validation test matrix (accept EUR/USD; reject eur/EU/whitespace)
+- [x] Currency validation test matrix (accept EUR/USD; reject eur/EU/whitespace)
 - [ ] FutureSpec invariants (expiry required, multiplier > 0)
 - [ ] Position invariants (long-only; reject NaN/Inf)
 - [ ] Portfolio invariants:
