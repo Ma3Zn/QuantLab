@@ -26,3 +26,6 @@ dist/
 # Data directories (cache/external not tracked)
 data/cache/
 data/external/
+
+# Script Locali
+script_locali/
