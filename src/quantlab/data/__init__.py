@@ -50,6 +50,7 @@ from quantlab.data.schemas import (
     Source,
     TimeSeriesBundle,
 )
+from quantlab.data.service import MarketDataService
 from quantlab.data.sessionrules import (
     SessionRule,
     SessionRulesSnapshot,
@@ -69,7 +70,6 @@ from quantlab.data.storage import (
     store_raw_payload,
 )
 from quantlab.data.validators import ValidationContext, validate_records
-from quantlab.data.service import MarketDataService
 
 __all__ = [
     "DataError",

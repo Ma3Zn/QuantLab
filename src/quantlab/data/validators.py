@@ -362,10 +362,9 @@ def _apply_time_semantics_flags(
         if timezone_value is not None:
             try:
                 local_date = record.ts.astimezone(ZoneInfo(timezone_value)).date()
-            except ZoneInfoNotFoundError as exc:
+            except ZoneInfoNotFoundError:
                 hard_errors.append(
-                    "invalid timezone for instrument "
-                    f"{record.instrument_id}: {timezone_value}"
+                    f"invalid timezone for instrument {record.instrument_id}: {timezone_value}"
                 )
             else:
                 if local_date != trading_date:
@@ -434,9 +433,6 @@ def _expected_close_ts(
         local_dt = datetime.combine(trading_date, close_time)
         expected = local_dt.replace(tzinfo=ZoneInfo(rule.timezone_local))
     except (ValueError, ZoneInfoNotFoundError) as exc:
-        hard_errors.append(
-            "failed to compute expected close time for "
-            f"{rule.mic}: {exc}"
-        )
+        hard_errors.append(f"failed to compute expected close time for {rule.mic}: {exc}")
         return None
     return expected.astimezone(timezone.utc)
