@@ -107,12 +107,12 @@ Legend:
 ## 5) Position model (long-only MVP)
 
 ### 5.1 Position fields and invariants (PR-28)
-- [ ] `Position(instrument_id, quantity)` exists
-- [ ] long-only: `quantity >= 0`
-- [ ] quantity rejects NaN/Inf
+- [x] `Position(instrument_id, quantity)` exists
+- [x] long-only: `quantity >= 0`
+- [x] quantity rejects NaN/Inf
 
 ### 5.2 Optional metadata (if included) (PR-28)
-- [ ] metadata/tags are passive, non-semantic (no strategy engine coupling)
+- [x] metadata/tags are passive, non-semantic (no strategy engine coupling)
 
 ---
 
@@ -148,7 +148,7 @@ Legend:
 ### 8.1 Unit tests (PR-25..PR-29)
 - [x] Currency validation test matrix (accept EUR/USD; reject eur/EU/whitespace)
 - [x] FutureSpec invariants (expiry required, multiplier > 0)
-- [ ] Position invariants (long-only; reject NaN/Inf)
+- [x] Position invariants (long-only; reject NaN/Inf)
 - [ ] Portfolio invariants:
   - [ ] tz-aware as_of required
   - [ ] duplicate positions rejected
