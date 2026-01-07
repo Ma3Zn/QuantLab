@@ -59,14 +59,14 @@ Legend:
 ## 2) Identifier contract with `data/` (InstrumentId vs MarketDataId)
 
 ### 2.1 InstrumentId (PR-24)
-- [ ] `InstrumentId` type exists (string-backed, validated)
-  - [ ] non-empty, trimmed
-  - [ ] length bounds (e.g., 1..64)
-  - [ ] forbids whitespace
-- [ ] Recommended namespace convention documented (EQ./IDX./CASH./FUT./BOND.)
+- [x] `InstrumentId` type exists (string-backed, validated)
+  - [x] non-empty, trimmed
+  - [x] length bounds (e.g., 1..64)
+  - [x] forbids whitespace
+- [x] Recommended namespace convention documented (EQ./IDX./CASH./FUT./BOND.)
 
 ### 2.2 MarketDataId integration with `data/` (PR-24)
-- [ ] A typed alias `MarketDataId` exists and **reuses** `data.AssetId` if present
+- [x] A typed alias `MarketDataId` exists and **reuses** `data.AssetId` if present
 - [ ] No “ticker string soup” in public APIs
 - [ ] `Instrument.market_data_id` is optional only where explicit in spec rules
 
