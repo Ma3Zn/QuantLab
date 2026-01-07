@@ -18,13 +18,13 @@ def test_future_spec_rejects_non_positive_multiplier() -> None:
 
 def test_required_fields_are_enforced() -> None:
     with pytest.raises(ValidationError):
-        IndexSpec()
+        IndexSpec.model_validate({})
     with pytest.raises(ValidationError):
-        FutureSpec(multiplier=1.0)
+        FutureSpec.model_validate({"multiplier": 1.0})
     with pytest.raises(ValidationError):
-        BondSpec()
+        BondSpec.model_validate({})
 
 
 def test_cash_spec_requires_market_data_binding() -> None:
     with pytest.raises(ValidationError):
-        CashSpec()
+        CashSpec.model_validate({})

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, Any
+from typing import Annotated, Any, cast
 
 from pydantic import Field, model_validator
 
@@ -55,22 +55,27 @@ class Instrument(InstrumentBaseModel):
                     market_data_id=None,
                 )
         if self.instrument_type == InstrumentType.INDEX:
-            if self.spec.is_tradable and self.market_data_id is None:
+            index_spec = cast(IndexSpec, self.spec)
+            if index_spec.is_tradable and self.market_data_id is None:
                 raise InvalidMarketDataBindingError(
                     instrument_id=instrument_id,
                     binding="REQUIRED",
                     market_data_id=None,
                 )
-            if self.spec.is_tradable and self.currency is None:
+            if index_spec.is_tradable and self.currency is None:
                 raise MissingCurrencyError(
                     instrument_id=instrument_id,
                     instrument_type=self.instrument_type.value,
                 )
-        if self.instrument_type in {
-            InstrumentType.EQUITY,
-            InstrumentType.FUTURE,
-            InstrumentType.BOND,
-        } and self.currency is None:
+        if (
+            self.instrument_type
+            in {
+                InstrumentType.EQUITY,
+                InstrumentType.FUTURE,
+                InstrumentType.BOND,
+            }
+            and self.currency is None
+        ):
             raise MissingCurrencyError(
                 instrument_id=instrument_id,
                 instrument_type=self.instrument_type.value,

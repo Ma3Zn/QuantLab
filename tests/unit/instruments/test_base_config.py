@@ -13,7 +13,7 @@ class _ExampleModel(InstrumentBaseModel):
 
 def test_extra_fields_are_rejected() -> None:
     with pytest.raises(ValidationError):
-        _ExampleModel(name="test", count=1, extra_field="nope")
+        _ExampleModel.model_validate({"name": "test", "count": 1, "extra_field": "nope"})
 
 
 def test_models_are_immutable() -> None:
