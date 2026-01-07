@@ -155,9 +155,9 @@ Legend:
   - [x] canonical ordering enforced
 
 ### 8.2 Property-based tests (Hypothesis) (PR-32)
-- [ ] round-trip: object → canonical JSON → object preserves semantics
-- [ ] determinism: same logical portfolio → identical canonical JSON
-- [ ] rejects invalid numeric values (NaN/Inf)
+- [x] round-trip: object → canonical JSON → object preserves semantics
+- [x] determinism: same logical portfolio → identical canonical JSON
+- [x] rejects invalid numeric values (NaN/Inf)
 
 ---
 
