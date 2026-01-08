@@ -195,16 +195,16 @@ Legend:
 ## 7) ValuationEngine and portfolio aggregation
 
 ### 7.1 Engine exists and is pure (PR-53)
-- [ ] `ValuationEngine` iterates positions deterministically
-- [ ] Uses `PricerRegistry` to price each position
-- [ ] Produces `PortfolioValuation` with base NAV and breakdown
-- [ ] Aggregates warnings deterministically
+- [x] `ValuationEngine` iterates positions deterministically
+- [x] Uses `PricerRegistry` to price each position
+- [x] Produces `PortfolioValuation` with base NAV and breakdown
+- [x] Aggregates warnings deterministically
 
 ### 7.2 Breakdown by currency (PR-53)
-- [ ] For each native currency, totals include:
-  - [ ] `notional_native` sum
-  - [ ] `notional_base` sum
-- [ ] Breakdown sums reconcile with positions and NAV
+- [x] For each native currency, totals include:
+  - [x] `notional_native` sum
+  - [x] `notional_base` sum
+- [x] Breakdown sums reconcile with positions and NAV
 
 ### 7.3 Lineage plumbing (PR-56)
 - [ ] PortfolioValuation includes dataset snapshot id when available

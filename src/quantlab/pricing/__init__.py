@@ -1,3 +1,5 @@
 """Pricing module public entry points (placeholders for MVP)."""
 
-__all__: list[str] = []
+from quantlab.pricing.engine import ValuationEngine
+
+__all__ = ["ValuationEngine"]
