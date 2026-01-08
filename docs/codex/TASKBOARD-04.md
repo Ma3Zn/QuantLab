@@ -185,10 +185,10 @@ Legend:
 - [x] Applies FX conversion if needed and records FX metadata
 
 ### 6.4 FuturePricer (PR-52)
-- [ ] Computes notional as `q * close * multiplier`
-- [ ] Multiplier comes from instrument spec (not hard-coded)
-- [ ] Limitations are explicit (no margining/roll)
-- [ ] Applies FX conversion and records FX metadata
+- [x] Computes notional as `q * close * multiplier`
+- [x] Multiplier comes from instrument spec (not hard-coded)
+- [x] Limitations are explicit (no margining/roll)
+- [x] Applies FX conversion and records FX metadata
 
 ---
 

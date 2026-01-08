@@ -20,6 +20,7 @@ Pricing behavior:
 ## Warning vocabulary (MVP)
 Warnings are stable string codes defined in `src/quantlab/pricing/warnings.py`:
 - `FX_INVERTED_QUOTE`
+- `FUTURE_MTM_ONLY`
 - `MD_IMPUTED_FFILL`
 - `MD_STALE_SOURCE_DATE`
 
