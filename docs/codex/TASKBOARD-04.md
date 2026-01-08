@@ -174,9 +174,9 @@ Legend:
 - [x] Missing pricer mapping fails fast with a typed error
 
 ### 6.2 CashPricer (PR-50)
-- [ ] Values cash as `quantity * 1.0` in native currency
-- [ ] Applies FX conversion if cash currency != base currency
-- [ ] Does not require market price points
+- [x] Values cash as `quantity * 1.0` in native currency
+- [x] Applies FX conversion if cash currency != base currency
+- [x] Does not require market price points
 
 ### 6.3 EquityPricer (and tradable index proxies) (PR-51)
 - [ ] Reads `close` (or configured field) from MarketDataView
