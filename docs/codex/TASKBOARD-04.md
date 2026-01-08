@@ -66,22 +66,22 @@ Legend:
 ## 2) Error taxonomy and warning vocabulary
 
 ### 2.1 Typed exceptions (PR-45)
-- [ ] `src/pricing/errors.py` exists
-- [ ] Errors include actionable context fields (as-of, asset_id, field, instrument_id)
+- [x] `src/pricing/errors.py` exists
+- [x] Errors include actionable context fields (as-of, asset_id, field, instrument_id)
 - [ ] Minimum error types exist:
-  - [ ] `MissingPriceError`
-  - [ ] `MissingFxRateError`
-  - [ ] `UnsupportedCurrencyError` (guardrail for MVP)
-  - [ ] `NonFiniteInputError`
-  - [ ] `InvalidFxRateError`
+  - [x] `MissingPriceError`
+  - [x] `MissingFxRateError`
+  - [x] `UnsupportedCurrencyError` (guardrail for MVP)
+  - [x] `NonFiniteInputError`
+  - [x] `InvalidFxRateError`
 
 ### 2.2 Warning codes (PR-45)
-- [ ] `src/pricing/warnings.py` exists
-- [ ] Warning codes are stable strings (uppercase + underscores)
+- [x] `src/pricing/warnings.py` exists
+- [x] Warning codes are stable strings (uppercase + underscores)
 - [ ] Minimum warning codes exist:
-  - [ ] `FX_INVERTED_QUOTE`
-  - [ ] `MD_IMPUTED_FFILL` (only if upstream meta exists)
-  - [ ] `MD_STALE_SOURCE_DATE` (optional)
+  - [x] `FX_INVERTED_QUOTE`
+  - [x] `MD_IMPUTED_FFILL` (only if upstream meta exists)
+  - [x] `MD_STALE_SOURCE_DATE` (optional)
 
 ---
 

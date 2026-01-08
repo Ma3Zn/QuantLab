@@ -17,16 +17,14 @@ Pricing behavior:
 - propagate quality flags to `warnings`
 - never change the numeric value
 
-## Warning vocabulary (suggested)
-Warnings should be stable string codes.
-Examples:
+## Warning vocabulary (MVP)
+Warnings are stable string codes defined in `src/quantlab/pricing/warnings.py`:
+- `FX_INVERTED_QUOTE`
 - `MD_IMPUTED_FFILL`
 - `MD_STALE_SOURCE_DATE`
-- `MD_LOW_LIQUIDITY_PROXY` (future use)
-- `FX_INVERTED_QUOTE`
 
-## Error taxonomy (suggested)
-Errors should be typed and specific:
+## Error taxonomy (MVP)
+Errors are typed and defined in `src/quantlab/pricing/errors.py`:
 - `MissingPriceError`
 - `MissingFxRateError`
 - `UnsupportedCurrencyError`
