@@ -24,6 +24,13 @@ Warnings are stable string codes defined in `src/quantlab/pricing/warnings.py`:
 - `MD_IMPUTED_FFILL`
 - `MD_STALE_SOURCE_DATE`
 
+## Quality flag mapping (MVP)
+Pricing maps upstream `MarketDataMeta.quality_flags` into warning codes:
+- `IMPUTED` → `MD_IMPUTED_FFILL`
+- `STALE` → `MD_STALE_SOURCE_DATE`
+
+Unrecognized quality flags are ignored (pricing does not invent new warnings).
+
 ## Error taxonomy (MVP)
 Errors are typed and defined in `src/quantlab/pricing/errors.py`:
 - `MissingPriceError`

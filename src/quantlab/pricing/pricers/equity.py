@@ -5,7 +5,7 @@ from math import isfinite
 from quantlab.instruments.instrument import Instrument
 from quantlab.instruments.position import Position
 from quantlab.pricing.errors import MissingPriceError, NonFiniteInputError
-from quantlab.pricing.market_data import MarketDataView
+from quantlab.pricing.market_data import MarketDataView, market_data_warnings
 from quantlab.pricing.pricers.base import PricingContext
 from quantlab.pricing.schemas.valuation import PositionValuation, ValuationInput
 
@@ -73,6 +73,9 @@ class EquityPricer:
             )
         ]
 
+        warnings = market_data_warnings(market_data, asset_id, field, as_of)
+        warnings.extend(conversion.warnings)
+
         return PositionValuation(
             as_of=as_of,
             instrument_id=instrument.instrument_id,
@@ -88,7 +91,7 @@ class EquityPricer:
             fx_rate_effective=conversion.fx_rate_effective,
             notional_base=conversion.notional_base,
             inputs=inputs,
-            warnings=list(conversion.warnings),
+            warnings=warnings,
         )
 
 

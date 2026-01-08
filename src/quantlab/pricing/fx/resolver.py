@@ -10,7 +10,7 @@ from quantlab.pricing.errors import (
     MissingFxRateError,
     UnsupportedCurrencyError,
 )
-from quantlab.pricing.market_data import MarketDataView
+from quantlab.pricing.market_data import MarketDataView, market_data_warnings
 
 FX_EURUSD_ASSET_ID = "FX.EURUSD"
 SUPPORTED_CURRENCIES = ("EUR", "USD")
@@ -20,6 +20,7 @@ class FxRateResolution(NamedTuple):
     rate: float
     fx_asset_id: str | None
     inverted: bool
+    warnings: tuple[str, ...]
 
 
 class FxRateResolver:
@@ -43,20 +44,22 @@ class FxRateResolver:
         self._ensure_supported(native_currency, base_currency, as_of, instrument_id)
 
         if native_currency == base_currency:
-            return FxRateResolution(rate=1.0, fx_asset_id=None, inverted=False)
+            return FxRateResolution(rate=1.0, fx_asset_id=None, inverted=False, warnings=())
 
-        eurusd = self._get_eurusd_rate(as_of, instrument_id)
+        eurusd, warnings = self._get_eurusd_rate(as_of, instrument_id)
         if native_currency == "EUR" and base_currency == "USD":
             return FxRateResolution(
                 rate=eurusd,
                 fx_asset_id=FX_EURUSD_ASSET_ID,
                 inverted=False,
+                warnings=warnings,
             )
         if native_currency == "USD" and base_currency == "EUR":
             return FxRateResolution(
                 rate=1.0 / eurusd,
                 fx_asset_id=FX_EURUSD_ASSET_ID,
                 inverted=True,
+                warnings=warnings,
             )
         raise UnsupportedCurrencyError(
             currency=native_currency,
@@ -87,7 +90,11 @@ class FxRateResolver:
                 instrument_id=instrument_id,
             )
 
-    def _get_eurusd_rate(self, as_of: date, instrument_id: str | None) -> float:
+    def _get_eurusd_rate(
+        self,
+        as_of: date,
+        instrument_id: str | None,
+    ) -> tuple[float, tuple[str, ...]]:
         asset_id = FX_EURUSD_ASSET_ID
         field = self._field
         if not self._market_data.has_value(asset_id, field, as_of):
@@ -107,7 +114,8 @@ class FxRateResolver:
                 rate=rate,
                 instrument_id=instrument_id,
             )
-        return rate
+        warnings = tuple(market_data_warnings(self._market_data, asset_id, field, as_of))
+        return rate, warnings
 
 
 __all__ = [

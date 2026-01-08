@@ -215,9 +215,9 @@ Legend:
 ## 8) Data quality propagation
 
 ### 8.1 Quality meta → warnings mapping (PR-54)
-- [ ] If `MarketDataView.get_point` provides meta flags, they are propagated to `warnings`
-- [ ] Pricing does not change values based on quality flags
-- [ ] Mapping is documented and stable
+- [x] If `MarketDataView.get_point` provides meta flags, they are propagated to `warnings`
+- [x] Pricing does not change values based on quality flags
+- [x] Mapping is documented and stable
 
 ---
 

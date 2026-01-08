@@ -35,11 +35,12 @@ def test_eur_to_usd_uses_direct_eurusd_rate() -> None:
     data = {(FX_EURUSD_ASSET_ID, "close", as_of): 1.2}
     resolver = FxRateResolver(InMemoryMarketData(data))
 
-    rate, asset_id, inverted = resolver.effective_rate("EUR", "USD", as_of)
+    rate, asset_id, inverted, warnings = resolver.effective_rate("EUR", "USD", as_of)
 
     assert rate == 1.2
     assert asset_id == FX_EURUSD_ASSET_ID
     assert inverted is False
+    assert warnings == ()
 
 
 def test_usd_to_eur_inverts_and_emits_warning() -> None:
@@ -66,11 +67,12 @@ def test_same_currency_returns_rate_one_with_no_fx_asset() -> None:
     as_of = date(2024, 1, 2)
     resolver = FxRateResolver(InMemoryMarketData({}))
 
-    rate, asset_id, inverted = resolver.effective_rate("EUR", "EUR", as_of)
+    rate, asset_id, inverted, warnings = resolver.effective_rate("EUR", "EUR", as_of)
 
     assert rate == 1.0
     assert asset_id is None
     assert inverted is False
+    assert warnings == ()
 
 
 def test_missing_fx_rate_raises() -> None:

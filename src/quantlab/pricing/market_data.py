@@ -7,6 +7,7 @@ from typing import Iterable, Protocol, runtime_checkable
 from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
 
 from quantlab.instruments.value_types import FiniteFloat
+from quantlab.pricing.warnings import MD_IMPUTED_FFILL, MD_STALE_SOURCE_DATE
 
 
 def _normalize_str_sequence(values: Iterable[object] | None, field_name: str) -> tuple[str, ...]:
@@ -67,8 +68,45 @@ class MarketDataView(Protocol):
         """Return the value plus optional metadata if available."""
 
 
+QUALITY_FLAG_WARNING_MAP: dict[str, str] = {
+    "IMPUTED": MD_IMPUTED_FFILL,
+    "STALE": MD_STALE_SOURCE_DATE,
+}
+
+
+def warnings_from_meta(meta: MarketDataMeta | None) -> list[str]:
+    if meta is None or not meta.quality_flags:
+        return []
+    warnings: list[str] = []
+    seen: set[str] = set()
+    for flag in meta.quality_flags:
+        code = QUALITY_FLAG_WARNING_MAP.get(flag)
+        if code and code not in seen:
+            warnings.append(code)
+            seen.add(code)
+    return warnings
+
+
+def market_data_warnings(
+    view: MarketDataView,
+    asset_id: str,
+    field: str,
+    as_of: date,
+) -> list[str]:
+    get_point = getattr(view, "get_point", None)
+    if not callable(get_point):
+        return []
+    point = get_point(asset_id, field, as_of)
+    if point is None:
+        return []
+    return warnings_from_meta(point.meta)
+
+
 __all__ = [
     "MarketDataMeta",
     "MarketDataView",
     "MarketPoint",
+    "QUALITY_FLAG_WARNING_MAP",
+    "market_data_warnings",
+    "warnings_from_meta",
 ]

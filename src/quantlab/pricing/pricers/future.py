@@ -6,7 +6,7 @@ from quantlab.instruments.instrument import Instrument
 from quantlab.instruments.position import Position
 from quantlab.instruments.specs import FutureSpec
 from quantlab.pricing.errors import MissingPriceError, NonFiniteInputError
-from quantlab.pricing.market_data import MarketDataView
+from quantlab.pricing.market_data import MarketDataView, market_data_warnings
 from quantlab.pricing.pricers.base import PricingContext
 from quantlab.pricing.schemas.valuation import PositionValuation, ValuationInput
 from quantlab.pricing.warnings import FUTURE_MTM_ONLY
@@ -79,6 +79,7 @@ class FuturePricer:
         ]
 
         warnings = [FUTURE_MTM_ONLY]
+        warnings.extend(market_data_warnings(market_data, asset_id, field, as_of))
         warnings.extend(conversion.warnings)
 
         return PositionValuation(

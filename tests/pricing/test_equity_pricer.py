@@ -13,16 +13,21 @@ from quantlab.instruments.specs import EquitySpec
 from quantlab.pricing.errors import MissingPriceError
 from quantlab.pricing.fx.converter import FxConverter
 from quantlab.pricing.fx.resolver import FX_EURUSD_ASSET_ID, FxRateResolver
-from quantlab.pricing.market_data import MarketPoint
+from quantlab.pricing.market_data import MarketDataMeta, MarketPoint
 from quantlab.pricing.pricers.base import PricingContext
 from quantlab.pricing.pricers.equity import EquityPricer
 from quantlab.pricing.schemas.valuation import ValuationInput
-from quantlab.pricing.warnings import FX_INVERTED_QUOTE
+from quantlab.pricing.warnings import FX_INVERTED_QUOTE, MD_IMPUTED_FFILL
 
 
 class InMemoryMarketData:
-    def __init__(self, data: Mapping[tuple[str, str, date], float]) -> None:
+    def __init__(
+        self,
+        data: Mapping[tuple[str, str, date], float],
+        meta: Mapping[tuple[str, str, date], MarketDataMeta] | None = None,
+    ) -> None:
         self._data = dict(data)
+        self._meta = dict(meta or {})
 
     def get_value(self, asset_id: str, field: str, as_of: date) -> float:
         return self._data[(asset_id, field, as_of)]
@@ -31,7 +36,12 @@ class InMemoryMarketData:
         return (asset_id, field, as_of) in self._data
 
     def get_point(self, asset_id: str, field: str, as_of: date) -> MarketPoint | None:
-        return None
+        if not self.has_value(asset_id, field, as_of):
+            return None
+        return MarketPoint(
+            value=self._data[(asset_id, field, as_of)],
+            meta=self._meta.get((asset_id, field, as_of)),
+        )
 
 
 def _equity_instrument(asset_id: str, currency: str) -> Instrument:
@@ -136,6 +146,57 @@ def test_usd_equity_in_eur_base_uses_inverted_eurusd() -> None:
     assert valuation.fx_rate_effective == pytest.approx(1.0 / 1.2)
     assert valuation.notional_base == pytest.approx(375.0)
     assert valuation.warnings == [FX_INVERTED_QUOTE]
+
+
+def test_imputed_market_point_emits_warning() -> None:
+    as_of = date(2024, 1, 2)
+    data = {("EQ.AAPL", "close", as_of): 150.0}
+    meta = {
+        ("EQ.AAPL", "close", as_of): MarketDataMeta(quality_flags=("IMPUTED",)),
+    }
+    market_data = InMemoryMarketData(data, meta)
+    resolver = FxRateResolver(market_data)
+    context = PricingContext(
+        as_of=as_of,
+        base_currency="EUR",
+        fx_converter=FxConverter(resolver),
+    )
+    pricer = EquityPricer()
+    instrument = _equity_instrument("EQ.AAPL", "EUR")
+    position = Position(instrument_id=instrument.instrument_id, quantity=3.0)
+
+    valuation = pricer.price(
+        position=position,
+        instrument=instrument,
+        market_data=market_data,
+        context=context,
+    )
+
+    assert valuation.warnings == [MD_IMPUTED_FFILL]
+
+
+def test_missing_meta_does_not_break_pricing() -> None:
+    as_of = date(2024, 1, 2)
+    data = {("EQ.AAPL", "close", as_of): 150.0}
+    market_data = InMemoryMarketData(data)
+    resolver = FxRateResolver(market_data)
+    context = PricingContext(
+        as_of=as_of,
+        base_currency="EUR",
+        fx_converter=FxConverter(resolver),
+    )
+    pricer = EquityPricer()
+    instrument = _equity_instrument("EQ.AAPL", "EUR")
+    position = Position(instrument_id=instrument.instrument_id, quantity=3.0)
+
+    valuation = pricer.price(
+        position=position,
+        instrument=instrument,
+        market_data=market_data,
+        context=context,
+    )
+
+    assert valuation.warnings == []
 
 
 @given(

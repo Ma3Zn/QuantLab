@@ -43,7 +43,7 @@ class FxConverter:
                 instrument_id=instrument_id,
             )
 
-        rate, fx_asset_id, inverted = self._resolver.effective_rate(
+        rate, fx_asset_id, inverted, fx_warnings = self._resolver.effective_rate(
             native_currency=native_currency,
             base_currency=base_currency,
             as_of=as_of,
@@ -67,14 +67,16 @@ class FxConverter:
                 instrument_id=instrument_id,
             )
 
-        warnings = (FX_INVERTED_QUOTE,) if inverted else ()
+        warnings = list(fx_warnings)
+        if inverted:
+            warnings.append(FX_INVERTED_QUOTE)
         return FxConversionResult(
             notional_native=notional_native,
             notional_base=notional_base,
             fx_rate_effective=rate,
             fx_asset_id_used=fx_asset_id,
             fx_inverted=inverted,
-            warnings=warnings,
+            warnings=tuple(warnings),
         )
 
 
