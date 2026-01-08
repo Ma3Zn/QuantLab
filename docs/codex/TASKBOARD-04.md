@@ -235,9 +235,9 @@ Legend:
 - [ ] EURUSD inversion consistency (USD→EUR equals 1/EURUSD)
 
 ### 9.3 Golden snapshot tests (PR-55)
-- [ ] At least one EUR/USD portfolio fixture exists
-- [ ] Snapshot includes inputs used + FX inversion flags
-- [ ] Snapshot diffs are informative
+- [x] At least one EUR/USD portfolio fixture exists
+- [x] Snapshot includes inputs used + FX inversion flags
+- [x] Snapshot diffs are informative
 
 ### 9.4 Integration tests (PR-53, PR-56)
 - [ ] Engine + adapter over canonical dataset produces expected valuation
@@ -248,13 +248,13 @@ Legend:
 ## 10) Examples and reproducibility artifacts
 
 ### 10.1 Example inputs/outputs (PR-55)
-- [ ] `docs/pricing/examples/portfolio_multi_ccy.json`
-- [ ] `docs/pricing/examples/market_data_minimal_multi_ccy.json`
-- [ ] `docs/pricing/examples/expected_portfolio_valuation_multi_ccy.json`
+- [x] `docs/pricing/examples/portfolio_multi_ccy.json`
+- [x] `docs/pricing/examples/market_data_minimal_multi_ccy.json`
+- [x] `docs/pricing/examples/expected_portfolio_valuation_multi_ccy.json`
 
 ### 10.2 Deterministic formatting (PR-55)
-- [ ] Rounding/float formatting policy is documented (if any)
-- [ ] Snapshots do not depend on non-deterministic ordering or timestamps
+- [x] Rounding/float formatting policy is documented (if any)
+- [x] Snapshots do not depend on non-deterministic ordering or timestamps
 
 ---
 

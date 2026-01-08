@@ -34,6 +34,7 @@
   - inputs used
   - fx inversion flags
   - nav and breakdown
+- Snapshots normalize floats to 10 decimal places for stable diffs (valuation outputs remain unrounded).
 
 ## Integration test
 - Minimal `MarketDataView` adapter over a canonical dataset object.
