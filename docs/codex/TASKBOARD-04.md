@@ -179,10 +179,10 @@ Legend:
 - [x] Does not require market price points
 
 ### 6.3 EquityPricer (and tradable index proxies) (PR-51)
-- [ ] Reads `close` (or configured field) from MarketDataView
-- [ ] Records input points used in `inputs`
-- [ ] Missing price fails fast with `MissingPriceError`
-- [ ] Applies FX conversion if needed and records FX metadata
+- [x] Reads `close` (or configured field) from MarketDataView
+- [x] Records input points used in `inputs`
+- [x] Missing price fails fast with `MissingPriceError`
+- [x] Applies FX conversion if needed and records FX metadata
 
 ### 6.4 FuturePricer (PR-52)
 - [ ] Computes notional as `q * close * multiplier`
