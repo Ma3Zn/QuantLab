@@ -7,6 +7,7 @@ from quantlab.pricing.errors import (
     InvalidFxRateError,
     MissingFxRateError,
     MissingPriceError,
+    MissingPricerError,
     NonFiniteInputError,
     UnsupportedCurrencyError,
 )
@@ -90,6 +91,16 @@ def test_invalid_fx_rate_error_has_required_context() -> None:
     assert error.context["field"] == "close"
     assert error.context["as_of"] == as_of.isoformat()
     assert error.context["instrument_id"] == "inst-5"
+
+
+def test_missing_pricer_error_has_required_context() -> None:
+    error = MissingPricerError(
+        instrument_kind="cash",
+        instrument_id="inst-6",
+    )
+
+    assert error.context["instrument_id"] == "inst-6"
+    assert error.context["instrument_kind"] == "cash"
 
 
 def test_warning_codes_are_stable_strings() -> None:

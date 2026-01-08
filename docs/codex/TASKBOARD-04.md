@@ -169,9 +169,9 @@ Legend:
 ## 6) Pricer registry and pricer plugins
 
 ### 6.1 Pricer interface and registry (PR-49)
-- [ ] Base pricer interface exists (no inheritance tree required)
-- [ ] Registry maps instrument kinds/specs → pricer components
-- [ ] Missing pricer mapping fails fast with a typed error
+- [x] Base pricer interface exists (no inheritance tree required)
+- [x] Registry maps instrument kinds/specs → pricer components
+- [x] Missing pricer mapping fails fast with a typed error
 
 ### 6.2 CashPricer (PR-50)
 - [ ] Values cash as `quantity * 1.0` in native currency

@@ -184,3 +184,27 @@ class InvalidFxRateError(PricingError):
             context=context,
             cause=cause,
         )
+
+
+class MissingPricerError(PricingError):
+    """Raised when no pricer is registered for an instrument kind."""
+
+    def __init__(
+        self,
+        *,
+        instrument_kind: str,
+        instrument_id: str | None = None,
+        cause: Exception | None = None,
+    ) -> None:
+        context = _base_context(
+            asset_id=None,
+            field=None,
+            as_of=None,
+            instrument_id=instrument_id,
+        )
+        context["instrument_kind"] = instrument_kind
+        super().__init__(
+            f"Missing pricer for instrument_kind={instrument_kind}",
+            context=context,
+            cause=cause,
+        )
