@@ -128,19 +128,19 @@ Legend:
 ## 4) Market data input protocol (`MarketDataView`)
 
 ### 4.1 Protocol exists (PR-47)
-- [ ] `src/pricing/market_data.py` exists
-- [ ] `MarketDataView` Protocol defines:
-  - [ ] `get_value(asset_id, field, as_of) -> float`
-  - [ ] `has_value(asset_id, field, as_of) -> bool`
-  - [ ] optional `get_point(...) -> MarketPoint`
+- [x] `src/pricing/market_data.py` exists
+- [x] `MarketDataView` Protocol defines:
+  - [x] `get_value(asset_id, field, as_of) -> float`
+  - [x] `has_value(asset_id, field, as_of) -> bool`
+  - [x] optional `get_point(...) -> MarketPoint`
 
 ### 4.2 MarketPoint metadata is structured (PR-47)
-- [ ] `MarketPoint.value` is finite
-- [ ] `MarketPoint.meta` is optional
-- [ ] `MarketDataMeta` supports (at least):
-  - [ ] quality flags (list/set)
-  - [ ] source date vs aligned date (if available)
-  - [ ] dataset snapshot id / lineage id (if available)
+- [x] `MarketPoint.value` is finite
+- [x] `MarketPoint.meta` is optional
+- [x] `MarketDataMeta` supports (at least):
+  - [x] quality flags (list/set)
+  - [x] source date vs aligned date (if available)
+  - [x] dataset snapshot id / lineage id (if available)
 
 ---
 
