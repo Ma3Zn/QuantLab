@@ -47,13 +47,13 @@ Legend:
 ## 1) Package skeleton and layering constraints
 
 ### 1.1 `src/pricing/` package exists (PR-44)
-- [ ] `src/pricing/__init__.py` exists and has no side effects
-- [ ] `src/pricing/README.md` exists and describes responsibilities/non-responsibilities
+- [x] `src/pricing/__init__.py` exists and has no side effects
+- [x] `src/pricing/README.md` exists and describes responsibilities/non-responsibilities
 - [ ] Subpackages exist (empty allowed initially):
-  - [ ] `src/pricing/pricers/`
-  - [ ] `src/pricing/fx/`
-  - [ ] `src/pricing/schemas/`
-  - [ ] `src/pricing/adapters/` (only for protocol adapters)
+  - [x] `src/pricing/pricers/`
+  - [x] `src/pricing/fx/`
+  - [x] `src/pricing/schemas/`
+  - [x] `src/pricing/adapters/` (only for protocol adapters)
 
 ### 1.2 Dependency rules are respected (ongoing)
 - [ ] `pricing/` imports instrument domain objects from `instruments/` only (no I/O)

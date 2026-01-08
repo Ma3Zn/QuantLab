@@ -1,21 +1,27 @@
 # `pricing/`
 
-This package implements the **pricing / valuation** layer of QuantLab.
+This package implements the pricing / valuation layer of QuantLab.
 
-## Responsibilities
-- Mark-to-market valuation for MVP linear instruments.
-- Multi-currency support (EUR/USD) with explicit FX conversion to a base currency.
-- Typed, serializable valuation outputs with audit metadata.
+## Responsibilities (MVP)
+- Deterministic mark-to-market valuation for linear instruments (cash, equity, tradable index proxies, linear futures).
+- Multi-currency valuation for EUR/USD portfolios with base-currency NAV.
+- Explicit FX conversion using canonical `FX.EURUSD` (USD per EUR) and recorded inversion.
+- Typed, serializable valuation outputs with audit metadata (inputs used, FX applied, warnings).
 
 ## Non-responsibilities
-- Market data fetching or storage (belongs to `data/`).
-- Risk metrics (belongs to `risk/`).
-- Scenario shocks (belongs to `stress/`).
-- Allocation decisions (belongs to `optimization/` and `decision/`).
+- Market data fetching, storage, or alignment (belongs to `data/`).
+- Risk metrics and analytics (belongs to `risk/`).
+- Scenario stress or shocks (belongs to `stress/`).
+- Allocation/optimization/decision outputs (belongs to `optimization/` and `decision/`).
 
-## Entry points (conceptual)
+## Design constraints
+- Pure computation: identical inputs produce identical outputs.
+- Layering: depends on `instruments/` and consumes `data/` only via protocols or stable schemas.
+- Composition over inheritance for pricer components.
+
+## Entry points (conceptual, forthcoming)
 - `ValuationEngine`
 - `PricerRegistry`
 - `FxConverter`
 
-See `docs/modules/pricing.md` and `docs/pricing/INDEX.md`.
+See `docs/modules/pricing.md` and `docs/pricing/INDEX.md` for the full contract.
