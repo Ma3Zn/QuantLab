@@ -1,0 +1,28 @@
+{
+  "portfolio_id": "PF.DEMO.EURUSD",
+  "schema_version": "0.1",
+  "base_currency": "EUR",
+  "positions": [
+    {
+      "position_id": "POS.CASH.EUR",
+      "instrument_id": "CASH.EUR",
+      "quantity": 1000.0
+    },
+    {
+      "position_id": "POS.CASH.USD",
+      "instrument_id": "CASH.USD",
+      "quantity": 500.0
+    },
+    {
+      "position_id": "POS.EQ.SAP",
+      "instrument_id": "EQ.SAP",
+      "quantity": 10.0
+    },
+    {
+      "position_id": "POS.EQ.AAPL",
+      "instrument_id": "EQ.AAPL",
+      "quantity": 5.0
+    }
+  ],
+  "as_of": "2026-01-02"
+}

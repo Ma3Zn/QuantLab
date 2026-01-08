@@ -1,0 +1,114 @@
+{
+  "schema_version": "0.1",
+  "as_of": "2026-01-02",
+  "base_currency": "EUR",
+  "nav_base": 3563.6363636364,
+  "breakdown_by_currency": {
+    "EUR": {
+      "notional_native": 2200.0,
+      "notional_base": 2200.0
+    },
+    "USD": {
+      "notional_native": 1500.0,
+      "notional_base": 1363.6363636364
+    }
+  },
+  "positions": [
+    {
+      "instrument_id": "CASH.EUR",
+      "instrument_kind": "CASH",
+      "quantity": 1000.0,
+      "instrument_currency": "EUR",
+      "unit_price": 1.0,
+      "notional_native": 1000.0,
+      "base_currency": "EUR",
+      "fx_asset_id_used": null,
+      "fx_inverted": false,
+      "fx_rate_effective": 1.0,
+      "notional_base": 1000.0,
+      "inputs": [],
+      "warnings": []
+    },
+    {
+      "instrument_id": "CASH.USD",
+      "instrument_kind": "CASH",
+      "quantity": 500.0,
+      "instrument_currency": "USD",
+      "unit_price": 1.0,
+      "notional_native": 500.0,
+      "base_currency": "EUR",
+      "fx_asset_id_used": "FX.EURUSD",
+      "fx_inverted": true,
+      "fx_rate_effective": 0.9090909091,
+      "notional_base": 454.5454545455,
+      "inputs": [
+        {
+          "asset_id": "FX.EURUSD",
+          "field": "close",
+          "date": "2026-01-02",
+          "value": 1.1
+        }
+      ],
+      "warnings": [
+        "FX_INVERTED_QUOTE"
+      ]
+    },
+    {
+      "instrument_id": "EQ.SAP",
+      "instrument_kind": "EQUITY",
+      "quantity": 10.0,
+      "instrument_currency": "EUR",
+      "unit_price": 120.0,
+      "notional_native": 1200.0,
+      "base_currency": "EUR",
+      "fx_asset_id_used": null,
+      "fx_inverted": false,
+      "fx_rate_effective": 1.0,
+      "notional_base": 1200.0,
+      "inputs": [
+        {
+          "asset_id": "EQ.SAP",
+          "field": "close",
+          "date": "2026-01-02",
+          "value": 120.0
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "instrument_id": "EQ.AAPL",
+      "instrument_kind": "EQUITY",
+      "quantity": 5.0,
+      "instrument_currency": "USD",
+      "unit_price": 200.0,
+      "notional_native": 1000.0,
+      "base_currency": "EUR",
+      "fx_asset_id_used": "FX.EURUSD",
+      "fx_inverted": true,
+      "fx_rate_effective": 0.9090909091,
+      "notional_base": 909.0909090909,
+      "inputs": [
+        {
+          "asset_id": "EQ.AAPL",
+          "field": "close",
+          "date": "2026-01-02",
+          "value": 200.0
+        },
+        {
+          "asset_id": "FX.EURUSD",
+          "field": "close",
+          "date": "2026-01-02",
+          "value": 1.1
+        }
+      ],
+      "warnings": [
+        "FX_INVERTED_QUOTE"
+      ]
+    }
+  ],
+  "warnings": [],
+  "lineage": {
+    "market_data_snapshot_id": "<to_be_filled_by_data_layer>",
+    "request_hash": "<optional>"
+  }
+}

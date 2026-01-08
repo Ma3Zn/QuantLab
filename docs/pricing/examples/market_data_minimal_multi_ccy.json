@@ -1,0 +1,26 @@
+{
+  "as_of": "2026-01-02",
+  "points": [
+    {
+      "asset_id": "EQ.SAP",
+      "field": "close",
+      "date": "2026-01-02",
+      "value": 120.0,
+      "currency": "EUR"
+    },
+    {
+      "asset_id": "EQ.AAPL",
+      "field": "close",
+      "date": "2026-01-02",
+      "value": 200.0,
+      "currency": "USD"
+    },
+    {
+      "asset_id": "FX.EURUSD",
+      "field": "close",
+      "date": "2026-01-02",
+      "value": 1.1,
+      "quote": "USD per EUR"
+    }
+  ]
+}
