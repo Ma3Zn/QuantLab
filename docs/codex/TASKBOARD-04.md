@@ -147,22 +147,22 @@ Legend:
 ## 5) FX conversion (EUR/USD policy B)
 
 ### 5.1 Canonical FX series (PR-48)
-- [ ] Canonical FX asset id is `FX.EURUSD`
-- [ ] Quote convention: USD per 1 EUR
-- [ ] Conversion rules implemented:
-  - [ ] native==base → rate 1, no FX asset id
-  - [ ] EUR→USD uses EURUSD directly
-  - [ ] USD→EUR uses inverse of EURUSD and records inversion
+- [x] Canonical FX asset id is `FX.EURUSD`
+- [x] Quote convention: USD per 1 EUR
+- [x] Conversion rules implemented:
+  - [x] native==base → rate 1, no FX asset id
+  - [x] EUR→USD uses EURUSD directly
+  - [x] USD→EUR uses inverse of EURUSD and records inversion
 
 ### 5.2 Error handling (PR-48)
-- [ ] Missing `FX.EURUSD` → `MissingFxRateError`
-- [ ] `eurusd <= 0` → `InvalidFxRateError`
-- [ ] Unsupported currency (not EUR/USD) → `UnsupportedCurrencyError`
+- [x] Missing `FX.EURUSD` → `MissingFxRateError`
+- [x] `eurusd <= 0` → `InvalidFxRateError`
+- [x] Unsupported currency (not EUR/USD) → `UnsupportedCurrencyError`
 
 ### 5.3 Audit fields (PR-48, PR-46)
-- [ ] `fx_asset_id_used` recorded for non-base positions
-- [ ] `fx_inverted` recorded correctly
-- [ ] `fx_rate_effective` equals the rate applied to native amounts
+- [x] `fx_asset_id_used` recorded for non-base positions
+- [x] `fx_inverted` recorded correctly
+- [x] `fx_rate_effective` equals the rate applied to native amounts
 
 ---
 

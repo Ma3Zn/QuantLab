@@ -4,6 +4,7 @@ from datetime import date
 
 import pytest
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.pricing.schemas.valuation import (
     CurrencyBreakdown,
     PortfolioValuation,
@@ -16,7 +17,7 @@ def _position() -> PositionValuation:
     return PositionValuation(
         as_of=date(2026, 1, 2),
         instrument_id="EQ.AAPL",
-        market_data_id="EQ.AAPL",
+        market_data_id=AssetId("EQ.AAPL"),
         instrument_kind="EQUITY",
         quantity=5.0,
         instrument_currency="USD",
@@ -78,7 +79,7 @@ def test_non_finite_values_are_rejected() -> None:
         _ = PositionValuation(
             as_of=date(2026, 1, 2),
             instrument_id="EQ.AAPL",
-            market_data_id="EQ.AAPL",
+            market_data_id=AssetId("EQ.AAPL"),
             instrument_kind="EQUITY",
             quantity=5.0,
             instrument_currency="USD",
