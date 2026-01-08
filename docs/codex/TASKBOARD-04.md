@@ -88,40 +88,40 @@ Legend:
 ## 3) Valuation output schemas and canonical JSON
 
 ### 3.1 `PositionValuation` schema (PR-46)
-- [ ] Model exists under `src/pricing/schemas/`
-- [ ] Fields present (minimum):
-  - [ ] `schema_version`
-  - [ ] `as_of`
-  - [ ] `instrument_id`
-  - [ ] `market_data_id (if applicable)`
-  - [ ] `instrument_kind`
-  - [ ] `quantity`
-  - [ ] `instrument_currency`
-  - [ ] `unit_price`
-  - [ ] `notional_native`
-  - [ ] `base_currency`
-  - [ ] `fx_asset_id_used`
-  - [ ] `fx_inverted`
-  - [ ] `fx_rate_effective`
-  - [ ] `notional_base`
-  - [ ] `inputs`
-  - [ ] `warnings`
-- [ ] Finite-number validation is enforced for all numeric fields
-- [ ] Dates serialize as ISO `YYYY-MM-DD`
+- [x] Model exists under `src/pricing/schemas/`
+- [x] Fields present (minimum):
+  - [x] `schema_version`
+  - [x] `as_of`
+  - [x] `instrument_id`
+  - [x] `market_data_id (if applicable)`
+  - [x] `instrument_kind`
+  - [x] `quantity`
+  - [x] `instrument_currency`
+  - [x] `unit_price`
+  - [x] `notional_native`
+  - [x] `base_currency`
+  - [x] `fx_asset_id_used`
+  - [x] `fx_inverted`
+  - [x] `fx_rate_effective`
+  - [x] `notional_base`
+  - [x] `inputs`
+  - [x] `warnings`
+- [x] Finite-number validation is enforced for all numeric fields
+- [x] Dates serialize as ISO `YYYY-MM-DD`
 
 ### 3.2 `PortfolioValuation` schema (PR-46, PR-53)
-- [ ] Model exists under `src/pricing/schemas/`
-- [ ] Fields present (minimum):
-  - [ ] `schema_version`
-  - [ ] `as_of`
-  - [ ] `base_currency`
-  - [ ] `nav_base`
-  - [ ] `positions`
-  - [ ] `breakdown_by_currency`
-  - [ ] `warnings`
-  - [ ] `lineage`
-- [ ] `breakdown_by_currency` contains both native and base totals per currency
-- [ ] `lineage` exists (may be placeholder until PR-56)
+- [x] Model exists under `src/pricing/schemas/`
+- [x] Fields present (minimum):
+  - [x] `schema_version`
+  - [x] `as_of`
+  - [x] `base_currency`
+  - [x] `nav_base`
+  - [x] `positions`
+  - [x] `breakdown_by_currency`
+  - [x] `warnings`
+  - [x] `lineage`
+- [x] `breakdown_by_currency` contains both native and base totals per currency
+- [x] `lineage` exists (may be placeholder until PR-56)
 
 ---
 
