@@ -45,3 +45,8 @@ Minimum fields:
 
 ## Example (illustrative)
 See `docs/pricing/examples/expected_portfolio_valuation_multi_ccy.json`.
+
+## Related docs
+- `INDEX.md`
+- `08_testing_plan_mvp.md`
+- `../adr/0207-pricing-outputs-canonical-json.md`

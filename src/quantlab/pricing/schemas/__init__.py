@@ -1,4 +1,4 @@
-"""Pricing schemas package (placeholders for MVP)."""
+"""Typed, serializable valuation outputs for the pricing layer."""
 
 from quantlab.pricing.schemas.valuation import (
     VALUATION_SCHEMA_VERSION,

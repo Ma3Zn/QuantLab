@@ -25,6 +25,8 @@ def _normalize_str_sequence(values: Iterable[object] | None, field_name: str) ->
 
 
 class MarketDataBaseModel(BaseModel):
+    """Base model for market data metadata and points."""
+
     model_config = ConfigDict(
         extra="forbid",
         frozen=True,
@@ -33,6 +35,8 @@ class MarketDataBaseModel(BaseModel):
 
 
 class MarketDataMeta(MarketDataBaseModel):
+    """Metadata describing data quality and lineage for a market point."""
+
     quality_flags: tuple[str, ...] = Field(default_factory=tuple)
     source_date: date | None = None
     aligned_date: date | None = None
@@ -50,6 +54,8 @@ class MarketDataMeta(MarketDataBaseModel):
 
 
 class MarketPoint(MarketDataBaseModel):
+    """Market data value plus optional metadata."""
+
     value: FiniteFloat
     meta: MarketDataMeta | None = None
 
@@ -75,6 +81,7 @@ QUALITY_FLAG_WARNING_MAP: dict[str, str] = {
 
 
 def warnings_from_meta(meta: MarketDataMeta | None) -> list[str]:
+    """Translate MarketDataMeta quality flags into pricing warning codes."""
     if meta is None or not meta.quality_flags:
         return []
     warnings: list[str] = []
@@ -93,6 +100,7 @@ def market_data_warnings(
     field: str,
     as_of: date,
 ) -> list[str]:
+    """Collect pricing warning codes for a market data point if metadata exists."""
     get_point = getattr(view, "get_point", None)
     if not callable(get_point):
         return []

@@ -46,3 +46,8 @@ No probabilistic or heuristic decisions in the MVP.
 ## Future
 - Severity levels (INFO/WARN/ERROR).
 - Policy-driven tolerance (e.g., allow stale FX within 1 business day).
+
+## Related docs
+- `INDEX.md`
+- `03_market_data_contract.md`
+- `../adr/0205-pricing-missing-data-policy.md`

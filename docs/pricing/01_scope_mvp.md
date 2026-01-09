@@ -45,3 +45,9 @@
 - Curve-based pricing for bonds and swaps.
 - Futures roll models and continuous contract handling.
 - Options pricers with Greeks and calibration.
+
+## Related docs
+- `INDEX.md`
+- `02_currency_and_fx_policy.md`
+- `../adr/0201-pricing-scope-mvp.md`
+- `../adr/0208-pricing-futures-simplification.md`

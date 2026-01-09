@@ -193,18 +193,22 @@ class CanonicalDataView(MarketDataView):
 
     @property
     def lineage(self) -> dict[str, str]:
+        """Return dataset lineage identifiers for valuation outputs."""
         return dict(self._lineage)
 
     def has_value(self, asset_id: str, field: str, as_of: date) -> bool:
+        """Return True if a numeric market value exists for the key."""
         return self.get_point(asset_id, field, as_of) is not None
 
     def get_value(self, asset_id: str, field: str, as_of: date) -> float:
+        """Return the numeric market value or raise MissingPriceError."""
         point = self.get_point(asset_id, field, as_of)
         if point is None:
             raise MissingPriceError(asset_id=asset_id, field=field, as_of=as_of)
         return float(point.value)
 
     def get_point(self, asset_id: str, field: str, as_of: date) -> MarketPoint | None:
+        """Return the market point and metadata if available."""
         for index in self._indices:
             instrument_id = index.resolve_instrument_id(asset_id)
             if not instrument_id:

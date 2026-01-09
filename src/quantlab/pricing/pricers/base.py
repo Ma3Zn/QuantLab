@@ -14,6 +14,8 @@ from quantlab.pricing.schemas.valuation import PositionValuation
 
 @dataclass(frozen=True)
 class PricingContext:
+    """Shared pricing inputs required by pricers for deterministic valuation."""
+
     as_of: date
     base_currency: Currency
     fx_converter: FxConverter

@@ -6,6 +6,10 @@
 - `market_data_id` to retrieve time series from `data/`
 - `currency` to label valuation outputs
 
+Integration note (MVP):
+- `pricing/` expects a `MarketDataView` adapter over canonical `data/` snapshots and uses
+  `market_data_id` as the asset key, including `FX.EURUSD` for EUR/USD conversion.
+
 `pricing/` must not require:
 - provider tickers
 - implicit global calendars

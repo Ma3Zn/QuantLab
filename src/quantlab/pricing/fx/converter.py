@@ -12,6 +12,8 @@ from quantlab.pricing.warnings import FX_INVERTED_QUOTE
 
 @dataclass(frozen=True)
 class FxConversionResult:
+    """Resolved FX conversion outcome including applied rate and warnings."""
+
     notional_native: float
     notional_base: float
     fx_rate_effective: float
@@ -35,6 +37,7 @@ class FxConverter:
         as_of: date,
         instrument_id: str | None = None,
     ) -> FxConversionResult:
+        """Convert native notional into base currency using resolved FX policy."""
         if not isfinite(notional_native):
             raise NonFiniteInputError(
                 field="notional_native",

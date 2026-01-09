@@ -269,7 +269,7 @@ Legend:
 
 ## 12) Final module sign-off checklist (PR-58)
 
-- [ ] All docs in `docs/pricing/` are accurate and internally consistent
+- [x] All docs in `docs/pricing/` are accurate and internally consistent
 - [ ] ADR decisions are reflected in code and tests
 - [ ] CI passes (lint/typecheck/tests) with pricing module included
 - [ ] No dependency-layer violations (pricing remains pure)

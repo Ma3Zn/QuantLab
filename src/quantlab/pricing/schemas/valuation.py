@@ -12,6 +12,8 @@ VALUATION_SCHEMA_VERSION = "0.1"
 
 
 class PricingBaseModel(BaseModel):
+    """Base model for pricing schemas with strict, immutable fields."""
+
     model_config = ConfigDict(
         extra="forbid",
         frozen=True,
@@ -33,6 +35,8 @@ class PricingBaseModel(BaseModel):
 
 
 class ValuationInput(PricingBaseModel):
+    """A single market data point used during valuation."""
+
     asset_id: str
     field: str
     date: date
@@ -40,11 +44,15 @@ class ValuationInput(PricingBaseModel):
 
 
 class CurrencyBreakdown(PricingBaseModel):
+    """Aggregate notionals for a single native currency."""
+
     notional_native: FiniteFloat
     notional_base: FiniteFloat
 
 
 class PositionValuation(PricingBaseModel):
+    """Typed valuation output for a single position."""
+
     schema_version: SchemaVersion = VALUATION_SCHEMA_VERSION
     as_of: date
     instrument_id: InstrumentId
@@ -64,6 +72,8 @@ class PositionValuation(PricingBaseModel):
 
 
 class PortfolioValuation(PricingBaseModel):
+    """Typed valuation output for a portfolio run."""
+
     schema_version: SchemaVersion = VALUATION_SCHEMA_VERSION
     as_of: date
     base_currency: Currency

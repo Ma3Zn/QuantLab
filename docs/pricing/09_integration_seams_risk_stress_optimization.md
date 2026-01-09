@@ -37,3 +37,7 @@ Downstream modules must not assume:
 ## Extension notes
 - Scenario repricing is easiest if stress produces a wrapper `MarketDataView` that applies shocks.
 - That keeps pricing unchanged and deterministic.
+
+## Related docs
+- `INDEX.md`
+- `../instruments/08_integration_seams_pricing_risk.md`

@@ -1,4 +1,4 @@
-"""Pricing module public entry points (placeholders for MVP)."""
+"""Public entry points for the pricing valuation layer."""
 
 from quantlab.pricing.engine import ValuationEngine
 

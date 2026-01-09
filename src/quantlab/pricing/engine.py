@@ -43,6 +43,7 @@ class ValuationEngine:
         as_of: date | None = None,
         lineage: Mapping[str, str] | None = None,
     ) -> PortfolioValuation:
+        """Value a portfolio deterministically using registered pricers and FX policy."""
         as_of_date = self._resolve_as_of(portfolio, as_of)
         resolver = FxRateResolver(market_data, field=self._price_field)
         converter = FxConverter(resolver)

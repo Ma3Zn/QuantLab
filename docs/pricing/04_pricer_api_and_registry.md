@@ -45,3 +45,8 @@ Each `PositionValuation` must include:
 ## Extension points
 - Add bond pricer once curve contracts exist.
 - Add option pricer only after risk layer requirements are explicit.
+
+## Related docs
+- `INDEX.md`
+- `05_valuation_outputs_contract.md`
+- `../adr/0206-pricing-pricer-registry-composition.md`

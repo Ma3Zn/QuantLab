@@ -1,4 +1,4 @@
-"""Pricing adapters package (placeholders for MVP)."""
+"""Adapters that expose data-layer snapshots through the pricing protocol."""
 
 from quantlab.pricing.adapters.data_view import CanonicalDataView
 

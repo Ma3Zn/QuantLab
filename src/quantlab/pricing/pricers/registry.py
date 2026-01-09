@@ -13,11 +13,13 @@ class PricerRegistry:
         self._pricers: dict[str, Pricer] = dict(mapping or {})
 
     def register(self, instrument_kind: str, pricer: Pricer) -> None:
+        """Register a pricer implementation for an instrument kind."""
         if not instrument_kind:
             raise ValueError("instrument_kind must be non-empty")
         self._pricers[instrument_kind] = pricer
 
     def resolve(self, instrument_kind: str) -> Pricer:
+        """Return the pricer registered for the instrument kind."""
         if not instrument_kind:
             raise ValueError("instrument_kind must be non-empty")
         try:
@@ -26,6 +28,7 @@ class PricerRegistry:
             raise MissingPricerError(instrument_kind=instrument_kind) from exc
 
     def registered_kinds(self) -> tuple[str, ...]:
+        """List instrument kinds currently registered."""
         return tuple(sorted(self._pricers.keys()))
 
 

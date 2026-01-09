@@ -43,3 +43,8 @@
 ## Non-goals (MVP)
 - Statistical tests.
 - Performance benchmarks (add later once scale is known).
+
+## Related docs
+- `INDEX.md`
+- `05_valuation_outputs_contract.md`
+- `../adr/0209-pricing-testing-strategy.md`

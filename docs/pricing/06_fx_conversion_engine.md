@@ -45,3 +45,9 @@ Compute:
 - Add more canonical FX assets.
 - Add an FX graph for triangulation.
 - Add `datetime` and session rules.
+
+## Related docs
+- `INDEX.md`
+- `02_currency_and_fx_policy.md`
+- `../adr/0202-pricing-multi-currency-base-nav.md`
+- `../adr/0203-pricing-fx-quote-convention-eurusd.md`

@@ -17,6 +17,8 @@ SUPPORTED_CURRENCIES = ("EUR", "USD")
 
 
 class FxRateResolution(NamedTuple):
+    """Effective FX rate with provenance details for conversion."""
+
     rate: float
     fx_asset_id: str | None
     inverted: bool
@@ -41,6 +43,7 @@ class FxRateResolver:
         as_of: date,
         instrument_id: str | None = None,
     ) -> FxRateResolution:
+        """Return the effective FX rate and metadata for conversion."""
         self._ensure_supported(native_currency, base_currency, as_of, instrument_id)
 
         if native_currency == base_currency:

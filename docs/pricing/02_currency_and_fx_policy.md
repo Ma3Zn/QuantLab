@@ -54,3 +54,9 @@ The output must record:
 - Add additional canonical pairs (e.g., `FX.EURGBP`).
 - Add triangulation via a small FX graph.
 - Add intraday timestamps and session rules.
+
+## Related docs
+- `INDEX.md`
+- `06_fx_conversion_engine.md`
+- `../adr/0202-pricing-multi-currency-base-nav.md`
+- `../adr/0203-pricing-fx-quote-convention-eurusd.md`

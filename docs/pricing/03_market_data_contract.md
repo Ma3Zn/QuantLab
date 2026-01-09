@@ -47,3 +47,9 @@ Pricing policy:
 ## Determinism requirement
 `MarketDataView` must be deterministic for a given dataset version.
 Pricing outputs must include enough lineage to identify the dataset snapshot used.
+
+## Related docs
+- `INDEX.md`
+- `04_pricer_api_and_registry.md`
+- `../adr/0204-pricing-as-of-semantics-daily.md`
+- `../adr/0205-pricing-missing-data-policy.md`
