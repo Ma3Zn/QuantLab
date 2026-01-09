@@ -54,10 +54,10 @@ Legend:
 
 ### 1.1 Package skeleton exists
 - [ ] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
-- [ ] `src/risk/errors.py` defines typed exceptions (no silent failures)
+- [x] `src/risk/errors.py` defines typed exceptions (no silent failures)
 - [ ] `src/risk/schemas/` contains typed request/report models (Pydantic v2)
 - [ ] `src/risk/metrics/` contains pure functions (no I/O)
-- [ ] `src/risk/engine.py` orchestrates the pipeline with no side effects
+- [x] `src/risk/engine.py` orchestrates the pipeline with no side effects
 
 ### 1.2 Layering constraints are enforced
 - [ ] No imports from `src/data/providers/` or `src/data/storage/` inside `src/risk/`
