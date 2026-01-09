@@ -25,7 +25,7 @@ By the end of this backlog:
 
 ---
 
-## PR-34 — Add risk+stress documentation pack (ADRs + module docs + examples)
+## PR-59 — Add risk+stress documentation pack (ADRs + module docs + examples)
 
 ### Goal
 Commit the prepared documentation for the two modules: ADRs, module docs, index/quickstart, and example JSON files.
@@ -44,7 +44,7 @@ Commit the prepared documentation for the two modules: ADRs, module docs, index/
 
 ---
 
-## PR-35 — Create `risk/` package skeleton + error taxonomy
+## PR-60 — Create `risk/` package skeleton + error taxonomy
 
 ### Goal
 Add the minimal package structure and typed exceptions for the risk layer.
@@ -67,7 +67,7 @@ Add the minimal package structure and typed exceptions for the risk layer.
 
 ---
 
-## PR-36 — Add typed schemas: `RiskRequest` + `RiskReport` (Pydantic v2)
+## PR-61 — Add typed schemas: `RiskRequest` + `RiskReport` (Pydantic v2)
 
 ### Goal
 Implement strict, JSON-serializable contracts for requests and outputs.
@@ -91,7 +91,7 @@ Implement strict, JSON-serializable contracts for requests and outputs.
 
 ---
 
-## PR-37 — Implement returns builder (from aligned prices)
+## PR-62 — Implement returns builder (from aligned prices)
 
 ### Goal
 Compute return series from aligned price series using explicit conventions.
@@ -114,7 +114,7 @@ Compute return series from aligned price series using explicit conventions.
 
 ---
 
-## PR-38 — Implement volatility and sample covariance/correlation
+## PR-63 — Implement volatility and sample covariance/correlation
 
 ### Goal
 Add core time-series risk metrics with correct annualization and diagnostics.
@@ -135,7 +135,7 @@ Add core time-series risk metrics with correct annualization and diagnostics.
 
 ---
 
-## PR-39 — Implement drawdown metrics
+## PR-64 — Implement drawdown metrics
 
 ### Goal
 Add drawdown computation with correct definitions and edge-case handling.
@@ -153,7 +153,7 @@ Add drawdown computation with correct definitions and edge-case handling.
 
 ---
 
-## PR-40 — Implement tracking error (benchmark optional)
+## PR-65 — Implement tracking error (benchmark optional)
 
 ### Goal
 Compute annualized tracking error when a benchmark return series is provided.
@@ -168,7 +168,7 @@ Compute annualized tracking error when a benchmark return series is provided.
 
 ---
 
-## PR-41 — Implement historical VaR and ES
+## PR-66 — Implement historical VaR and ES
 
 ### Goal
 Add historical simulation VaR/ES for one-day horizon with explicit loss convention.
@@ -189,7 +189,7 @@ Add historical simulation VaR/ES for one-day horizon with explicit loss conventi
 
 ---
 
-## PR-42 — Implement exposure views: asset + currency
+## PR-67 — Implement exposure views: asset + currency
 
 ### Goal
 Compute exposure decompositions required by the MVP.
@@ -211,7 +211,7 @@ Compute exposure decompositions required by the MVP.
 
 ---
 
-## PR-43 — Add mapping seam for sector/region exposures (optional output)
+## PR-68 — Add mapping seam for sector/region exposures (optional output)
 
 ### Goal
 Define a plug-in interface for mapped exposures without coupling to external I/O.
@@ -227,7 +227,7 @@ Define a plug-in interface for mapped exposures without coupling to external I/O
 
 ---
 
-## PR-44 — Implement variance attribution (component contributions)
+## PR-69 — Implement variance attribution (component contributions)
 
 ### Goal
 Add MVP variance attribution based on weights and covariance.
@@ -246,7 +246,7 @@ Add MVP variance attribution based on weights and covariance.
 
 ---
 
-## PR-45 — Implement RiskEngine orchestration and build `RiskReport`
+## PR-70 — Implement RiskEngine orchestration and build `RiskReport`
 
 ### Goal
 Wire schemas + metrics + exposures into a single orchestration path that emits `RiskReport`.
@@ -268,7 +268,7 @@ Wire schemas + metrics + exposures into a single orchestration path that emits `
 
 ---
 
-## PR-46 — Create `stress/` package skeleton + error taxonomy
+## PR-71 — Create `stress/` package skeleton + error taxonomy
 
 ### Goal
 Add the minimal package structure and typed exceptions for the stress layer.
@@ -284,7 +284,7 @@ Add the minimal package structure and typed exceptions for the stress layer.
 
 ---
 
-## PR-47 — Implement scenario models + validation + hashing
+## PR-72 — Implement scenario models + validation + hashing
 
 ### Goal
 Define scenario types and a deterministic scenario set representation.
@@ -306,7 +306,7 @@ Define scenario types and a deterministic scenario set representation.
 
 ---
 
-## PR-48 — Implement shock application utilities (price-based)
+## PR-73 — Implement shock application utilities (price-based)
 
 ### Goal
 Implement shock-to-price mapping with explicit conventions.
@@ -327,7 +327,7 @@ Implement shock-to-price mapping with explicit conventions.
 
 ---
 
-## PR-49 — Implement linear revaluation for supported instrument types
+## PR-74 — Implement linear revaluation for supported instrument types
 
 ### Goal
 Compute position-level P&L under shocked prices for linear instruments.
@@ -347,7 +347,7 @@ Compute position-level P&L under shocked prices for linear instruments.
 
 ---
 
-## PR-50 — Implement StressEngine orchestration and build `StressReport`
+## PR-75 — Implement StressEngine orchestration and build `StressReport`
 
 ### Goal
 Wire scenarios + shock application + revaluation into a single execution path.
@@ -370,7 +370,7 @@ Wire scenarios + shock application + revaluation into a single execution path.
 
 ---
 
-## PR-51 — Add cross-module integration tests (risk + stress)
+## PR-76 — Add cross-module integration tests (risk + stress)
 
 ### Goal
 Add end-to-end tests that validate the complete pipelines on committed sample fixtures.
@@ -385,7 +385,7 @@ Add end-to-end tests that validate the complete pipelines on committed sample fi
 
 ---
 
-## PR-52 — Add property-based tests (Hypothesis) for invariants
+## PR-77 — Add property-based tests (Hypothesis) for invariants
 
 ### Goal
 Add robust invariants that catch common numerical/aggregation bugs.
@@ -407,7 +407,7 @@ Add robust invariants that catch common numerical/aggregation bugs.
 
 ---
 
-## PR-53 — Docs consistency gate + public API verification
+## PR-78 — Docs consistency gate + public API verification
 
 ### Goal
 Ensure docs match real import paths, and the public API is stable and intentional.

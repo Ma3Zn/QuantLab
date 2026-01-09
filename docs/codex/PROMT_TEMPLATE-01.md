@@ -8,7 +8,7 @@ General rules (non-negotiable):
 - Do not implement features outside the PR scope. If you discover missing prerequisites, add the smallest necessary scaffolding within the PR, and document it.
 
 Workflow for THIS PR:
-1) Read `docs/codex/BACKLOG-04.md` and `docs/codex/SESSION_PLAYBOOK.md`.
+1) Read `docs/codex/BACKLOG-05.md` and `docs/codex/SESSION_PLAYBOOK.md`.
 2) Read documents in `docs/*` to find specific information regarding properties of the module
    under construction.
 3) Implement exactly the tasks listed for the PR:
@@ -17,7 +17,7 @@ Workflow for THIS PR:
    - docs updates requested for that PR
 4) Run the test suite (at least the relevant subset) and fix until green. Then run mypy from the
    virtual environment .venv and fix all relevant errors.
-5) Consinstently update `docs/codex/TASKBOARD-04.md` and produce a PR summary that includes:
+5) Consinstently update `docs/codex/TASKBOARD-05.md` and produce a PR summary that includes:
    - What changed (modules/classes/functions)
    - How to run tests for this PR
    - Any assumptions/limitations introduced

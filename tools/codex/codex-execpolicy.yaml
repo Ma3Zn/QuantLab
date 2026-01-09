@@ -7,8 +7,6 @@ allow:
   - "python -m pytest*"
   - "python -m ruff*"
   - "python -m mypy*"
-  - "python -m pip install*"
-  - "pip install*"
   - "git status"
   - "git diff*"
   - "git log*"
