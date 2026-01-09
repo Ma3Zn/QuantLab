@@ -89,6 +89,7 @@ Legend:
 - [x] market data bundle id/hash is included
 - [x] request canonical hash is included (optional but recommended)
 - [x] all hashes are deterministic (canonical JSON encoding)
+  - [ ] wire portfolio snapshot id/hash source and hashing convention.
 
 ---
 
@@ -105,6 +106,8 @@ Legend:
 - [x] portfolio volatility annualized correctly (unit-tested)
 - [x] covariance symmetry enforced (numeric tolerance)
 - [x] correlation computed consistently and safely (division by zero handled)
+- [ ] report includes covariance/correlation diagnostics (sample size, missing count, symmetry error)
+  - [ ] add diagnostics fields to `RiskReport` and wire through engine.
 
 ### 3.3 Drawdowns
 - [x] drawdown series definition is correct and documented
@@ -115,6 +118,7 @@ Legend:
 - [x] benchmark alignment policy is explicit
 - [x] tracking error is annualized correctly
 - [ ] report surfaces benchmark id/lineage
+  - [ ] add benchmark id/lineage fields and propagation into RiskReport.
 
 ---
 
@@ -273,3 +277,10 @@ Legend:
 - [ ] `pytest -q` passes (unit + property + golden + integration)
 - [ ] No imports from provider/storage layers inside `risk/` and `stress/`
 - [ ] Canonical JSON fixtures are stable across runs
+
+---
+
+## 14) Follow-ups (deferred)
+- [ ] Populate `RiskReport` fields from computed metrics/exposures once PR-62+ lands
+- [ ] Emit structured warnings for missing data policy usage and raw-price inputs
+- [ ] Expand `RiskMetrics` with covariance/correlation summaries when implemented
