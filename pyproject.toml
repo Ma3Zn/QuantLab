@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "quantlab"
 version = "0.0.0"
-description = "QuantLab data layer MVP scaffolding."
+description = "QuantLab MVP"
 requires-python = ">=3.10"
 authors = [{ name = "QuantLab" }]
 dependencies = [
@@ -21,6 +21,7 @@ dev = [
   "mypy==1.7.1",
   "pytest==7.4.3",
   "hypothesis==6.92.1",
+  "pyarrow==22.0.0",
 ]
 
 [tool.setuptools.packages.find]
