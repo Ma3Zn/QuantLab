@@ -29,6 +29,13 @@ def build_currency_exposures(
             notional_by_currency[str(currency)] += float(breakdown.notional_base)
     else:
         assert notionals is not None
+        warnings.append(
+            RiskWarning(
+                code="FX_AGGREGATION_UNSUPPORTED",
+                message=("Currency exposures are a decomposition only; no FX aggregation applied."),
+                context={"component": "currency"},
+            )
+        )
         for currency, notional in notionals.items():
             notional_by_currency[str(currency)] += float(notional)
 

@@ -85,3 +85,10 @@ def test_currency_exposures_from_valuation_normalize_and_sort() -> None:
     assert warnings == []
     assert [exposure.currency for exposure in exposures] == ["JPY", "USD"]
     assert sum(exposure.weight for exposure in exposures) == pytest.approx(1.0)
+
+
+def test_currency_exposures_from_notionals_warns_fx_aggregation() -> None:
+    exposures, warnings = build_currency_exposures(notionals={"USD": 3.0, "JPY": 2.0})
+
+    assert [warning.code for warning in warnings] == ["FX_AGGREGATION_UNSUPPORTED"]
+    assert [exposure.currency for exposure in exposures] == ["JPY", "USD"]

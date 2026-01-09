@@ -137,7 +137,7 @@ Legend:
 
 ### 5.2 Currency exposures
 - [x] decomposition by instrument currency exists
-- [ ] if FX aggregation is unsupported, report explicitly states “decomposition only”
+- [x] if FX aggregation is unsupported, report explicitly states “decomposition only”
 
 ### 5.3 Optional mapped exposures (sector/region) via seam (ADR-0306)
 - [ ] `ExposureMappingProvider` protocol exists
