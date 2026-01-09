@@ -121,10 +121,10 @@ Legend:
 ## 4) Risk tail risk (VaR/ES)
 
 ### 4.1 Historical VaR/ES (ADR-0304)
-- [ ] loss convention is explicit and consistent
-- [ ] VaR quantile definition is stable (ties, interpolation policy)
-- [ ] ES computed as average beyond VaR with correct inequality convention
-- [ ] small sample guardrails (warnings or errors)
+- [x] loss convention is explicit and consistent
+- [x] VaR quantile definition is stable (ties, interpolation policy)
+- [x] ES computed as average beyond VaR with correct inequality convention
+- [x] small sample guardrails (warnings or errors)
 
 ---
 
@@ -233,7 +233,7 @@ Legend:
 
 ### 11.1 Unit tests
 - [x] metric-level tests for vol/cov/drawdown/TE
-- [ ] VaR/ES tests with known distributions (synthetic fixtures)
+- [x] VaR/ES tests with known distributions (synthetic fixtures)
 - [ ] stress revaluation tests per instrument type
 
 ### 11.2 Property-based tests (Hypothesis)
