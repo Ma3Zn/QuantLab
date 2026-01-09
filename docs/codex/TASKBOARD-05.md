@@ -145,9 +145,9 @@ Legend:
 - [x] when provider present, results are deterministic and tested
 
 ### 5.4 Variance attribution (ADR-0307)
-- [ ] compute marginal/component contributions for a static weight vector
-- [ ] attribution convention is recorded in report
-- [ ] sanity tests: contributions sum to portfolio variance (within tolerance)
+- [x] compute marginal/component contributions for a static weight vector
+- [x] attribution convention is recorded in report
+- [x] sanity tests: contributions sum to portfolio variance (within tolerance)
 
 ---
 
