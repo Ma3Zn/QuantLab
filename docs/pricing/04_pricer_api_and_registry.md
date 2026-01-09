@@ -24,6 +24,7 @@ A `PricerRegistry` maps instrument kind/spec to a pricer instance.
 Examples:
 - `CashSpec` → `CashPricer`
 - `EquitySpec` → `EquityPricer`
+- `IndexSpec` (tradable) → `IndexPricer`
 - `FutureSpec` → `FuturePricer`
 
 The registry must:
