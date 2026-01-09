@@ -131,12 +131,12 @@ Legend:
 ## 5) Risk exposures and attribution
 
 ### 5.1 Asset exposures
-- [ ] weight computation defined (from snapshot valuation or notionals)
-- [ ] exposure sums to 1 (when normalizable) or report states alternative convention
-- [ ] exposure is keyed by `MarketDataId` and stable ordering is enforced
+- [x] weight computation defined (from snapshot valuation or notionals)
+- [x] exposure sums to 1 (when normalizable) or report states alternative convention
+- [x] exposure is keyed by `MarketDataId` and stable ordering is enforced
 
 ### 5.2 Currency exposures
-- [ ] decomposition by instrument currency exists
+- [x] decomposition by instrument currency exists
 - [ ] if FX aggregation is unsupported, report explicitly states “decomposition only”
 
 ### 5.3 Optional mapped exposures (sector/region) via seam (ADR-0306)
