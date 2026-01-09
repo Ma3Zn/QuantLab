@@ -61,9 +61,9 @@ Legend:
 - [x] `src/risk/engine.py` orchestrates the pipeline with no side effects
 
 ### 1.2 Layering constraints are enforced
-- [ ] No imports from `src/data/providers/` or `src/data/storage/` inside `src/risk/`
-- [ ] `risk/` only consumes **already aligned** time series bundles
-- [ ] Any optional mapping provider is a protocol/interface, not a concrete I/O implementation
+- [x] No imports from `src/data/providers/` or `src/data/storage/` inside `src/risk/`
+- [x] `risk/` only consumes **already aligned** time series bundles
+- [x] Any optional mapping provider is a protocol/interface, not a concrete I/O implementation
 
 ---
 
@@ -79,16 +79,16 @@ Legend:
 - [x] covariance estimator spec recorded (sample default)
 
 ### 2.2 Input validation failures are typed and actionable
-- [ ] missing assets in time series bundle triggers `RiskInputError`
-- [ ] look-ahead usage triggers `RiskInputError`
-- [ ] insufficient sample size for VaR/ES triggers error or warning (policy-defined)
+- [x] missing assets in time series bundle triggers `RiskInputError`
+- [x] look-ahead usage triggers `RiskInputError`
+- [x] insufficient sample size for VaR/ES triggers error or warning (policy-defined)
 - [x] NaN/Inf inputs are rejected (or sanitized with explicit warning, policy-defined)
 
 ### 2.3 Lineage is present and stable (ADR-0308)
 - [ ] portfolio snapshot id/hash is included
-- [ ] market data bundle id/hash is included
-- [ ] request canonical hash is included (optional but recommended)
-- [ ] all hashes are deterministic (canonical JSON encoding)
+- [x] market data bundle id/hash is included
+- [x] request canonical hash is included (optional but recommended)
+- [x] all hashes are deterministic (canonical JSON encoding)
 
 ---
 
@@ -161,7 +161,7 @@ Legend:
 ### 6.2 Warnings are structured and stable
 - [x] warnings include code, short message, minimal context dict
 - [ ] no long free-form logs in the report
-- [ ] warnings cover key biases: static weights, raw prices, missing data
+- [x] warnings cover key biases: static weights, raw prices, missing data
 
 ---
 
@@ -243,7 +243,7 @@ Legend:
 - [ ] stress aggregation invariants and scenario-order invariance
 
 ### 11.3 Golden tests
-- [ ] canonical `RiskReport` JSON fixtures (small and deterministic)
+- [x] canonical `RiskReport` JSON fixtures (small and deterministic)
 - [ ] canonical `StressReport` JSON fixtures (small and deterministic)
 
 ### 11.4 Integration tests
