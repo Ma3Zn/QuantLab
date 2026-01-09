@@ -10,7 +10,7 @@ from hypothesis import strategies as st
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.position import Position
 from quantlab.instruments.specs import FutureSpec
-from quantlab.pricing.errors import MissingPriceError
+from quantlab.pricing.errors import MissingPriceError, NonFiniteInputError
 from quantlab.pricing.fx.converter import FxConverter
 from quantlab.pricing.fx.resolver import FxRateResolver
 from quantlab.pricing.market_data import MarketPoint
@@ -98,6 +98,38 @@ def test_missing_close_raises_missing_price_error() -> None:
     assert excinfo.value.context["field"] == "close"
     assert excinfo.value.context["as_of"] == as_of.isoformat()
     assert excinfo.value.context["instrument_id"] == "FUT.ES"
+
+
+def test_non_finite_close_raises_non_finite_input_error() -> None:
+    as_of = date(2024, 1, 2)
+    market_data = InMemoryMarketData({("FUT.ES", "close", as_of): float("nan")})
+    resolver = FxRateResolver(market_data)
+    context = PricingContext(
+        as_of=as_of,
+        base_currency="EUR",
+        fx_converter=FxConverter(resolver),
+    )
+    pricer = FuturePricer()
+    instrument = _future_instrument("FUT.ES", "EUR", multiplier=50.0)
+    position = Position(instrument_id=instrument.instrument_id, quantity=1.0)
+
+    with pytest.raises(NonFiniteInputError) as excinfo:
+        pricer.price(
+            position=position,
+            instrument=instrument,
+            market_data=market_data,
+            context=context,
+        )
+
+    assert excinfo.value.context["asset_id"] == "FUT.ES"
+    assert excinfo.value.context["field"] == "close"
+    assert excinfo.value.context["as_of"] == as_of.isoformat()
+    assert excinfo.value.context["instrument_id"] == "FUT.ES"
+
+
+def test_future_spec_requires_positive_multiplier() -> None:
+    with pytest.raises(ValueError, match="multiplier must be > 0"):
+        _future_instrument("FUT.BAD", "EUR", multiplier=0.0)
 
 
 @given(

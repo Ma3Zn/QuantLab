@@ -56,10 +56,10 @@ Legend:
   - [x] `src/pricing/adapters/` (only for protocol adapters)
 
 ### 1.2 Dependency rules are respected (ongoing)
-- [ ] `pricing/` imports instrument domain objects from `instruments/` only (no I/O)
-- [ ] `pricing/` consumes `data/` only through a protocol or stable schema objects (no provider imports)
-- [ ] No `pricing/` dependency on `risk/`, `stress/`, `optimization/`, `decision/`
-- [ ] All computation is deterministic for identical inputs
+- [x] `pricing/` imports instrument domain objects from `instruments/` only (no I/O)
+- [x] `pricing/` consumes `data/` only through a protocol or stable schema objects (no provider imports)
+- [x] No `pricing/` dependency on `risk/`, `stress/`, `optimization/`, `decision/`
+- [x] All computation is deterministic for identical inputs
 
 ---
 
@@ -68,7 +68,7 @@ Legend:
 ### 2.1 Typed exceptions (PR-45)
 - [x] `src/pricing/errors.py` exists
 - [x] Errors include actionable context fields (as-of, asset_id, field, instrument_id)
-- [ ] Minimum error types exist:
+- [x] Minimum error types exist:
   - [x] `MissingPriceError`
   - [x] `MissingFxRateError`
   - [x] `UnsupportedCurrencyError` (guardrail for MVP)
@@ -78,7 +78,7 @@ Legend:
 ### 2.2 Warning codes (PR-45)
 - [x] `src/pricing/warnings.py` exists
 - [x] Warning codes are stable strings (uppercase + underscores)
-- [ ] Minimum warning codes exist:
+- [x] Minimum warning codes exist:
   - [x] `FX_INVERTED_QUOTE`
   - [x] `MD_IMPUTED_FFILL` (only if upstream meta exists)
   - [x] `MD_STALE_SOURCE_DATE` (optional)
@@ -224,15 +224,15 @@ Legend:
 ## 9) Testing completeness
 
 ### 9.1 Unit tests (PR-45 … PR-53)
-- [ ] Errors carry correct context
-- [ ] FX conversion rules correct (direct/inverse/same-currency)
-- [ ] Each pricer has edge-case tests (missing price, invalid multiplier, etc.)
-- [ ] Schemas reject NaN/Inf
+- [x] Errors carry correct context
+- [x] FX conversion rules correct (direct/inverse/same-currency)
+- [x] Each pricer has edge-case tests (missing price, invalid multiplier, etc.)
+- [x] Schemas reject NaN/Inf
 
 ### 9.2 Property-based tests (PR-50 … PR-52)
-- [ ] Scaling quantity scales notional (native and base) linearly
-- [ ] Base==native ⇒ notional_base == notional_native
-- [ ] EURUSD inversion consistency (USD→EUR equals 1/EURUSD)
+- [x] Scaling quantity scales notional (native and base) linearly
+- [x] Base==native ⇒ notional_base == notional_native
+- [x] EURUSD inversion consistency (USD→EUR equals 1/EURUSD)
 
 ### 9.3 Golden snapshot tests (PR-55)
 - [x] At least one EUR/USD portfolio fixture exists
@@ -270,8 +270,8 @@ Legend:
 ## 12) Final module sign-off checklist (PR-58)
 
 - [x] All docs in `docs/pricing/` are accurate and internally consistent
-- [ ] ADR decisions are reflected in code and tests
-- [ ] CI passes (lint/typecheck/tests) with pricing module included
-- [ ] No dependency-layer violations (pricing remains pure)
-- [ ] Known limitations are clearly stated (futures margining/roll, no derivatives, etc.)
-- [ ] A new reader can understand and run the pricing demo in <30 minutes (conceptually)
+- [x] ADR decisions are reflected in code and tests
+- [x] CI passes (lint/typecheck/tests) with pricing module included
+- [x] No dependency-layer violations (pricing remains pure)
+- [x] Known limitations are clearly stated (futures margining/roll, no derivatives, etc.)
+- [x] A new reader can understand and run the pricing demo in <30 minutes (conceptually)

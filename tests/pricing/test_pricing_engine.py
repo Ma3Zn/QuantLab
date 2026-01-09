@@ -93,6 +93,64 @@ def test_engine_prices_multi_currency_portfolio() -> None:
     assert "FX_INVERTED_QUOTE" in by_instrument["EQ.AAPL"].warnings
 
 
+def test_engine_orders_positions_deterministically() -> None:
+    as_of = date(2026, 1, 2)
+    market_data = InMemoryMarketData(
+        {
+            ("EQ.SAP", "close", as_of): 120.0,
+            ("EQ.AAPL", "close", as_of): 200.0,
+            (FX_EURUSD_ASSET_ID, "close", as_of): 1.1,
+        }
+    )
+    instruments = {
+        "EQ.SAP": _equity_instrument("EQ.SAP", "EUR"),
+        "EQ.AAPL": _equity_instrument("EQ.AAPL", "USD"),
+    }
+    portfolio_a = Portfolio(
+        as_of=datetime(2026, 1, 2, tzinfo=timezone.utc),
+        positions=[
+            Position(instrument_id="EQ.AAPL", quantity=5.0),
+            Position(instrument_id="EQ.SAP", quantity=10.0),
+        ],
+        cash={},
+    )
+    portfolio_b = Portfolio(
+        as_of=datetime(2026, 1, 2, tzinfo=timezone.utc),
+        positions=[
+            Position(instrument_id="EQ.SAP", quantity=10.0),
+            Position(instrument_id="EQ.AAPL", quantity=5.0),
+        ],
+        cash={},
+    )
+
+    registry = PricerRegistry(
+        {
+            "cash": CashPricer(),
+            "equity": EquityPricer(),
+        }
+    )
+    engine = ValuationEngine(registry)
+
+    valuation_a = engine.value_portfolio(
+        portfolio=portfolio_a,
+        instruments=instruments,
+        market_data=market_data,
+        base_currency="EUR",
+    )
+    valuation_b = engine.value_portfolio(
+        portfolio=portfolio_b,
+        instruments=instruments,
+        market_data=market_data,
+        base_currency="EUR",
+    )
+
+    order_a = [str(position.instrument_id) for position in valuation_a.positions]
+    order_b = [str(position.instrument_id) for position in valuation_b.positions]
+
+    assert order_a == order_b
+    assert valuation_a.nav_base == pytest.approx(valuation_b.nav_base)
+
+
 def test_breakdown_totals_match_position_sums() -> None:
     as_of = date(2026, 1, 2)
     market_data = InMemoryMarketData(

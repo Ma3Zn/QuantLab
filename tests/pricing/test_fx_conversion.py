@@ -4,6 +4,8 @@ from datetime import date
 from typing import Mapping
 
 import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from quantlab.pricing.errors import (
     InvalidFxRateError,
@@ -98,3 +100,51 @@ def test_unsupported_currency_raises() -> None:
 
     with pytest.raises(UnsupportedCurrencyError):
         resolver.effective_rate("JPY", "EUR", as_of)
+
+
+@given(
+    notional=st.floats(
+        min_value=-1e9,
+        max_value=1e9,
+        allow_nan=False,
+        allow_infinity=False,
+    )
+)
+@settings(max_examples=50)
+def test_same_currency_preserves_notional(notional: float) -> None:
+    as_of = date(2024, 1, 2)
+    resolver = FxRateResolver(InMemoryMarketData({}))
+    converter = FxConverter(resolver)
+
+    result = converter.convert(
+        notional_native=notional,
+        native_currency="EUR",
+        base_currency="EUR",
+        as_of=as_of,
+    )
+
+    assert result.notional_base == pytest.approx(notional)
+    assert result.fx_rate_effective == 1.0
+    assert result.fx_asset_id_used is None
+    assert result.fx_inverted is False
+    assert result.warnings == ()
+
+
+@given(
+    rate=st.floats(
+        min_value=1e-6,
+        max_value=1e6,
+        allow_nan=False,
+        allow_infinity=False,
+    )
+)
+@settings(max_examples=50)
+def test_eurusd_inversion_consistency(rate: float) -> None:
+    as_of = date(2024, 1, 2)
+    data = {(FX_EURUSD_ASSET_ID, "close", as_of): rate}
+    resolver = FxRateResolver(InMemoryMarketData(data))
+
+    eurusd = resolver.effective_rate("EUR", "USD", as_of).rate
+    usdeur = resolver.effective_rate("USD", "EUR", as_of).rate
+
+    assert usdeur == pytest.approx(1.0 / eurusd)

@@ -10,7 +10,7 @@ from hypothesis import strategies as st
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.position import Position
 from quantlab.instruments.specs import EquitySpec
-from quantlab.pricing.errors import MissingPriceError
+from quantlab.pricing.errors import MissingPriceError, NonFiniteInputError
 from quantlab.pricing.fx.converter import FxConverter
 from quantlab.pricing.fx.resolver import FX_EURUSD_ASSET_ID, FxRateResolver
 from quantlab.pricing.market_data import MarketDataMeta, MarketPoint
@@ -68,6 +68,34 @@ def test_missing_close_raises_missing_price_error() -> None:
     position = Position(instrument_id=instrument.instrument_id, quantity=10.0)
 
     with pytest.raises(MissingPriceError) as excinfo:
+        pricer.price(
+            position=position,
+            instrument=instrument,
+            market_data=market_data,
+            context=context,
+        )
+
+    assert excinfo.value.context["asset_id"] == "EQ.AAPL"
+    assert excinfo.value.context["field"] == "close"
+    assert excinfo.value.context["as_of"] == as_of.isoformat()
+    assert excinfo.value.context["instrument_id"] == "EQ.AAPL"
+
+
+def test_non_finite_close_raises_non_finite_input_error() -> None:
+    as_of = date(2024, 1, 2)
+    data = {("EQ.AAPL", "close", as_of): float("nan")}
+    market_data = InMemoryMarketData(data)
+    resolver = FxRateResolver(market_data)
+    context = PricingContext(
+        as_of=as_of,
+        base_currency="EUR",
+        fx_converter=FxConverter(resolver),
+    )
+    pricer = EquityPricer()
+    instrument = _equity_instrument("EQ.AAPL", "EUR")
+    position = Position(instrument_id=instrument.instrument_id, quantity=10.0)
+
+    with pytest.raises(NonFiniteInputError) as excinfo:
         pricer.price(
             position=position,
             instrument=instrument,
