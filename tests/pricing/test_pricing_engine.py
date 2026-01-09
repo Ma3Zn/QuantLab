@@ -7,6 +7,7 @@ from typing import Mapping
 
 import pytest
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.portfolio import Portfolio
 from quantlab.instruments.position import Position
@@ -37,7 +38,7 @@ def _equity_instrument(instrument_id: str, currency: str) -> Instrument:
     return Instrument(
         instrument_id=instrument_id,
         instrument_type=InstrumentType.EQUITY,
-        market_data_id=instrument_id,
+        market_data_id=AssetId(instrument_id),
         currency=currency,
         spec=EquitySpec(),
     )
@@ -245,18 +246,21 @@ def test_engine_emits_structured_logs(caplog: pytest.LogCaptureFixture) -> None:
     start = next(record for record in records if record.getMessage() == "valuation.start")
     complete = next(record for record in records if record.getMessage() == "valuation.complete")
 
-    assert start.portfolio_id == "PORT-001"
-    assert start.as_of == as_of.isoformat()
-    assert start.base_currency == "EUR"
-    assert start.dataset_lineage_id == "snapshot-123"
-    assert start.position_count == 4
-    assert start.cash_count == 2
-    assert start.price_field == "close"
+    start_payload = start.__dict__
+    complete_payload = complete.__dict__
 
-    assert complete.portfolio_id == "PORT-001"
-    assert complete.as_of == as_of.isoformat()
-    assert complete.base_currency == "EUR"
-    assert complete.dataset_lineage_id == "snapshot-123"
-    assert complete.position_count == 4
-    assert complete.warning_count == 2
-    assert complete.warning_counts == {"FX_INVERTED_QUOTE": 2}
+    assert start_payload["portfolio_id"] == "PORT-001"
+    assert start_payload["as_of"] == as_of.isoformat()
+    assert start_payload["base_currency"] == "EUR"
+    assert start_payload["dataset_lineage_id"] == "snapshot-123"
+    assert start_payload["position_count"] == 4
+    assert start_payload["cash_count"] == 2
+    assert start_payload["price_field"] == "close"
+
+    assert complete_payload["portfolio_id"] == "PORT-001"
+    assert complete_payload["as_of"] == as_of.isoformat()
+    assert complete_payload["base_currency"] == "EUR"
+    assert complete_payload["dataset_lineage_id"] == "snapshot-123"
+    assert complete_payload["position_count"] == 4
+    assert complete_payload["warning_count"] == 2
+    assert complete_payload["warning_counts"] == {"FX_INVERTED_QUOTE": 2}

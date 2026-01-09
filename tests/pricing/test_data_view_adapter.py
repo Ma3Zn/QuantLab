@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from quantlab.data.canonical import CanonicalDataset
+from quantlab.data.schemas.requests import AssetId
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.portfolio import Portfolio
 from quantlab.instruments.position import Position
@@ -51,7 +52,7 @@ def test_adapter_prices_from_canonical_fixtures() -> None:
     instrument = Instrument(
         instrument_id=equity_id,
         instrument_type=InstrumentType.EQUITY,
-        market_data_id=equity_id,
+        market_data_id=AssetId(equity_id),
         currency=str(equity_row["currency"]),
         spec=EquitySpec(),
     )

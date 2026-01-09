@@ -7,6 +7,7 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.position import Position
 from quantlab.instruments.specs import FutureSpec
@@ -37,7 +38,7 @@ def _future_instrument(asset_id: str, currency: str, multiplier: float) -> Instr
     return Instrument(
         instrument_id=asset_id,
         instrument_type=InstrumentType.FUTURE,
-        market_data_id=asset_id,
+        market_data_id=AssetId(asset_id),
         currency=currency,
         spec=FutureSpec(
             expiry=date(2024, 12, 20),

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+from typing import Iterable, Mapping
 
 import pytest
 
@@ -12,6 +13,8 @@ from quantlab.pricing.schemas.valuation import (
 )
 from quantlab.risk.exposures.asset import build_asset_exposures
 from quantlab.risk.exposures.currency import build_currency_exposures
+from quantlab.risk.exposures.mapping import build_mapped_exposures
+from quantlab.risk.schemas.report import AssetExposure
 
 
 def _position(asset_id: str, notional_base: float, currency: str = "USD") -> PositionValuation:
@@ -92,3 +95,41 @@ def test_currency_exposures_from_notionals_warns_fx_aggregation() -> None:
 
     assert [warning.code for warning in warnings] == ["FX_AGGREGATION_UNSUPPORTED"]
     assert [exposure.currency for exposure in exposures] == ["JPY", "USD"]
+
+
+class _FakeMappingProvider:
+    def __init__(self, mapping: dict[AssetId, dict[str, str]]) -> None:
+        self._mapping = mapping
+
+    def map_assets(self, asset_ids: Iterable[AssetId]) -> Mapping[AssetId, Mapping[str, str]]:
+        return {asset_id: self._mapping.get(asset_id, {}) for asset_id in asset_ids}
+
+
+def test_mapped_exposures_warns_without_provider() -> None:
+    exposures = [AssetExposure(asset_id=AssetId("EQ.AAPL"), weight=1.0)]
+
+    mapped, warnings = build_mapped_exposures(asset_exposures=exposures, provider=None)
+
+    assert mapped is None
+    assert [warning.code for warning in warnings] == ["MAPPING_PROVIDER_MISSING"]
+
+
+def test_mapped_exposures_groups_and_sorts_buckets() -> None:
+    exposures = [
+        AssetExposure(asset_id=AssetId("EQ.MSFT"), weight=0.6),
+        AssetExposure(asset_id=AssetId("EQ.AAPL"), weight=0.4),
+    ]
+    provider = _FakeMappingProvider(
+        {
+            AssetId("EQ.AAPL"): {"sector": "Tech", "region": "NA"},
+            AssetId("EQ.MSFT"): {"sector": "Tech", "region": "NA"},
+        }
+    )
+
+    mapped, warnings = build_mapped_exposures(asset_exposures=exposures, provider=provider)
+
+    assert warnings == []
+    assert mapped is not None
+    assert list(mapped.keys()) == ["region:NA", "sector:Tech"]
+    assert [exposure.asset_id for exposure in mapped["region:NA"]] == ["EQ.AAPL", "EQ.MSFT"]
+    assert sum(exposure.weight for exposure in mapped["sector:Tech"]) == pytest.approx(1.0)

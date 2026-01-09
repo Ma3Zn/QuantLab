@@ -140,9 +140,9 @@ Legend:
 - [x] if FX aggregation is unsupported, report explicitly states “decomposition only”
 
 ### 5.3 Optional mapped exposures (sector/region) via seam (ADR-0306)
-- [ ] `ExposureMappingProvider` protocol exists
-- [ ] when provider absent, report emits warning and omits mapped breakdowns
-- [ ] when provider present, results are deterministic and tested
+- [x] `ExposureMappingProvider` protocol exists
+- [x] when provider absent, report emits warning and omits mapped breakdowns
+- [x] when provider present, results are deterministic and tested
 
 ### 5.4 Variance attribution (ADR-0307)
 - [ ] compute marginal/component contributions for a static weight vector

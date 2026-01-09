@@ -5,6 +5,7 @@ from typing import Mapping
 
 import pytest
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.position import Position
 from quantlab.instruments.specs import IndexSpec
@@ -33,7 +34,7 @@ def _index_instrument(asset_id: str, currency: str | None, *, tradable: bool) ->
     return Instrument(
         instrument_id=asset_id,
         instrument_type=InstrumentType.INDEX,
-        market_data_id=asset_id if tradable else None,
+        market_data_id=AssetId(asset_id) if tradable else None,
         currency=currency,
         spec=IndexSpec(is_tradable=tradable),
     )

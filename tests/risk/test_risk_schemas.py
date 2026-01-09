@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.risk.schemas import (
     AssetExposure,
     CurrencyExposure,
@@ -26,7 +27,7 @@ def test_risk_request_rejects_missing_window() -> None:
         RiskRequest(
             as_of=date(2025, 12, 31),
             annualization_factor=252,
-            confidence_levels=[0.95],
+            confidence_levels=(0.95,),
             input_mode="PORTFOLIO_RETURNS",
             missing_data_policy="ERROR",
         )
@@ -39,20 +40,22 @@ def test_risk_request_rejects_lookahead_window() -> None:
             start_date=date(2025, 1, 1),
             end_date=date(2026, 1, 1),
             annualization_factor=252,
-            confidence_levels=[0.95],
+            confidence_levels=(0.95,),
             input_mode="PORTFOLIO_RETURNS",
             missing_data_policy="ERROR",
         )
 
 
 def test_risk_request_confidence_levels_sorted_unique() -> None:
-    request = RiskRequest(
-        as_of=date(2025, 12, 31),
-        lookback_trading_days=252,
-        annualization_factor=252,
-        confidence_levels=[0.99, "0.95", 0.95],
-        input_mode="PORTFOLIO_RETURNS",
-        missing_data_policy="ERROR",
+    request = RiskRequest.model_validate(
+        {
+            "as_of": date(2025, 12, 31),
+            "lookback_trading_days": 252,
+            "annualization_factor": 252,
+            "confidence_levels": [0.99, "0.95", 0.95],
+            "input_mode": "PORTFOLIO_RETURNS",
+            "missing_data_policy": "ERROR",
+        }
     )
     assert request.confidence_levels == (0.95, 0.99)
 
@@ -95,8 +98,8 @@ def test_risk_report_sorting() -> None:
         metrics=RiskMetrics(portfolio_vol_annualized=0.18),
         exposures=RiskExposures(
             by_asset=[
-                AssetExposure(asset_id="EQ.MSFT", weight=0.25),
-                AssetExposure(asset_id="EQ.AAPL", weight=0.25),
+                AssetExposure(asset_id=AssetId("EQ.MSFT"), weight=0.25),
+                AssetExposure(asset_id=AssetId("EQ.AAPL"), weight=0.25),
             ],
             by_currency=[
                 CurrencyExposure(currency="USD", weight=1.0),
@@ -104,8 +107,8 @@ def test_risk_report_sorting() -> None:
         ),
         attribution=RiskAttribution(
             variance_contributions=[
-                VarianceContribution(asset_id="EQ.MSFT", component=0.24),
-                VarianceContribution(asset_id="EQ.AAPL", component=0.26),
+                VarianceContribution(asset_id=AssetId("EQ.MSFT"), component=0.24),
+                VarianceContribution(asset_id=AssetId("EQ.AAPL"), component=0.26),
             ],
             convention="component = w*(Sigma w) / (w^T Sigma w)",
         ),

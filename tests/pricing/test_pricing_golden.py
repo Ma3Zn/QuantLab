@@ -5,6 +5,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Mapping
 
+from quantlab.data.schemas.requests import AssetId
 from quantlab.instruments.instrument import Instrument, InstrumentType
 from quantlab.instruments.portfolio import Portfolio
 from quantlab.instruments.position import Position
@@ -79,7 +80,7 @@ def _equity_instrument(instrument_id: str, currency: str) -> Instrument:
     return Instrument(
         instrument_id=instrument_id,
         instrument_type=InstrumentType.EQUITY,
-        market_data_id=instrument_id,
+        market_data_id=AssetId(instrument_id),
         currency=currency,
         spec=EquitySpec(),
     )
