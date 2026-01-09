@@ -57,7 +57,7 @@ Legend:
 - [x] `src/risk/errors.py` defines typed exceptions (no silent failures)
 - [x] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
 - [x] `src/risk/schemas/` contains typed request/report models (Pydantic v2)
-- [ ] `src/risk/metrics/` contains pure functions (no I/O)
+- [x] `src/risk/metrics/` contains pure functions (no I/O)
 - [x] `src/risk/engine.py` orchestrates the pipeline with no side effects
 
 ### 1.2 Layering constraints are enforced
@@ -82,7 +82,7 @@ Legend:
 - [ ] missing assets in time series bundle triggers `RiskInputError`
 - [ ] look-ahead usage triggers `RiskInputError`
 - [ ] insufficient sample size for VaR/ES triggers error or warning (policy-defined)
-- [ ] NaN/Inf inputs are rejected (or sanitized with explicit warning, policy-defined)
+- [x] NaN/Inf inputs are rejected (or sanitized with explicit warning, policy-defined)
 
 ### 2.3 Lineage is present and stable (ADR-0308)
 - [ ] portfolio snapshot id/hash is included
@@ -95,10 +95,10 @@ Legend:
 ## 3) Risk core computations (time-series)
 
 ### 3.1 Returns builder (ADR-0303)
-- [ ] supports simple returns from prices
-- [ ] supports log returns (opt-in)
-- [ ] handles missing values per policy (error/drop/ffill/partial)
-- [ ] emits structured warnings when policy may bias results
+- [x] supports simple returns from prices
+- [x] supports log returns (opt-in)
+- [x] handles missing values per policy (error/drop/ffill/partial)
+- [x] emits structured warnings when policy may bias results
 
 ### 3.2 Volatility and covariance/correlation (ADR-0305)
 - [ ] sample covariance estimator implemented and tested
