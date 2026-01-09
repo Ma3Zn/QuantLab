@@ -10,6 +10,7 @@ import pandas as pd
 from quantlab.data.schemas.lineage import LineageMeta
 from quantlab.data.schemas.quality import QualityReport
 from quantlab.data.schemas.requests import AssetId
+from quantlab.data.transforms.returns import ReturnMethod, ReturnMissingPolicy, compute_returns
 
 
 def _serialize_index(values: pd.Index) -> list[str]:
@@ -50,15 +51,28 @@ class TimeSeriesBundle:
     def to_dict(self) -> dict[str, object]:
         return {
             "data": _serialize_frame(self.data),
-            "assets_meta": {
-                str(asset): dict(meta) for asset, meta in self.assets_meta.items()
-            },
+            "assets_meta": {str(asset): dict(meta) for asset, meta in self.assets_meta.items()},
             "quality": self.quality.to_dict(),
             "lineage": self.lineage.to_dict(),
         }
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), sort_keys=True)
+
+    def returns(
+        self,
+        *,
+        field: str = "close",
+        method: ReturnMethod = "simple",
+        missing_policy: ReturnMissingPolicy = "ALLOW_NAN",
+    ) -> pd.DataFrame:
+        """Compute deterministic returns from the aligned price data."""
+        return compute_returns(
+            self.data,
+            field=field,
+            method=method,
+            missing_policy=missing_policy,
+        )
 
 
 __all__ = ["TimeSeriesBundle"]

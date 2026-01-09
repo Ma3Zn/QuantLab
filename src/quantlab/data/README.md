@@ -17,6 +17,7 @@
 - `MarketDataService.get_timeseries(request) -> TimeSeriesBundle` (service.py)
 - `MarketDataService.get_timeseries_from_cache(request_hash) -> TimeSeriesBundle` (service.py)
 - `TimeSeriesBundle` contains `data`, `assets_meta`, `quality`, `lineage`.
+- `TimeSeriesBundle.returns(...)` and `compute_returns(frame, ...)` for deterministic returns.
 
 Example (see `examples/scripts/data_pull_demo.py` for a runnable demo):
 

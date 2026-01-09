@@ -70,6 +70,7 @@ from quantlab.data.storage import (
     stage_canonical_snapshot,
     store_raw_payload,
 )
+from quantlab.data.transforms.returns import ReturnMethod, ReturnMissingPolicy, compute_returns
 from quantlab.data.validators import ValidationContext, validate_records
 
 __all__ = [
@@ -117,6 +118,9 @@ __all__ = [
     "IngestRunMeta",
     "PointRecord",
     "TimeSeriesBundle",
+    "ReturnMethod",
+    "ReturnMissingPolicy",
+    "compute_returns",
     "SessionRule",
     "SessionRulesSnapshot",
     "compute_sessionrules_hash",
