@@ -7,6 +7,7 @@ from quantlab.risk.errors import (
     RiskInputError,
     RiskSchemaError,
 )
+from quantlab.risk.schemas import RiskReport, RiskRequest
 
 __all__ = [
     "RiskEngine",
@@ -14,4 +15,6 @@ __all__ = [
     "RiskInputError",
     "RiskComputationError",
     "RiskSchemaError",
+    "RiskRequest",
+    "RiskReport",
 ]

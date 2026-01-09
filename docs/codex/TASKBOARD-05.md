@@ -55,7 +55,8 @@ Legend:
 ### 1.1 Package skeleton exists
 - [ ] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
 - [x] `src/risk/errors.py` defines typed exceptions (no silent failures)
-- [ ] `src/risk/schemas/` contains typed request/report models (Pydantic v2)
+- [x] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
+- [x] `src/risk/schemas/` contains typed request/report models (Pydantic v2)
 - [ ] `src/risk/metrics/` contains pure functions (no I/O)
 - [x] `src/risk/engine.py` orchestrates the pipeline with no side effects
 
@@ -69,13 +70,13 @@ Legend:
 ## 2) Risk contracts: inputs, policies, lineage
 
 ### 2.1 `RiskRequest` covers required fields (ADR-0302/0303)
-- [ ] as_of date + explicit window definition (days or start/end)
-- [ ] annualization factor is explicit and recorded
-- [ ] return definition is explicit (simple default; log optional)
-- [ ] missing data policy is explicit
-- [ ] confidence levels for VaR/ES are explicit
-- [ ] input mode is explicit (`PORTFOLIO_RETURNS` vs `STATIC_WEIGHTS_X_ASSET_RETURNS`)
-- [ ] covariance estimator spec recorded (sample default)
+- [x] as_of date + explicit window definition (days or start/end)
+- [x] annualization factor is explicit and recorded
+- [x] return definition is explicit (simple default; log optional)
+- [x] missing data policy is explicit
+- [x] confidence levels for VaR/ES are explicit
+- [x] input mode is explicit (`PORTFOLIO_RETURNS` vs `STATIC_WEIGHTS_X_ASSET_RETURNS`)
+- [x] covariance estimator spec recorded (sample default)
 
 ### 2.2 Input validation failures are typed and actionable
 - [ ] missing assets in time series bundle triggers `RiskInputError`
@@ -153,12 +154,12 @@ Legend:
 ## 6) Risk report output quality (ADR-0308)
 
 ### 6.1 `RiskReport` is typed and JSON-serializable
-- [ ] Pydantic v2 models with strict validation
-- [ ] canonical JSON serialization is stable
-- [ ] stable field ordering and stable sorting of lists (by id)
+- [x] Pydantic v2 models with strict validation
+- [x] canonical JSON serialization is stable
+- [x] stable field ordering and stable sorting of lists (by id)
 
 ### 6.2 Warnings are structured and stable
-- [ ] warnings include code, short message, minimal context dict
+- [x] warnings include code, short message, minimal context dict
 - [ ] no long free-form logs in the report
 - [ ] warnings cover key biases: static weights, raw prices, missing data
 

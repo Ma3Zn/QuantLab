@@ -6,6 +6,7 @@ def test_risk_imports_cleanly() -> None:
         "quantlab.risk",
         "quantlab.risk.engine",
         "quantlab.risk.errors",
+        "quantlab.risk.schemas",
     ]
     for module in modules:
         assert importlib.import_module(module)
