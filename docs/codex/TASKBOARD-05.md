@@ -173,6 +173,7 @@ Legend:
 - [ ] `src/stress/schemas/` contains typed request/report models (Pydantic v2)
 - [ ] `src/stress/scenarios.py` defines scenario models (pure)
 - [ ] `src/stress/engine.py` executes stress (pure)
+- [x] `src/stress/` package scaffold exists (`__init__`, `errors`, `engine`, `scenarios`, `schemas`)
 
 ### 7.2 Layering constraints are enforced
 - [ ] No imports from provider/storage code inside `src/stress/`
