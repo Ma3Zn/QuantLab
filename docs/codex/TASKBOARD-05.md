@@ -101,10 +101,10 @@ Legend:
 - [x] emits structured warnings when policy may bias results
 
 ### 3.2 Volatility and covariance/correlation (ADR-0305)
-- [ ] sample covariance estimator implemented and tested
-- [ ] portfolio volatility annualized correctly (unit-tested)
-- [ ] covariance symmetry enforced (numeric tolerance)
-- [ ] correlation computed consistently and safely (division by zero handled)
+- [x] sample covariance estimator implemented and tested
+- [x] portfolio volatility annualized correctly (unit-tested)
+- [x] covariance symmetry enforced (numeric tolerance)
+- [x] correlation computed consistently and safely (division by zero handled)
 
 ### 3.3 Drawdowns
 - [ ] drawdown series definition is correct and documented
