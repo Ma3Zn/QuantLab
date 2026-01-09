@@ -112,8 +112,8 @@ Legend:
 - [ ] time-to-recovery computed if feasible (else explicitly omitted)
 
 ### 3.4 Tracking error (if benchmark supplied)
-- [ ] benchmark alignment policy is explicit
-- [ ] tracking error is annualized correctly
+- [x] benchmark alignment policy is explicit
+- [x] tracking error is annualized correctly
 - [ ] report surfaces benchmark id/lineage
 
 ---
@@ -232,7 +232,7 @@ Legend:
 ## 11) Testing (risk + stress) is serious and reproducible
 
 ### 11.1 Unit tests
-- [ ] metric-level tests for vol/cov/drawdown/TE
+- [x] metric-level tests for vol/cov/drawdown/TE
 - [ ] VaR/ES tests with known distributions (synthetic fixtures)
 - [ ] stress revaluation tests per instrument type
 
