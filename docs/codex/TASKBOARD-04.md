@@ -261,9 +261,9 @@ Legend:
 ## 11) Observability (non-functional)
 
 ### 11.1 Structured logging (PR-57)
-- [ ] ValuationEngine logs start/end with portfolio_id, as_of, base_currency
-- [ ] Logs summarize counts (positions priced, warnings count)
-- [ ] Logs do not leak into outputs (no timestamps in valuation objects)
+- [x] ValuationEngine logs start/end with portfolio_id, as_of, base_currency
+- [x] Logs summarize counts (positions priced, warnings count)
+- [x] Logs do not leak into outputs (no timestamps in valuation objects)
 
 ---
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timezone
 from math import fsum
 from typing import Mapping
@@ -140,3 +141,64 @@ def test_breakdown_totals_match_position_sums() -> None:
 
     nav_sum = fsum(position.notional_base for position in valuation.positions)
     assert valuation.nav_base == pytest.approx(nav_sum)
+
+
+def test_engine_emits_structured_logs(caplog: pytest.LogCaptureFixture) -> None:
+    as_of = date(2026, 1, 2)
+    market_data = InMemoryMarketData(
+        {
+            ("EQ.SAP", "close", as_of): 120.0,
+            ("EQ.AAPL", "close", as_of): 200.0,
+            (FX_EURUSD_ASSET_ID, "close", as_of): 1.1,
+        }
+    )
+    instruments = {
+        "EQ.SAP": _equity_instrument("EQ.SAP", "EUR"),
+        "EQ.AAPL": _equity_instrument("EQ.AAPL", "USD"),
+    }
+    portfolio = Portfolio(
+        as_of=datetime(2026, 1, 2, tzinfo=timezone.utc),
+        positions=[
+            Position(instrument_id="EQ.SAP", quantity=10.0),
+            Position(instrument_id="EQ.AAPL", quantity=5.0),
+        ],
+        cash={"EUR": 1000.0, "USD": 500.0},
+        meta={"portfolio_id": "PORT-001"},
+    )
+
+    registry = PricerRegistry(
+        {
+            "cash": CashPricer(),
+            "equity": EquityPricer(),
+        }
+    )
+    engine = ValuationEngine(registry)
+
+    caplog.set_level(logging.INFO, logger="quantlab.pricing.engine")
+    engine.value_portfolio(
+        portfolio=portfolio,
+        instruments=instruments,
+        market_data=market_data,
+        base_currency="EUR",
+        lineage={"market_data_snapshot_id": "snapshot-123"},
+    )
+
+    records = [record for record in caplog.records if record.name == "quantlab.pricing.engine"]
+    start = next(record for record in records if record.getMessage() == "valuation.start")
+    complete = next(record for record in records if record.getMessage() == "valuation.complete")
+
+    assert start.portfolio_id == "PORT-001"
+    assert start.as_of == as_of.isoformat()
+    assert start.base_currency == "EUR"
+    assert start.dataset_lineage_id == "snapshot-123"
+    assert start.position_count == 4
+    assert start.cash_count == 2
+    assert start.price_field == "close"
+
+    assert complete.portfolio_id == "PORT-001"
+    assert complete.as_of == as_of.isoformat()
+    assert complete.base_currency == "EUR"
+    assert complete.dataset_lineage_id == "snapshot-123"
+    assert complete.position_count == 4
+    assert complete.warning_count == 2
+    assert complete.warning_counts == {"FX_INVERTED_QUOTE": 2}

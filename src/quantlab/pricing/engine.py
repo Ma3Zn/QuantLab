@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime
 from math import fsum, isfinite
 from typing import Mapping
@@ -21,6 +22,8 @@ from quantlab.pricing.schemas.valuation import (
     PortfolioValuation,
     PositionValuation,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ValuationEngine:
@@ -55,6 +58,22 @@ class ValuationEngine:
             instruments,
             as_of_date,
         )
+        log_context = _build_log_context(
+            portfolio=portfolio,
+            as_of_date=as_of_date,
+            base_currency=base_currency,
+            lineage=lineage,
+            market_data=market_data,
+        )
+        logger.info(
+            "valuation.start",
+            extra={
+                **log_context,
+                "position_count": len(positions_to_price),
+                "cash_count": len(portfolio.cash),
+                "price_field": self._price_field,
+            },
+        )
 
         valuations: list[PositionValuation] = []
         warnings: list[str] = []
@@ -85,7 +104,19 @@ class ValuationEngine:
         }
 
         nav_base = fsum(valuation.notional_base for valuation in valuations)
+        warning_counts = _warning_counts(warnings)
         aggregated_warnings = sorted(set(warnings))
+
+        logger.info(
+            "valuation.complete",
+            extra={
+                **log_context,
+                "position_count": len(valuations),
+                "warning_count": len(warnings),
+                "warning_counts": warning_counts,
+                "nav_base": nav_base,
+            },
+        )
 
         return PortfolioValuation(
             as_of=as_of_date,
@@ -160,6 +191,71 @@ def _cash_instrument(currency: Currency) -> Instrument:
         currency=currency,
         spec=CashSpec(market_data_binding="NONE"),
     )
+
+
+def _portfolio_id(portfolio: Portfolio) -> str | None:
+    if not portfolio.meta:
+        return None
+    value = portfolio.meta.get("portfolio_id")
+    if value is None:
+        return None
+    value_str = str(value)
+    return value_str if value_str else None
+
+
+def _resolve_dataset_lineage_id(
+    *,
+    lineage: Mapping[str, str] | None,
+    market_data: MarketDataView,
+) -> str | None:
+    if lineage:
+        for key in ("market_data_snapshot_id", "dataset_id", "ingest_run_id", "request_hash"):
+            value = lineage.get(key)
+            if value:
+                return str(value)
+
+    lineage_attr = getattr(market_data, "lineage", None)
+    lineage_mapping: Mapping[str, str] | None = None
+    if callable(lineage_attr):
+        try:
+            value = lineage_attr()
+        except TypeError:
+            value = None
+        if isinstance(value, Mapping):
+            lineage_mapping = value
+    elif isinstance(lineage_attr, Mapping):
+        lineage_mapping = lineage_attr
+
+    if lineage_mapping:
+        dataset_id = sorted(lineage_mapping.keys())[0]
+        return str(dataset_id)
+    return None
+
+
+def _build_log_context(
+    *,
+    portfolio: Portfolio,
+    as_of_date: date,
+    base_currency: Currency,
+    lineage: Mapping[str, str] | None,
+    market_data: MarketDataView,
+) -> dict[str, object]:
+    return {
+        "portfolio_id": _portfolio_id(portfolio),
+        "as_of": as_of_date.isoformat(),
+        "base_currency": base_currency,
+        "dataset_lineage_id": _resolve_dataset_lineage_id(
+            lineage=lineage,
+            market_data=market_data,
+        ),
+    }
+
+
+def _warning_counts(warnings: list[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for warning in warnings:
+        counts[warning] = counts.get(warning, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 __all__ = ["ValuationEngine"]
