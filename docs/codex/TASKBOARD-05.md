@@ -107,8 +107,8 @@ Legend:
 - [x] correlation computed consistently and safely (division by zero handled)
 
 ### 3.3 Drawdowns
-- [ ] drawdown series definition is correct and documented
-- [ ] max drawdown computed correctly
+- [x] drawdown series definition is correct and documented
+- [x] max drawdown computed correctly
 - [ ] time-to-recovery computed if feasible (else explicitly omitted)
 
 ### 3.4 Tracking error (if benchmark supplied)
