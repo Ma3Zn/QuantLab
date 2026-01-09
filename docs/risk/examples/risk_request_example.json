@@ -1,0 +1,16 @@
+{
+  "as_of": "2025-12-31",
+  "lookback_trading_days": 252,
+  "confidence_levels": [
+    0.95,
+    0.99
+  ],
+  "return_definition": "simple",
+  "annualization_factor": 252,
+  "input_mode": "STATIC_WEIGHTS_X_ASSET_RETURNS",
+  "missing_data_policy": "ERROR",
+  "covariance_estimator": {
+    "type": "SAMPLE"
+  },
+  "notes": "MVP example request. Assumes static weights."
+}

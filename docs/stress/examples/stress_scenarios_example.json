@@ -1,0 +1,52 @@
+{
+  "as_of": "2025-12-31",
+  "shock_convention": "RETURN_MULTIPLICATIVE",
+  "missing_shock_policy": "ZERO_WITH_WARNING",
+  "scenarios": [
+    {
+      "scenario_id": "S1_EQUITY_-10",
+      "name": "Equity -10% broad shock",
+      "type": "ParametricShock",
+      "shock_vector": {
+        "EQ.AAPL": -0.1,
+        "EQ.MSFT": -0.1,
+        "EQ.AMZN": -0.1,
+        "EQ.GOOG": -0.1
+      },
+      "tags": [
+        "parametric",
+        "equity_down"
+      ]
+    },
+    {
+      "scenario_id": "S2_TECH_-25",
+      "name": "Tech -25% shock",
+      "type": "CustomShockVector",
+      "shock_vector": {
+        "EQ.AAPL": -0.25,
+        "EQ.MSFT": -0.25,
+        "EQ.AMZN": -0.25,
+        "EQ.GOOG": -0.25
+      },
+      "tags": [
+        "custom",
+        "concentration"
+      ]
+    },
+    {
+      "scenario_id": "S3_HISTORICAL_2008_SAMPLE",
+      "name": "Historical-like shock (materialized)",
+      "type": "HistoricalShock",
+      "shock_vector": {
+        "EQ.AAPL": -0.18,
+        "EQ.MSFT": -0.15,
+        "EQ.AMZN": -0.22,
+        "EQ.GOOG": -0.16
+      },
+      "tags": [
+        "historical",
+        "materialized"
+      ]
+    }
+  ]
+}

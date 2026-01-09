@@ -1,0 +1,97 @@
+{
+  "report_version": "1.0",
+  "generated_at_utc": "2026-01-09T00:00:00Z",
+  "as_of": "2025-12-31",
+  "window": {
+    "lookback_trading_days": 252,
+    "start": "2025-01-02",
+    "end": "2025-12-31"
+  },
+  "conventions": {
+    "return_definition": "simple",
+    "annualization_factor": 252,
+    "loss_definition": "loss=-return"
+  },
+  "input_lineage": {
+    "portfolio_snapshot_id": "PORTFOLIO:demo:2025-12-31",
+    "portfolio_snapshot_hash": "sha256:...replace...",
+    "market_data_bundle_id": "MDBUNDLE:demo:close",
+    "market_data_bundle_hash": "sha256:...replace..."
+  },
+  "metrics": {
+    "portfolio_vol_annualized": 0.18,
+    "max_drawdown": -0.22,
+    "tracking_error_annualized": null,
+    "var": {
+      "0.95": 0.022,
+      "0.99": 0.041
+    },
+    "es": {
+      "0.95": 0.031,
+      "0.99": 0.055
+    }
+  },
+  "exposures": {
+    "by_asset": [
+      {
+        "asset_id": "EQ.AAPL",
+        "weight": 0.25
+      },
+      {
+        "asset_id": "EQ.MSFT",
+        "weight": 0.25
+      },
+      {
+        "asset_id": "EQ.AMZN",
+        "weight": 0.25
+      },
+      {
+        "asset_id": "EQ.GOOG",
+        "weight": 0.25
+      }
+    ],
+    "by_currency": [
+      {
+        "currency": "USD",
+        "weight": 1.0
+      }
+    ]
+  },
+  "attribution": {
+    "variance_contributions": [
+      {
+        "asset_id": "EQ.AAPL",
+        "component": 0.26
+      },
+      {
+        "asset_id": "EQ.MSFT",
+        "component": 0.24
+      },
+      {
+        "asset_id": "EQ.AMZN",
+        "component": 0.25
+      },
+      {
+        "asset_id": "EQ.GOOG",
+        "component": 0.25
+      }
+    ],
+    "convention": "component = w*(Sigma w) / (w^T Sigma w)"
+  },
+  "warnings": [
+    {
+      "code": "STATIC_WEIGHTS",
+      "message": "Portfolio returns derived from a single snapshot. Rebalancing inside the window is ignored.",
+      "context": {
+        "input_mode": "STATIC_WEIGHTS_X_ASSET_RETURNS"
+      }
+    },
+    {
+      "code": "RAW_PRICES",
+      "message": "Raw prices used. Corporate actions are not corrected.",
+      "context": {
+        "data_policy": "raw+guardrails"
+      }
+    }
+  ]
+}

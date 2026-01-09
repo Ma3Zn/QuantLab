@@ -1,0 +1,76 @@
+{
+  "report_version": "1.0",
+  "generated_at_utc": "2026-01-09T00:00:00Z",
+  "as_of": "2025-12-31",
+  "input_lineage": {
+    "portfolio_snapshot_id": "PORTFOLIO:demo:2025-12-31",
+    "portfolio_snapshot_hash": "sha256:...replace...",
+    "market_state_id": "MARKETSTATE:demo:close",
+    "market_state_hash": "sha256:...replace...",
+    "scenario_set_id": "SCENSET:demo:v1",
+    "scenario_set_hash": "sha256:...replace..."
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "S1_EQUITY_-10",
+      "pnl": -10000.0,
+      "delta_nav": -10000.0,
+      "return": -0.1
+    },
+    {
+      "scenario_id": "S2_TECH_-25",
+      "pnl": -25000.0,
+      "delta_nav": -25000.0,
+      "return": -0.25
+    },
+    {
+      "scenario_id": "S3_HISTORICAL_2008_SAMPLE",
+      "pnl": -17750.0,
+      "delta_nav": -17750.0,
+      "return": -0.1775
+    }
+  ],
+  "breakdowns": {
+    "by_position": [
+      {
+        "position_id": "POS:EQ.AAPL",
+        "scenario_id": "S1_EQUITY_-10",
+        "pnl": -2500.0
+      },
+      {
+        "position_id": "POS:EQ.MSFT",
+        "scenario_id": "S1_EQUITY_-10",
+        "pnl": -2500.0
+      }
+    ],
+    "by_asset": [
+      {
+        "asset_id": "EQ.AAPL",
+        "scenario_id": "S2_TECH_-25",
+        "pnl": -6250.0
+      }
+    ],
+    "by_currency": [
+      {
+        "currency": "USD",
+        "scenario_id": "S2_TECH_-25",
+        "pnl": -25000.0
+      }
+    ]
+  },
+  "summary": {
+    "worst_scenario_id": "S2_TECH_-25",
+    "max_loss": -25000.0,
+    "max_loss_return": -0.25,
+    "min_return": -0.25,
+    "median_return": -0.1775,
+    "max_return": -0.1
+  },
+  "warnings": [
+    {
+      "code": "NO_PROBABILITIES",
+      "message": "Scenarios are deterministic. No probabilities are assigned. This is not VaR.",
+      "context": {}
+    }
+  ]
+}
