@@ -1,6 +1,7 @@
 """Data layer package scaffolding for QuantLab."""
 
 from quantlab.data.calendar import CalendarBaseline, CalendarBaselineSpec, calendar_version_id
+from quantlab.data.canonical import CanonicalDataset
 from quantlab.data.errors import (
     DataError,
     NormalizationError,
@@ -133,4 +134,5 @@ __all__ = [
     "ValidationContext",
     "validate_records",
     "MarketDataService",
+    "CanonicalDataset",
 ]

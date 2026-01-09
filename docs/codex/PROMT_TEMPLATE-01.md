@@ -22,5 +22,7 @@ Workflow for THIS PR:
    - How to run tests for this PR
    - Any assumptions/limitations introduced
    - Follow-ups explicitly deferred to later PRs
+   - A commit message for the works done
+   - If on a new branch, a title and a body for the pull request
 
 Now implement: <PR_CODE>

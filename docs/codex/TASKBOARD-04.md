@@ -207,8 +207,8 @@ Legend:
 - [x] Breakdown sums reconcile with positions and NAV
 
 ### 7.3 Lineage plumbing (PR-56)
-- [ ] PortfolioValuation includes dataset snapshot id when available
-- [ ] Valuation outputs include enough metadata to reproduce the run
+- [x] PortfolioValuation includes dataset snapshot id when available
+- [x] Valuation outputs include enough metadata to reproduce the run
 
 ---
 
@@ -240,8 +240,8 @@ Legend:
 - [x] Snapshot diffs are informative
 
 ### 9.4 Integration tests (PR-53, PR-56)
-- [ ] Engine + adapter over canonical dataset produces expected valuation
-- [ ] No network calls or external dependencies in tests
+- [x] Engine + adapter over canonical dataset produces expected valuation
+- [x] No network calls or external dependencies in tests
 
 ---
 
