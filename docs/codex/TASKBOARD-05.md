@@ -193,8 +193,8 @@ Legend:
 - [x] HistoricalShock: must include explicit vector for execution (materialized)
 
 ### 8.2 Shock application semantics are explicit (ADR-0403)
-- [ ] default: multiplicative return shocks: P' = P*(1+shock)
-- [ ] reject invalid shocked prices where appropriate
+- [x] default: multiplicative return shocks: P' = P*(1+shock)
+- [x] reject invalid shocked prices where appropriate
 - [ ] missing shock policy is explicit (zero-with-warning vs error)
 
 ### 8.3 Scenario identity and determinism
