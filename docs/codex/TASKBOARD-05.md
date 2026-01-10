@@ -207,10 +207,10 @@ Legend:
 ## 9) Stress engine (price-based) correctness (ADR-0401)
 
 ### 9.1 Linear instrument revaluation
-- [ ] equity/index: qty*(P'-P)
-- [ ] futures: qty*multiplier*(P'-P)
-- [ ] cash: P&L = 0 in own currency (no FX unless explicit)
-- [ ] instrument-specific multiplier conventions are tested
+- [x] equity/index: qty*(P'-P)
+- [x] futures: qty*multiplier*(P'-P)
+- [x] cash: P&L = 0 in own currency (no FX unless explicit)
+- [x] instrument-specific multiplier conventions are tested
 
 ### 9.2 Aggregation and breakdown integrity
 - [ ] portfolio P&L equals sum of position P&L (tolerance)
@@ -239,7 +239,7 @@ Legend:
 ### 11.1 Unit tests
 - [x] metric-level tests for vol/cov/drawdown/TE
 - [x] VaR/ES tests with known distributions (synthetic fixtures)
-- [ ] stress revaluation tests per instrument type
+- [x] stress revaluation tests per instrument type
 
 ### 11.2 Property-based tests (Hypothesis)
 - [ ] covariance symmetry / PSD invariants (within tolerance)
