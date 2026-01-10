@@ -1,3 +1,5 @@
-"""Stress schema models live here (implemented in PR-72/75)."""
+"""Stress schema models live here."""
 
-__all__: list[str] = []
+from quantlab.stress.schemas.base import StressBaseModel
+
+__all__ = ["StressBaseModel"]

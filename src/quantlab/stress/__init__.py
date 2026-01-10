@@ -7,11 +7,31 @@ from quantlab.stress.errors import (
     StressInputError,
     StressScenarioError,
 )
+from quantlab.stress.scenarios import (
+    CustomShockVector,
+    HistoricalShock,
+    MissingShockPolicy,
+    ParametricShock,
+    Scenario,
+    ScenarioSet,
+    ScenarioType,
+    ShockConvention,
+    scenario_set_hash,
+)
 
 __all__ = [
+    "CustomShockVector",
+    "HistoricalShock",
+    "MissingShockPolicy",
+    "ParametricShock",
+    "Scenario",
+    "ScenarioSet",
+    "ScenarioType",
+    "ShockConvention",
     "StressEngine",
     "StressError",
     "StressInputError",
     "StressScenarioError",
     "StressComputationError",
+    "scenario_set_hash",
 ]

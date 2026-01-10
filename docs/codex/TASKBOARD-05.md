@@ -173,9 +173,9 @@ Legend:
 
 ### 7.1 Package skeleton exists
 - [ ] `src/stress/__init__.py` exports stable API (`Scenario`, `ScenarioSet`, `StressReport`, `StressEngine`)
-- [ ] `src/stress/errors.py` defines typed exceptions
+- [x] `src/stress/errors.py` defines typed exceptions
 - [ ] `src/stress/schemas/` contains typed request/report models (Pydantic v2)
-- [ ] `src/stress/scenarios.py` defines scenario models (pure)
+- [x] `src/stress/scenarios.py` defines scenario models (pure)
 - [ ] `src/stress/engine.py` executes stress (pure)
 - [x] `src/stress/` package scaffold exists (`__init__`, `errors`, `engine`, `scenarios`, `schemas`)
 
@@ -188,9 +188,9 @@ Legend:
 ## 8) Stress scenario modeling (ADR-0402/0403)
 
 ### 8.1 Scenario types exist and validate
-- [ ] ParametricShock: explicit shock vector keyed by `MarketDataId`
-- [ ] CustomShockVector: explicit convention and units
-- [ ] HistoricalShock: must include explicit vector for execution (materialized)
+- [x] ParametricShock: explicit shock vector keyed by `MarketDataId`
+- [x] CustomShockVector: explicit convention and units
+- [x] HistoricalShock: must include explicit vector for execution (materialized)
 
 ### 8.2 Shock application semantics are explicit (ADR-0403)
 - [ ] default: multiplicative return shocks: P' = P*(1+shock)
@@ -198,8 +198,8 @@ Legend:
 - [ ] missing shock policy is explicit (zero-with-warning vs error)
 
 ### 8.3 Scenario identity and determinism
-- [ ] stable `scenario_id` is required
-- [ ] scenario set has a canonical hash (order-independent or order-canonicalized)
+- [x] stable `scenario_id` is required
+- [x] scenario set has a canonical hash (order-independent or order-canonicalized)
 - [ ] deterministic ordering of scenario results
 
 ---
