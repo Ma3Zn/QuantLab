@@ -79,6 +79,9 @@ def test_stress_report_golden() -> None:
         portfolio=portfolio,
         market_state=market_state,
         scenarios=scenarios,
+        portfolio_snapshot_id="PORT-001",
+        market_state_id="MKT-001",
+        scenario_set_id="SCEN-001",
         generated_at_utc=datetime(2026, 1, 1, tzinfo=timezone.utc),
     )
 

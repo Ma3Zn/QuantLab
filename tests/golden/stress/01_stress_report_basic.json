@@ -3,8 +3,11 @@
   "generated_at_utc": "2026-01-01T00:00:00Z",
   "as_of": "2025-12-31",
   "input_lineage": {
+    "portfolio_snapshot_id": "PORT-001",
     "portfolio_snapshot_hash": "fc9b7737089a19eba057e15542a9b8596b189653354657a4f7137594151761f5",
+    "market_state_id": "MKT-001",
     "market_state_hash": "2dd6914bd3f085fb699e63366e19aa821e985da2f6b762ecea23fb2e5ee355ac",
+    "scenario_set_id": "SCEN-001",
     "scenario_set_hash": "389554b939445611e962e9246a43a9ccf699b67fc801357350ffdde5df1c97ee"
   },
   "scenario_results": [

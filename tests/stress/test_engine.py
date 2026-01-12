@@ -59,3 +59,41 @@ def test_stress_engine_missing_shock_policy_error() -> None:
 
     with pytest.raises(StressInputError):
         StressEngine().run(portfolio=portfolio, market_state=market_state, scenarios=scenarios)
+
+
+def test_stress_engine_lineage_ids_are_propagated() -> None:
+    as_of = date(2025, 12, 31)
+    portfolio = _build_portfolio(as_of)
+    market_state = {
+        MarketDataId("EQ.AAPL"): 100.0,
+        MarketDataId("EQ.MSFT"): 200.0,
+    }
+    scenarios = ScenarioSet(
+        as_of=as_of,
+        missing_shock_policy="ZERO_WITH_WARNING",
+        scenarios=[
+            ParametricShock(
+                scenario_id="S1",
+                name="Broad equity -5%",
+                shock_convention="RETURN_MULTIPLICATIVE",
+                shock_vector={
+                    MarketDataId("EQ.AAPL"): -0.05,
+                    MarketDataId("EQ.MSFT"): -0.05,
+                },
+            )
+        ],
+    )
+
+    report = StressEngine().run(
+        portfolio=portfolio,
+        market_state=market_state,
+        scenarios=scenarios,
+        portfolio_snapshot_id="PORT-123",
+        market_state_id="MS-456",
+        scenario_set_id="SCEN-789",
+    )
+
+    assert report.input_lineage is not None
+    assert report.input_lineage.portfolio_snapshot_id == "PORT-123"
+    assert report.input_lineage.market_state_id == "MS-456"
+    assert report.input_lineage.scenario_set_id == "SCEN-789"

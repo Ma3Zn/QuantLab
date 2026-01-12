@@ -284,4 +284,4 @@ Legend:
 - [x] Emit structured warnings for missing data policy usage and raw-price inputs
 - [ ] Expand `RiskMetrics` with covariance/correlation summaries when implemented
 - [ ] Add FX aggregation policy/base-currency handling for stress NAV/returns
-- [ ] Wire optional input lineage ids (portfolio/market_state/scenario_set) into `StressReport` (hashes are wired)
+- [x] Wire optional input lineage ids (portfolio/market_state/scenario_set) into `StressReport` (hashes are wired)

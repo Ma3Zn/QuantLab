@@ -51,6 +51,9 @@ class StressEngine:
         portfolio: Portfolio,
         market_state: Mapping[MarketDataId, FiniteFloat],
         scenarios: ScenarioSet,
+        portfolio_snapshot_id: str | None = None,
+        market_state_id: str | None = None,
+        scenario_set_id: str | None = None,
         generated_at_utc: datetime | None = None,
     ) -> StressReport:
         if not isinstance(portfolio, Portfolio):
@@ -144,6 +147,9 @@ class StressEngine:
                 portfolio=portfolio,
                 market_state=base_prices,
                 scenarios=scenarios,
+                portfolio_snapshot_id=portfolio_snapshot_id,
+                market_state_id=market_state_id,
+                scenario_set_id=scenario_set_id,
             )
 
             report = StressReport(
@@ -526,14 +532,20 @@ def _build_input_lineage(
     portfolio: Portfolio,
     market_state: Mapping[MarketDataId, float],
     scenarios: ScenarioSet,
+    portfolio_snapshot_id: str | None,
+    market_state_id: str | None,
+    scenario_set_id: str | None,
 ) -> StressInputLineage:
     portfolio_hash = _hash_payload(portfolio.to_canonical_dict())
     market_state_hash = _hash_payload(_canonical_market_state(market_state))
     scenario_hash = scenarios.canonical_hash()
 
     return StressInputLineage(
+        portfolio_snapshot_id=portfolio_snapshot_id,
         portfolio_snapshot_hash=portfolio_hash,
+        market_state_id=market_state_id,
         market_state_hash=market_state_hash,
+        scenario_set_id=scenario_set_id,
         scenario_set_hash=scenario_hash,
     )
 
