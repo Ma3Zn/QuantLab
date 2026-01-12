@@ -72,8 +72,9 @@ class Portfolio(InstrumentBaseModel):
     def to_canonical_json(self) -> str:
         return json.dumps(
             self.to_canonical_dict(),
+            sort_keys=True,
             separators=(",", ":"),
-            ensure_ascii=False,
+            ensure_ascii=True,
         )
 
 

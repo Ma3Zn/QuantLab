@@ -273,9 +273,9 @@ Legend:
 
 ## 13) Completion criteria (“risk+stress MVP done”)
 - [ ] All above checkboxes are complete
-- [ ] `pytest -q` passes (unit + property + golden + integration)
+- [x] `pytest -q` passes (unit + property + golden + integration)
 - [x] No imports from provider/storage layers inside `risk/` and `stress/`
-- [ ] Canonical JSON fixtures are stable across runs
+- [x] Canonical JSON fixtures are stable across runs
 
 ---
 

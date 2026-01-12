@@ -24,7 +24,7 @@ class StressBaseModel(BaseModel):
             self.to_canonical_dict(),
             sort_keys=True,
             separators=(",", ":"),
-            ensure_ascii=False,
+            ensure_ascii=True,
         )
 
 
