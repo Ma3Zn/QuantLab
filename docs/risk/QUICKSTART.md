@@ -17,7 +17,7 @@ from quantlab.instruments import PortfolioSnapshot
 from quantlab.risk import RiskRequest, RiskEngine
 
 # portfolio: PortfolioSnapshot (as_of consistent with the data)
-# prices: AlignedTimeSeriesBundle (close prices) or returns bundle
+# prices: TimeSeriesBundle (aligned close prices) or returns bundle
 
 req = RiskRequest(
     as_of="2025-12-31",

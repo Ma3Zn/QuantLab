@@ -260,8 +260,8 @@ Legend:
 ## 12) Packaging / API exports / docs consistency
 
 ### 12.1 Public exports
-- [ ] `src/risk/__init__.py` and `src/stress/__init__.py` expose stable names
-- [ ] docs quickstarts import paths match code
+- [x] `src/risk/__init__.py` and `src/stress/__init__.py` expose stable names
+- [x] docs quickstarts import paths match code
 - [ ] versioning notes are added where appropriate (schema version fields)
 
 ### 12.2 Explicit limitations remain visible
