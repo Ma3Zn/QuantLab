@@ -242,10 +242,10 @@ Legend:
 - [x] stress revaluation tests per instrument type
 
 ### 11.2 Property-based tests (Hypothesis)
-- [ ] covariance symmetry / PSD invariants (within tolerance)
-- [ ] drawdown invariants
-- [ ] VaR <= ES (loss convention)
-- [ ] stress aggregation invariants and scenario-order invariance
+- [x] covariance symmetry / PSD invariants (within tolerance)
+- [x] drawdown invariants
+- [x] VaR <= ES (loss convention)
+- [x] stress aggregation invariants and scenario-order invariance
 
 ### 11.3 Golden tests
 - [x] canonical `RiskReport` JSON fixtures (small and deterministic)
