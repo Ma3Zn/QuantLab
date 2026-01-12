@@ -10,6 +10,8 @@
 - A portfolio snapshot (`instruments/`)
 - An aligned price bundle (`data/` outputs) for the relevant market data ids
 - Optionally: portfolio return series from `pricing/`
+- If `RiskRequest.lineage` omits `portfolio_snapshot_hash`, the engine computes it using
+  canonical JSON + SHA256.
 
 ## Minimal usage pattern (library-first)
 ```python

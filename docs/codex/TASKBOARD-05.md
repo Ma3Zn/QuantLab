@@ -88,7 +88,7 @@ Legend:
 - [x] market data bundle id/hash is included
 - [x] request canonical hash is included (optional but recommended)
 - [x] all hashes are deterministic (canonical JSON encoding)
-  - [ ] wire portfolio snapshot id/hash source and hashing convention (still caller-provided only).
+  - [x] wire portfolio snapshot id/hash source and hashing convention.
 
 ---
 

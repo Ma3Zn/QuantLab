@@ -35,3 +35,8 @@
 - static weights assumption (if used)
 - data quality flags (suspect corporate actions, missing data handling)
 - estimator choices (sample covariance)
+
+## Lineage hashing convention
+- If `portfolio_snapshot_hash` is not provided in `RiskRequest.lineage`, the engine computes it.
+- Convention: `Portfolio.to_canonical_dict()` -> canonical JSON (`sort_keys=True`, `separators=(",", ":")`,
+  `ensure_ascii=True`) -> `sha256` of UTF-8 payload.

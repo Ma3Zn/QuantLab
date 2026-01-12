@@ -39,6 +39,7 @@
   "generated_at_utc": "2024-01-10T00:00:00Z",
   "input_lineage": {
     "market_data_bundle_hash": "md_req_hash_demo",
+    "portfolio_snapshot_hash": "7a979793de8a289cd39705fbeab54b2fffcf17a7a1d70a4639c31892e6094c31",
     "request_hash": "cf3cb3a8032a44ed44f01377f9c6af4a47a5ef15087bfce5e79ea2dffcb0862f"
   },
   "metrics": {

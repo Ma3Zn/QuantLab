@@ -206,7 +206,7 @@ class RiskEngine:
                 start=window_start,
                 end=window_end,
             )
-            input_lineage = _build_input_lineage(request, market_lineage)
+            input_lineage = _build_input_lineage(request, market_lineage, portfolio)
             report = RiskReport(
                 generated_at_utc=generated_at_utc or datetime.now(timezone.utc),
                 as_of=request.as_of,
@@ -589,6 +589,7 @@ def _slice_series_to_window(
 def _build_input_lineage(
     request: RiskRequest,
     market_lineage: LineageMeta | None,
+    portfolio: Portfolio | None,
 ) -> RiskInputLineage | None:
     lineage = request.lineage or {}
     portfolio_snapshot_id = lineage.get("portfolio_snapshot_id")
@@ -596,6 +597,9 @@ def _build_input_lineage(
     market_data_bundle_id = lineage.get("market_data_bundle_id")
     market_data_bundle_hash = lineage.get("market_data_bundle_hash")
     request_hash = lineage.get("request_hash") or _hash_request(request)
+
+    if portfolio_snapshot_hash is None and portfolio is not None:
+        portfolio_snapshot_hash = _portfolio_snapshot_hash(portfolio)
 
     if market_data_bundle_hash is None and market_lineage is not None:
         market_data_bundle_hash = market_lineage.request_hash
@@ -627,6 +631,15 @@ def _normalize_lineage_value(value: object | None) -> str | None:
 
 def _hash_request(request: RiskRequest) -> str:
     payload = request.model_dump(mode="json", exclude_none=True)
+    return _hash_payload(payload)
+
+
+def _portfolio_snapshot_hash(portfolio: Portfolio) -> str:
+    payload = portfolio.to_canonical_dict()
+    return _hash_payload(payload)
+
+
+def _hash_payload(payload: object) -> str:
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
