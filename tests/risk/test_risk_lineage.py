@@ -52,3 +52,18 @@ def test_input_lineage_respects_portfolio_hash_override() -> None:
 
     assert lineage is not None
     assert lineage.portfolio_snapshot_hash == "override-hash"
+
+
+def test_input_lineage_includes_benchmark_lineage() -> None:
+    as_of = date(2025, 1, 3)
+    portfolio = _build_portfolio(as_of)
+    request = _build_request(
+        as_of,
+        lineage={"benchmark_id": "BENCH:SPX", "benchmark_hash": "bench-hash"},
+    )
+
+    lineage = _build_input_lineage(request, market_lineage=None, portfolio=portfolio)
+
+    assert lineage is not None
+    assert lineage.benchmark_id == "BENCH:SPX"
+    assert lineage.benchmark_hash == "bench-hash"

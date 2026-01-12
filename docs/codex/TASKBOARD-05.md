@@ -116,8 +116,8 @@ Legend:
 ### 3.4 Tracking error (if benchmark supplied)
 - [x] benchmark alignment policy is explicit
 - [x] tracking error is annualized correctly
-- [ ] report surfaces benchmark id/lineage
-  - [ ] add benchmark id/lineage fields and propagation into RiskReport.
+- [x] report surfaces benchmark id/lineage
+  - [x] add benchmark id/lineage fields and propagation into RiskReport.
 
 ---
 

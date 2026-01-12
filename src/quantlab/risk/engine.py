@@ -603,6 +603,8 @@ def _build_input_lineage(
     lineage = request.lineage or {}
     portfolio_snapshot_id = lineage.get("portfolio_snapshot_id")
     portfolio_snapshot_hash = lineage.get("portfolio_snapshot_hash")
+    benchmark_id = lineage.get("benchmark_id")
+    benchmark_hash = lineage.get("benchmark_hash")
     market_data_bundle_id = lineage.get("market_data_bundle_id")
     market_data_bundle_hash = lineage.get("market_data_bundle_hash")
     request_hash = lineage.get("request_hash") or _hash_request(request)
@@ -616,6 +618,8 @@ def _build_input_lineage(
     values = (
         portfolio_snapshot_id,
         portfolio_snapshot_hash,
+        benchmark_id,
+        benchmark_hash,
         market_data_bundle_id,
         market_data_bundle_hash,
         request_hash,
@@ -626,6 +630,8 @@ def _build_input_lineage(
     return RiskInputLineage(
         portfolio_snapshot_id=_normalize_lineage_value(portfolio_snapshot_id),
         portfolio_snapshot_hash=_normalize_lineage_value(portfolio_snapshot_hash),
+        benchmark_id=_normalize_lineage_value(benchmark_id),
+        benchmark_hash=_normalize_lineage_value(benchmark_hash),
         market_data_bundle_id=_normalize_lineage_value(market_data_bundle_id),
         market_data_bundle_hash=_normalize_lineage_value(market_data_bundle_hash),
         request_hash=_normalize_lineage_value(request_hash),

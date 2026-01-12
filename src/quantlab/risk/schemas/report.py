@@ -67,6 +67,8 @@ class RiskInputLineage(RiskBaseModel):
 
     portfolio_snapshot_id: str | None = None
     portfolio_snapshot_hash: str | None = None
+    benchmark_id: str | None = None
+    benchmark_hash: str | None = None
     market_data_bundle_id: str | None = None
     market_data_bundle_hash: str | None = None
     request_hash: str | None = None
