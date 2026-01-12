@@ -7,7 +7,7 @@ Legend:
 - [x] already produced as project artifacts (docs pack) and ready to be committed
 - [ ] not yet implemented / not yet merged into the repository
 
-**Scope:** `src/risk/` + `src/stress/` + unit/property/golden/integration tests + module docs.
+**Scope:** `src/quantlab/risk/` + `src/quantlab/stress/` + unit/property/golden/integration tests + module docs.
 **Non-scope:** data fetching and caching (`data/`), instrument definitions (`instruments/`), allocation (`optimization/`), decision layer.
 
 **Stress approach (MVP):** price-based revaluation for linear instruments only (ADR-0401).
@@ -53,15 +53,14 @@ Legend:
 ## 1) Risk module: package boundaries and public API
 
 ### 1.1 Package skeleton exists
-- [ ] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
-- [x] `src/risk/errors.py` defines typed exceptions (no silent failures)
-- [x] `src/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
-- [x] `src/risk/schemas/` contains typed request/report models (Pydantic v2)
-- [x] `src/risk/metrics/` contains pure functions (no I/O)
-- [x] `src/risk/engine.py` orchestrates the pipeline with no side effects
+- [x] `src/quantlab/risk/__init__.py` exports the intended stable API (`RiskRequest`, `RiskReport`, `RiskEngine`, key specs)
+- [x] `src/quantlab/risk/errors.py` defines typed exceptions (no silent failures)
+- [x] `src/quantlab/risk/schemas/` contains typed request/report models (Pydantic v2)
+- [x] `src/quantlab/risk/metrics/` contains pure functions (no I/O)
+- [x] `src/quantlab/risk/engine.py` orchestrates the pipeline with no side effects
 
 ### 1.2 Layering constraints are enforced
-- [x] No imports from `src/data/providers/` or `src/data/storage/` inside `src/risk/`
+- [x] No imports from `src/data/providers/` or `src/data/storage/` inside `src/quantlab/risk/`
 - [x] `risk/` only consumes **already aligned** time series bundles
 - [x] Any optional mapping provider is a protocol/interface, not a concrete I/O implementation
 
@@ -85,11 +84,11 @@ Legend:
 - [x] NaN/Inf inputs are rejected (or sanitized with explicit warning, policy-defined)
 
 ### 2.3 Lineage is present and stable (ADR-0308)
-- [ ] portfolio snapshot id/hash is included
+- [x] portfolio snapshot id/hash is included (via `RiskRequest.lineage`)
 - [x] market data bundle id/hash is included
 - [x] request canonical hash is included (optional but recommended)
 - [x] all hashes are deterministic (canonical JSON encoding)
-  - [ ] wire portfolio snapshot id/hash source and hashing convention.
+  - [ ] wire portfolio snapshot id/hash source and hashing convention (still caller-provided only).
 
 ---
 
@@ -107,7 +106,7 @@ Legend:
 - [x] covariance symmetry enforced (numeric tolerance)
 - [x] correlation computed consistently and safely (division by zero handled)
 - [ ] report includes covariance/correlation diagnostics (sample size, missing count, symmetry error)
-  - [ ] add diagnostics fields to `RiskReport` and wire through engine.
+  - [ ] add diagnostics fields to `RiskReport` and wire through engine (diagnostics exist in metrics).
 
 ### 3.3 Drawdowns
 - [x] drawdown series definition is correct and documented
@@ -164,7 +163,7 @@ Legend:
 
 ### 6.2 Warnings are structured and stable
 - [x] warnings include code, short message, minimal context dict
-- [ ] no long free-form logs in the report
+- [x] no long free-form logs in the report
 - [x] warnings cover key biases: static weights, raw prices, missing data
 
 ---
@@ -172,16 +171,16 @@ Legend:
 ## 7) Stress module: package boundaries and public API
 
 ### 7.1 Package skeleton exists
-- [x] `src/stress/__init__.py` exports stable API (`Scenario`, `ScenarioSet`, `StressReport`, `StressEngine`)
-- [x] `src/stress/errors.py` defines typed exceptions
-- [x] `src/stress/schemas/` contains typed request/report models (Pydantic v2)
-- [x] `src/stress/scenarios.py` defines scenario models (pure)
-- [x] `src/stress/engine.py` executes stress (pure)
-- [x] `src/stress/` package scaffold exists (`__init__`, `errors`, `engine`, `scenarios`, `schemas`)
+- [x] `src/quantlab/stress/__init__.py` exports stable API (`Scenario`, `ScenarioSet`, `StressReport`, `StressEngine`)
+- [x] `src/quantlab/stress/errors.py` defines typed exceptions
+- [x] `src/quantlab/stress/schemas/` contains typed request/report models (Pydantic v2)
+- [x] `src/quantlab/stress/scenarios.py` defines scenario models (pure)
+- [x] `src/quantlab/stress/engine.py` executes stress (pure)
+- [x] `src/quantlab/stress/` package scaffold exists (`__init__`, `errors`, `engine`, `scenarios`, `schemas`)
 
 ### 7.2 Layering constraints are enforced
-- [ ] No imports from provider/storage code inside `src/stress/`
-- [ ] historical scenarios are executed only after materialization into explicit shock vectors
+- [x] No imports from provider/storage code inside `src/quantlab/stress/`
+- [x] historical scenarios are executed only after materialization into explicit shock vectors
 
 ---
 
@@ -260,29 +259,29 @@ Legend:
 ## 12) Packaging / API exports / docs consistency
 
 ### 12.1 Public exports
-- [x] `src/risk/__init__.py` and `src/stress/__init__.py` expose stable names
+- [x] `src/quantlab/risk/__init__.py` and `src/quantlab/stress/__init__.py` expose stable names
 - [x] docs quickstarts import paths match code
-- [ ] versioning notes are added where appropriate (schema version fields)
+- [x] versioning notes are added where appropriate (schema version fields)
 
 ### 12.2 Explicit limitations remain visible
-- [ ] raw prices assumption documented
-- [ ] static weights assumption documented (if used)
-- [ ] price-based stress limitation documented (linear payoffs only)
-- [ ] multi-currency limitations documented
+- [x] raw prices assumption documented
+- [x] static weights assumption documented (if used)
+- [x] price-based stress limitation documented (linear payoffs only)
+- [x] multi-currency limitations documented
 
 ---
 
 ## 13) Completion criteria (“risk+stress MVP done”)
 - [ ] All above checkboxes are complete
 - [ ] `pytest -q` passes (unit + property + golden + integration)
-- [ ] No imports from provider/storage layers inside `risk/` and `stress/`
+- [x] No imports from provider/storage layers inside `risk/` and `stress/`
 - [ ] Canonical JSON fixtures are stable across runs
 
 ---
 
 ## 14) Follow-ups (deferred)
-- [ ] Populate `RiskReport` fields from computed metrics/exposures once PR-62+ lands
-- [ ] Emit structured warnings for missing data policy usage and raw-price inputs
+- [x] Populate `RiskReport` fields from computed metrics/exposures
+- [x] Emit structured warnings for missing data policy usage and raw-price inputs
 - [ ] Expand `RiskMetrics` with covariance/correlation summaries when implemented
 - [ ] Add FX aggregation policy/base-currency handling for stress NAV/returns
-- [ ] Wire optional input lineage ids (portfolio/market_state/scenario_set) into `StressReport`
+- [ ] Wire optional input lineage ids (portfolio/market_state/scenario_set) into `StressReport` (hashes are wired)
