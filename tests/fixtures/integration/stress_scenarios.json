@@ -1,0 +1,25 @@
+{
+  "as_of": "2025-12-31",
+  "missing_shock_policy": "ZERO_WITH_WARNING",
+  "scenarios": [
+    {
+      "scenario_id": "S1",
+      "name": "AAPL -10% only",
+      "type": "ParametricShock",
+      "shock_convention": "RETURN_MULTIPLICATIVE",
+      "shock_vector": {
+        "EQ.AAPL": -0.1
+      }
+    },
+    {
+      "scenario_id": "S2",
+      "name": "Broad equity down",
+      "type": "ParametricShock",
+      "shock_convention": "RETURN_MULTIPLICATIVE",
+      "shock_vector": {
+        "EQ.AAPL": -0.2,
+        "EQ.MSFT": -0.1
+      }
+    }
+  ]
+}

@@ -252,8 +252,8 @@ Legend:
 - [x] canonical `StressReport` JSON fixtures (small and deterministic)
 
 ### 11.4 Integration tests
-- [ ] end-to-end risk pipeline on committed sample dataset
-- [ ] end-to-end stress pipeline with a small scenario set
+- [x] end-to-end risk pipeline on committed sample dataset
+- [x] end-to-end stress pipeline with a small scenario set
 
 ---
 
