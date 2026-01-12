@@ -8,7 +8,7 @@ General rules (non-negotiable):
 - Do not implement features outside the PR scope. If you discover missing prerequisites, add the smallest necessary scaffolding within the PR, and document it.
 
 Workflow for THIS PR:
-1) Read `docs/codex/BACKLOG-05.md` and `docs/codex/SESSION_PLAYBOOK.md`.
+1) Read `docs/codex/risk_stress_MVP_miss.md` and `docs/codex/SESSION_PLAYBOOK.md`.
 2) Read documents in `docs/*` to find specific information regarding properties of the module
    under construction.
 3) Implement exactly the tasks listed for the PR:
