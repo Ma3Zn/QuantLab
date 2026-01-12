@@ -13,6 +13,7 @@ class StressBaseModel(BaseModel):
         extra="forbid",
         frozen=True,
         str_strip_whitespace=True,
+        populate_by_name=True,
     )
 
     def to_canonical_dict(self) -> dict[str, Any]:

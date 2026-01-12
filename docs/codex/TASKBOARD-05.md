@@ -172,11 +172,11 @@ Legend:
 ## 7) Stress module: package boundaries and public API
 
 ### 7.1 Package skeleton exists
-- [ ] `src/stress/__init__.py` exports stable API (`Scenario`, `ScenarioSet`, `StressReport`, `StressEngine`)
+- [x] `src/stress/__init__.py` exports stable API (`Scenario`, `ScenarioSet`, `StressReport`, `StressEngine`)
 - [x] `src/stress/errors.py` defines typed exceptions
-- [ ] `src/stress/schemas/` contains typed request/report models (Pydantic v2)
+- [x] `src/stress/schemas/` contains typed request/report models (Pydantic v2)
 - [x] `src/stress/scenarios.py` defines scenario models (pure)
-- [ ] `src/stress/engine.py` executes stress (pure)
+- [x] `src/stress/engine.py` executes stress (pure)
 - [x] `src/stress/` package scaffold exists (`__init__`, `errors`, `engine`, `scenarios`, `schemas`)
 
 ### 7.2 Layering constraints are enforced
@@ -195,12 +195,12 @@ Legend:
 ### 8.2 Shock application semantics are explicit (ADR-0403)
 - [x] default: multiplicative return shocks: P' = P*(1+shock)
 - [x] reject invalid shocked prices where appropriate
-- [ ] missing shock policy is explicit (zero-with-warning vs error)
+- [x] missing shock policy is explicit (zero-with-warning vs error)
 
 ### 8.3 Scenario identity and determinism
 - [x] stable `scenario_id` is required
 - [x] scenario set has a canonical hash (order-independent or order-canonicalized)
-- [ ] deterministic ordering of scenario results
+- [x] deterministic ordering of scenario results
 
 ---
 
@@ -213,24 +213,24 @@ Legend:
 - [x] instrument-specific multiplier conventions are tested
 
 ### 9.2 Aggregation and breakdown integrity
-- [ ] portfolio P&L equals sum of position P&L (tolerance)
-- [ ] asset breakdown sums to portfolio P&L (tolerance)
-- [ ] currency breakdown sums to portfolio P&L when meaningful
-- [ ] drivers/top contributors extracted deterministically
+- [x] portfolio P&L equals sum of position P&L (tolerance)
+- [x] asset breakdown sums to portfolio P&L (tolerance)
+- [x] currency breakdown sums to portfolio P&L when meaningful
+- [x] drivers/top contributors extracted deterministically
 
 ---
 
 ## 10) Stress report output quality (ADR-0404/0405)
 
 ### 10.1 `StressReport` schema is complete and stable
-- [ ] scenario table includes P&L, ΔNAV, return
-- [ ] breakdown by position and asset is present
-- [ ] worst scenario + max loss reported
-- [ ] report includes explicit disclaimer: “no probabilities, not VaR”
+- [x] scenario table includes P&L, ΔNAV, return
+- [x] breakdown by position and asset is present
+- [x] worst scenario + max loss reported
+- [x] report includes explicit disclaimer: “no probabilities, not VaR”
 
 ### 10.2 Warnings and errors
-- [ ] missing market state price triggers typed error (or explicit policy)
-- [ ] missing shocks handled per policy with warnings
+- [x] missing market state price triggers typed error (or explicit policy)
+- [x] missing shocks handled per policy with warnings
 
 ---
 
@@ -249,7 +249,7 @@ Legend:
 
 ### 11.3 Golden tests
 - [x] canonical `RiskReport` JSON fixtures (small and deterministic)
-- [ ] canonical `StressReport` JSON fixtures (small and deterministic)
+- [x] canonical `StressReport` JSON fixtures (small and deterministic)
 
 ### 11.4 Integration tests
 - [ ] end-to-end risk pipeline on committed sample dataset

@@ -18,6 +18,7 @@ from quantlab.stress.scenarios import (
     ShockConvention,
     scenario_set_hash,
 )
+from quantlab.stress.schemas import StressReport
 from quantlab.stress.shocks import apply_shock_to_price, apply_shocks_to_prices
 
 __all__ = [
@@ -34,6 +35,7 @@ __all__ = [
     "StressInputError",
     "StressScenarioError",
     "StressComputationError",
+    "StressReport",
     "apply_shock_to_price",
     "apply_shocks_to_prices",
     "scenario_set_hash",

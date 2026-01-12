@@ -1,0 +1,149 @@
+{
+  "report_version": "1.0",
+  "generated_at_utc": "2026-01-01T00:00:00Z",
+  "as_of": "2025-12-31",
+  "input_lineage": {
+    "portfolio_snapshot_hash": "fc9b7737089a19eba057e15542a9b8596b189653354657a4f7137594151761f5",
+    "market_state_hash": "2dd6914bd3f085fb699e63366e19aa821e985da2f6b762ecea23fb2e5ee355ac",
+    "scenario_set_hash": "389554b939445611e962e9246a43a9ccf699b67fc801357350ffdde5df1c97ee"
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "S1",
+      "pnl": -100.0,
+      "delta_nav": -100.0,
+      "return": -0.05,
+      "top_drivers": [
+        {
+          "position_id": "EQ.AAPL",
+          "pnl": -100.0
+        },
+        {
+          "position_id": "EQ.MSFT",
+          "pnl": 0.0
+        }
+      ]
+    },
+    {
+      "scenario_id": "S2",
+      "pnl": -300.0,
+      "delta_nav": -300.0,
+      "return": -0.15,
+      "top_drivers": [
+        {
+          "position_id": "EQ.AAPL",
+          "pnl": -200.0
+        },
+        {
+          "position_id": "EQ.MSFT",
+          "pnl": -100.0
+        }
+      ]
+    }
+  ],
+  "breakdowns": {
+    "by_position": [
+      {
+        "position_id": "EQ.AAPL",
+        "scenario_id": "S1",
+        "pnl": -100.0
+      },
+      {
+        "position_id": "EQ.MSFT",
+        "scenario_id": "S1",
+        "pnl": 0.0
+      },
+      {
+        "position_id": "EQ.AAPL",
+        "scenario_id": "S2",
+        "pnl": -200.0
+      },
+      {
+        "position_id": "EQ.MSFT",
+        "scenario_id": "S2",
+        "pnl": -100.0
+      }
+    ],
+    "by_asset": [
+      {
+        "asset_id": "EQ.AAPL",
+        "scenario_id": "S1",
+        "pnl": -100.0
+      },
+      {
+        "asset_id": "EQ.MSFT",
+        "scenario_id": "S1",
+        "pnl": 0.0
+      },
+      {
+        "asset_id": "EQ.AAPL",
+        "scenario_id": "S2",
+        "pnl": -200.0
+      },
+      {
+        "asset_id": "EQ.MSFT",
+        "scenario_id": "S2",
+        "pnl": -100.0
+      }
+    ],
+    "by_currency": [
+      {
+        "currency": "USD",
+        "scenario_id": "S1",
+        "pnl": -100.0
+      },
+      {
+        "currency": "USD",
+        "scenario_id": "S2",
+        "pnl": -300.0
+      }
+    ]
+  },
+  "summary": {
+    "worst_scenario_id": "S2",
+    "max_loss": -300.0,
+    "max_loss_return": -0.15,
+    "min_return": -0.15,
+    "median_return": -0.1,
+    "max_return": -0.05,
+    "top_k_losses": [
+      {
+        "scenario_id": "S2",
+        "pnl": -300.0,
+        "return": -0.15
+      },
+      {
+        "scenario_id": "S1",
+        "pnl": -100.0,
+        "return": -0.05
+      }
+    ],
+    "top_drivers": [
+      {
+        "position_id": "EQ.AAPL",
+        "pnl": -200.0
+      },
+      {
+        "position_id": "EQ.MSFT",
+        "pnl": -100.0
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "code": "MISSING_SHOCKS_ASSUMED_ZERO",
+      "message": "Missing shocks were assumed to be zero under policy.",
+      "context": {
+        "scenario_id": "S1",
+        "asset_ids": [
+          "EQ.MSFT"
+        ]
+      }
+    },
+    {
+      "code": "NO_PROBABILITIES",
+      "message": "Scenarios are deterministic. No probabilities are assigned. This is not VaR.",
+      "context": {}
+    }
+  ]
+}
