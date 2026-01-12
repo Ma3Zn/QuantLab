@@ -34,6 +34,7 @@ from quantlab.risk.schemas.report import (
     CurrencyExposure,
     RiskAttribution,
     RiskConventions,
+    RiskCovarianceDiagnostics,
     RiskExposures,
     RiskInputLineage,
     RiskMetrics,
@@ -190,6 +191,13 @@ class RiskEngine:
                 tracking_error_annualized=tracking_error,
                 var={str(level): value for level, value in var_map.items()},
                 es={str(level): value for level, value in es_map.items()},
+                covariance_diagnostics=RiskCovarianceDiagnostics(
+                    sample_size=covariance_result.diagnostics.sample_size,
+                    missing_count=covariance_result.diagnostics.missing_count,
+                    symmetry_max_error=covariance_result.diagnostics.symmetry_max_error,
+                    is_symmetric=covariance_result.diagnostics.is_symmetric,
+                    estimator=covariance_result.diagnostics.estimator,
+                ),
             )
             exposures = RiskExposures(
                 by_asset=asset_exposures,

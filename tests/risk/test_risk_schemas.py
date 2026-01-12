@@ -11,6 +11,7 @@ from quantlab.risk.schemas import (
     CurrencyExposure,
     RiskAttribution,
     RiskConventions,
+    RiskCovarianceDiagnostics,
     RiskExposures,
     RiskInputLineage,
     RiskMetrics,
@@ -123,3 +124,18 @@ def test_risk_report_sorting() -> None:
         "EQ.MSFT",
     ]
     assert [warning.code for warning in report.warnings] == ["RAW_PRICES", "STATIC_WEIGHTS"]
+
+
+def test_risk_metrics_accepts_covariance_diagnostics() -> None:
+    metrics = RiskMetrics(
+        portfolio_vol_annualized=0.2,
+        covariance_diagnostics=RiskCovarianceDiagnostics(
+            sample_size=120,
+            missing_count=0,
+            symmetry_max_error=0.0,
+            is_symmetric=True,
+            estimator="SAMPLE",
+        ),
+    )
+    assert metrics.covariance_diagnostics is not None
+    assert metrics.covariance_diagnostics.sample_size == 120

@@ -105,8 +105,8 @@ Legend:
 - [x] portfolio volatility annualized correctly (unit-tested)
 - [x] covariance symmetry enforced (numeric tolerance)
 - [x] correlation computed consistently and safely (division by zero handled)
-- [ ] report includes covariance/correlation diagnostics (sample size, missing count, symmetry error)
-  - [ ] add diagnostics fields to `RiskReport` and wire through engine (diagnostics exist in metrics).
+- [x] report includes covariance/correlation diagnostics (sample size, missing count, symmetry error)
+  - [x] add diagnostics fields to `RiskReport` and wire through engine (diagnostics exist in metrics).
 
 ### 3.3 Drawdowns
 - [x] drawdown series definition is correct and documented

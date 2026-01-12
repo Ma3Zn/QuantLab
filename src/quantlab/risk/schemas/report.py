@@ -72,6 +72,16 @@ class RiskInputLineage(RiskBaseModel):
     request_hash: str | None = None
 
 
+class RiskCovarianceDiagnostics(RiskBaseModel):
+    """Diagnostics for covariance/correlation estimation."""
+
+    sample_size: int
+    missing_count: int
+    symmetry_max_error: float
+    is_symmetric: bool
+    estimator: str
+
+
 class RiskMetrics(RiskBaseModel):
     """Core numerical metrics output for the risk report."""
 
@@ -80,6 +90,7 @@ class RiskMetrics(RiskBaseModel):
     tracking_error_annualized: FiniteFloat | None = None
     var: dict[str, FiniteFloat] | None = None
     es: dict[str, FiniteFloat] | None = None
+    covariance_diagnostics: RiskCovarianceDiagnostics | None = None
 
     @field_validator("var", "es", mode="before")
     @classmethod
@@ -193,6 +204,7 @@ __all__ = [
     "CurrencyExposure",
     "RiskAttribution",
     "RiskConventions",
+    "RiskCovarianceDiagnostics",
     "RiskExposures",
     "RiskInputLineage",
     "RiskMetrics",

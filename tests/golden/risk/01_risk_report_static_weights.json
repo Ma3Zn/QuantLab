@@ -43,6 +43,13 @@
     "request_hash": "cf3cb3a8032a44ed44f01377f9c6af4a47a5ef15087bfce5e79ea2dffcb0862f"
   },
   "metrics": {
+    "covariance_diagnostics": {
+      "estimator": "SAMPLE",
+      "is_symmetric": true,
+      "missing_count": 0,
+      "sample_size": 5,
+      "symmetry_max_error": 0.0
+    },
     "es": {
       "0.8": 6.787843820196177e-05
     },
