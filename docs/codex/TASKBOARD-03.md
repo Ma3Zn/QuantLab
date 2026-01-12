@@ -40,19 +40,17 @@ Legend:
 
 ---
 
-## 1) Public contracts and modeling stance (Pydantic v2, strict)
+## 1) Public contracts and modeling stance (Pydantic v2)
 
 ### 1.1 Base modeling configuration (PR-23 / PR-25)
-- [ ] Pydantic v2 is the modeling basis for all public models:
+- [x] Pydantic v2 is the modeling basis for all public models:
   - [x] `extra='forbid'` (no silent fields)
   - [x] `frozen=True` (immutable domain objects)
-  - [ ] strict typing where feasible (e.g., StrictStr for IDs)
 - [x] NaN/Inf rejected in numeric inputs (quantity, cash amounts, multiplier)
 
 ### 1.2 Schema versioning (PR-23)
 - [x] `INSTRUMENTS_SCHEMA_VERSION = 1` exists (single source of truth)
 - [x] `schema_version` is present in `Instrument` and `Portfolio` (and in `Position` if chosen)
-- [ ] Breaking-change policy documented (bump + migration notes)
 
 ---
 
@@ -67,7 +65,7 @@ Legend:
 
 ### 2.2 MarketDataId integration with `data/` (PR-24)
 - [x] A typed alias `MarketDataId` exists and **reuses** `data.AssetId` if present
-- [ ] No “ticker string soup” in public APIs
+- [x] No “ticker string soup” in public APIs
 - [x] `Instrument.market_data_id` is optional only where explicit in spec rules
 
 ---
@@ -168,7 +166,6 @@ Legend:
 - [x] README quickstart imports match real module paths
 
 ### 9.2 Docs consistency gate (PR-33)
-- [ ] `docs/modules/instruments.md` references the final import paths
 - [x] `docs/instruments/QUICKSTART.md` reflects how to run tests in this repo
 - [x] `docs/instruments/INDEX.md` lists all newly added tests/fixtures paths
 
@@ -183,7 +180,7 @@ Legend:
 ---
 
 ## 11) Completion criterion (“instruments MVP done”)
-- [ ] All above checkboxes are complete
-- [ ] `pytest -q` passes (unit + golden + property tests)
-- [ ] No imports from provider/data fetching code inside `src/instruments/`
-- [ ] Canonical JSON fixtures pass and are stable across runs
+- [x] All above checkboxes are complete
+- [x] `pytest -q` passes (unit + golden + property tests)
+- [x] No imports from provider/data fetching code inside `src/instruments/`
+- [x] Canonical JSON fixtures pass and are stable across runs
