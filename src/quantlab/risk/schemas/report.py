@@ -87,6 +87,7 @@ class RiskMetrics(RiskBaseModel):
 
     portfolio_vol_annualized: FiniteFloat | None = None
     max_drawdown: FiniteFloat | None = None
+    time_to_recovery_days: int | None = None
     tracking_error_annualized: FiniteFloat | None = None
     var: dict[str, FiniteFloat] | None = None
     es: dict[str, FiniteFloat] | None = None

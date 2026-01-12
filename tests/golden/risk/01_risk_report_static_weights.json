@@ -55,6 +55,7 @@
     },
     "max_drawdown": -6.787843820188488e-05,
     "portfolio_vol_annualized": 0.10928568621978858,
+    "time_to_recovery_days": 3,
     "var": {
       "0.8": -0.0001796610273354538
     }

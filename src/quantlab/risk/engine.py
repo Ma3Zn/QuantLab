@@ -24,8 +24,8 @@ from quantlab.risk.exposures.mapping import ExposureMappingProvider, build_mappe
 from quantlab.risk.metrics import (
     annualized_volatility,
     build_returns,
+    drawdown_metrics,
     historical_var_es,
-    max_drawdown,
     sample_covariance,
     tracking_error_annualized,
 )
@@ -143,7 +143,7 @@ class RiskEngine:
             )
             warnings.extend(vol_warnings)
 
-            max_dd, dd_warnings = max_drawdown(
+            max_dd, time_to_recovery_days, dd_warnings = drawdown_metrics(
                 portfolio_series,
                 return_definition=request.return_definition,
                 allow_missing=allow_missing,
@@ -188,6 +188,7 @@ class RiskEngine:
             metrics = RiskMetrics(
                 portfolio_vol_annualized=vol,
                 max_drawdown=max_dd,
+                time_to_recovery_days=time_to_recovery_days,
                 tracking_error_annualized=tracking_error,
                 var={str(level): value for level, value in var_map.items()},
                 es={str(level): value for level, value in es_map.items()},

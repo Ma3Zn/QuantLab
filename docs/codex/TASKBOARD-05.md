@@ -111,7 +111,7 @@ Legend:
 ### 3.3 Drawdowns
 - [x] drawdown series definition is correct and documented
 - [x] max drawdown computed correctly
-- [ ] time-to-recovery computed if feasible (else explicitly omitted)
+- [x] time-to-recovery computed if feasible (else explicitly omitted)
 
 ### 3.4 Tracking error (if benchmark supplied)
 - [x] benchmark alignment policy is explicit
