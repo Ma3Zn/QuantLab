@@ -1,6 +1,6 @@
 """Public entry points for the stress testing layer."""
 
-from quantlab.stress.engine import StressEngine
+from quantlab.stress.engine import FxAggregationPolicy, StressEngine
 from quantlab.stress.errors import (
     StressComputationError,
     StressError,
@@ -31,6 +31,7 @@ __all__ = [
     "ScenarioType",
     "ShockConvention",
     "StressEngine",
+    "FxAggregationPolicy",
     "StressError",
     "StressInputError",
     "StressScenarioError",

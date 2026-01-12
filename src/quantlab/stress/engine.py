@@ -6,7 +6,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from math import isfinite
 from statistics import median
-from typing import Iterable, Mapping, cast
+from typing import Iterable, Literal, Mapping, cast
 
 from pydantic import ValidationError
 
@@ -37,6 +37,7 @@ from quantlab.stress.shocks import apply_shock_to_price
 DEFAULT_TOLERANCE = 1e-9
 TOP_K_DRIVERS = 5
 TOP_K_LOSSES = 3
+FxAggregationPolicy = Literal["WARN", "ERROR"]
 
 
 class StressEngine:
@@ -54,6 +55,7 @@ class StressEngine:
         portfolio_snapshot_id: str | None = None,
         market_state_id: str | None = None,
         scenario_set_id: str | None = None,
+        fx_aggregation_policy: FxAggregationPolicy = "WARN",
         generated_at_utc: datetime | None = None,
     ) -> StressReport:
         if not isinstance(portfolio, Portfolio):
@@ -70,7 +72,9 @@ class StressEngine:
             _require_market_state_complete(base_prices, asset_universe)
             _validate_scenario_assets(scenarios, asset_universe)
 
-            nav, nav_warnings = _compute_nav(portfolio, base_prices)
+            nav, nav_warnings = _compute_nav(
+                portfolio, base_prices, _normalize_fx_policy(fx_aggregation_policy)
+            )
 
             warnings: list[StressWarning] = [
                 StressWarning(
@@ -296,6 +300,7 @@ def _build_shocked_prices(
 def _compute_nav(
     portfolio: Portfolio,
     base_prices: Mapping[MarketDataId, float],
+    fx_aggregation_policy: FxAggregationPolicy,
 ) -> tuple[float, list[StressWarning]]:
     warnings: list[StressWarning] = []
     currencies: set[Currency] = set()
@@ -317,11 +322,22 @@ def _compute_nav(
         total_value += _require_finite(float(amount), "cash_amount")
 
     if len(currencies) > 1:
+        if fx_aggregation_policy == "ERROR":
+            raise StressInputError(
+                "multi-currency portfolio requires explicit FX/base-currency policy",
+                context={"currencies": sorted(str(currency) for currency in currencies)},
+            )
         warnings.append(
             StressWarning(
                 code="FX_AGGREGATION_UNSUPPORTED",
-                message=("Portfolio NAV aggregates multiple currencies without FX conversion."),
-                context={"currencies": sorted(str(currency) for currency in currencies)},
+                message=(
+                    "Portfolio NAV aggregates multiple currencies without FX/base-currency "
+                    "conversion; returns use naive aggregation."
+                ),
+                context={
+                    "currencies": sorted(str(currency) for currency in currencies),
+                    "policy": fx_aggregation_policy,
+                },
             )
         )
 
@@ -562,4 +578,14 @@ def _hash_payload(payload: Mapping[str, object]) -> str:
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
-__all__ = ["StressEngine"]
+def _normalize_fx_policy(policy: str) -> FxAggregationPolicy:
+    normalized = str(policy).upper()
+    if normalized not in {"WARN", "ERROR"}:
+        raise StressInputError(
+            "unsupported fx_aggregation_policy",
+            context={"policy": policy},
+        )
+    return cast(FxAggregationPolicy, normalized)
+
+
+__all__ = ["FxAggregationPolicy", "StressEngine"]

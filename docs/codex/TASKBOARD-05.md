@@ -283,5 +283,5 @@ Legend:
 - [x] Populate `RiskReport` fields from computed metrics/exposures
 - [x] Emit structured warnings for missing data policy usage and raw-price inputs
 - [ ] Expand `RiskMetrics` with covariance/correlation summaries when implemented
-- [ ] Add FX aggregation policy/base-currency handling for stress NAV/returns
+- [x] Add FX aggregation policy/base-currency handling for stress NAV/returns
 - [x] Wire optional input lineage ids (portfolio/market_state/scenario_set) into `StressReport` (hashes are wired)

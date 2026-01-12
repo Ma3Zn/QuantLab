@@ -28,6 +28,7 @@ def test_stress_public_api_exports() -> None:
         "ScenarioType",
         "ShockConvention",
         "StressEngine",
+        "FxAggregationPolicy",
         "StressError",
         "StressInputError",
         "StressScenarioError",
